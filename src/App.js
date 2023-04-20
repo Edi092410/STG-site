@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./assets/App.css";
+//import { Okay } from "./components/Okay/Okay";
+import { AfterRegister } from "./pages/AfterRegister";
+//import { PublicPage } from "./pages/PublicPage";
+//import { Regist } from "./pages/Regist";
+//import { FirstLogin } from "./pages/FirstLogin";
+//import { FirstLoginSecond } from "./pages/FirstLoginSecond";
+//import { PasswordChange } from "./pages/PasswordChange";
+//import { PasswordChangeSecond } from "./pages/PasswordChangeSecond";
+//import { SecondLogin } from "./pages/SecondLogin";
+//import { SecondLoginSecond } from "./pages/SecondLoginSecond";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AfterRegister />
     </div>
   );
 }
