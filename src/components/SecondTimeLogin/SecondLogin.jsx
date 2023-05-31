@@ -2,7 +2,7 @@ import React from "react";
 
 export default function SecondLogin() {
   return (
-    <div className="flex justify-center min-h-[80vh]  items-center">
+    <form className="flex justify-center min-h-[80vh]  items-center">
       <div className="w-96">
         <div className="float-left text-xl font-bold w-full mb-5">
           Та GTS системд нэвтрэх гэж байна
@@ -21,10 +21,10 @@ export default function SecondLogin() {
         ></input>
 
         <div className=" text-blue-500 font-bold w-full mt-1">Дахин илгээх</div>
-        <button className=" w-full h-12 bg-slate-800 text-white rounded-3xl mt-6">
+        <button type="submit" className=" w-full h-12 bg-slate-800 text-white rounded-3xl mt-6">
           Баталгаажуулах
         </button>
       </div>
-    </div>
+    </form>
   );
 }
