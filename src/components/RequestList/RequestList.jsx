@@ -1,6 +1,6 @@
 import React from "react";
 import { FaPlus } from "react-icons/fa";
-
+import image from "./Request.jpg"
 import { Props } from "./Props";
 export const RequestList = () => {
   const data = [
@@ -23,10 +23,10 @@ export const RequestList = () => {
   return (
     <div className="w-full border-[1px] rounded-lg shadow-lg border-slate-300 mt-16">
       <div>
-        <div className="w-[35%] mt-8">
+        <div className="w-[35%] mt-8 mr-[32.5%] ml-[32.5%]">
           <div className="flex">
             <img
-              src="\"
+              src={image}
               alt="description"
               className="w-[50px] h-[50px] mr-2"
             ></img>

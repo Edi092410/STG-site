@@ -1,18 +1,16 @@
 import "./assets/App.css";
-//import { Okay } from "./components/Okay/Okay";
-import { AfterRegister } from "./pages/AfterRegister";
-//import { PublicPage } from "./pages/PublicPage";
-//import { Regist } from "./pages/Regist";
-//import { FirstLogin } from "./pages/FirstLogin";
-//import { FirstLoginSecond } from "./pages/FirstLoginSecond";
-//import { PasswordChange } from "./pages/PasswordChange";
-//import { PasswordChangeSecond } from "./pages/PasswordChangeSecond";
-//import { SecondLogin } from "./pages/SecondLogin";
-//import { SecondLoginSecond } from "./pages/SecondLoginSecond";
+import { AppRoutes } from "./Routes/AppRoutes";
+import { Test } from "./components/Test/Test";
+import { Selection } from "./components/Selection/Selection";
+import { CreateOrder } from "./components/CreateOrder/CreateOrder";
+
+import "./index.css"
 function App() {
   return (
     <div className="App">
-      <AfterRegister />
+      {/* <AppRoutes /> */}
+      {/* < Test /> */}
+      < CreateOrder />
     </div>
   );
 }
