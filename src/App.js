@@ -1,16 +1,18 @@
 import "./assets/App.css";
 import { AppRoutes } from "./Routes/AppRoutes";
-import { Test } from "./components/Test/Test";
+// import { Test } from "./components/Test/Test";
 import { Selection } from "./components/Selection/Selection";
 import { CreateOrder } from "./components/CreateOrder/CreateOrder";
-
-import "./index.css"
+import { Slogan } from "./components/Slogan/Slogan";
+import { Test } from "./Axios/Test";
+import { Menu } from "./components/ProfileMenu/Menu";
+import "./index.css";
 function App() {
   return (
     <div className="App">
-      {/* <AppRoutes /> */}
-      {/* < Test /> */}
-      < CreateOrder />
+      <AppRoutes />
+      {/* <Axios /> */}
+      {/* <Menu /> */}
     </div>
   );
 }
