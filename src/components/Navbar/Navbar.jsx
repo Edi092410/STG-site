@@ -1,82 +1,59 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-// import "../../assets/App.css"
+
 export const Navbar = () => {
-
-  const style = {
-    paddingBottom: '10px',
-    borderBottom: '2px solid white',
-    color: 'white',
-    transition: 'padding-bottom 0.3s, border-bottom 0.3s, color 0.3s, background-color 0.3s'
-  }
-
   const navbar = [
     {
       name: "Нүүр",
-      to: "/"
+      to: "/",
+      key: "page",
+      disabled: false,
     },
     {
       name: "Бүтээгдэхүүн",
-      to: "/login"
+      to: "/produc",
+      key: "product",
+      disabled: true,
     },
     {
       name: "Үйлчилгээ",
-      to: "/service/list"
+      to: "/service/list",
+      key: "service",
+      disabled: false,
     },
     {
       name: "Сургалт",
-      to: "/register"
+      to: "/course",
+      key: "course",
+      disabled: true,
     },
     {
       name: "Бичвэр",
-      to: "/"
+      to: "/article",
+      key: "article",
+      disabled: true,
     },
-  ]
+  ];
 
   return (
     <div className="absolute">
-      <ul className="text-center text-slate-400 text-xs">
-        {/* <li className="navbar-item inline-block mr-5">
-          <NavLink 
-            to='/'
-            style={({ isActive }) => ({
-              paddingBottom: isActive ? '10px' : 'none',
-              borderBottom: isActive ? '2px solid white' : 'none',
-              color: isActive ? 'white' : '',
-              transition: 'padding-bottom 0.3s, border-bottom 0.3s, color 0.3s, background-color 0.3s'
-            })}
-            >Нүүр</NavLink>
-        </li>
-        <li className="navbar-item inline-block mr-5">Бүтээгдэхүүн</li>
-        <li className="navbar-item inline-block mr-5">
-          <NavLink 
-          to='/service/list'
-          style={({ isActive }) => ({
-            paddingBottom: isActive ? '10px' : 'none',
-            borderBottom: isActive ? '2px solid white' : 'none',
-            color: isActive ? 'white' : '',
-            transition: 'padding-bottom 0.3s, border-bottom 0.3s, color 0.3s, background-color 0.3s'
-          })}
-          >Үйлчилгээ</NavLink>
-        </li>
-        <li className="navbar-item inline-block mr-5">Сургалт</li>
-        <li className="navbar-item inline-block mr-5">Бичвэр</li> */}
-        <li>
-        {navbar.map((prop) => (
-          <NavLink 
-              to={prop.to}
-              className='inline-block mr-5 hover: pb-[10px] hover:border-b-2 hover:border-white hover:text-white'
-              style={({ isActive }) => ({
-                paddingBottom: isActive ? '10px' : 'none',
-                borderBottom: isActive ? '2px solid white' : 'none',
-                color: isActive ? 'white' : '',
-                transition: 'padding-bottom 0.3s, border-bottom 0.3s, color 0.3s, background-color 0.3s'
-              })}
-          >
+      <ul className="flex text-center text-slate-400 text-xs">
+        {navbar.map((prop, index) =>
+          prop.disabled ? (
+            <li key={prop.key} className="mr-5 opacity-50 cursor-not-allowed">
               {prop.name}
-          </NavLink>
-        ))}
-        </li>
+            </li>
+          ) : (
+            <li key={prop.key} className="mr-5">
+              <NavLink
+                to={prop.to}
+                className="hover:pb-[10px] hover:border-b-2 hover:border-white hover:text-white transition-all duration-300"
+              >
+                {prop.name}
+              </NavLink>
+            </li>
+          )
+        )}
       </ul>
     </div>
   );

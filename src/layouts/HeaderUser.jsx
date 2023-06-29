@@ -1,43 +1,88 @@
 import React, { useEffect, useRef, useState } from "react";
-import logo from "../assets/logo.jpg";
+import { GetData } from "../Axios/Axios";
 import { Navbar } from "../components/Navbar/Navbar";
-import { FaRegUserCircle } from "react-icons/fa";
-import { ProfileMenu } from "../components/ProfileMenu/ProfileMenu";
 import { Menu } from "../components/ProfileMenu/Menu";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
+import { Notification } from "../components/Notification/Notification";
 
 export const HeaderUser = (props) => {
+  const [api, setApi] = useState([]);
+  const [modal, setModal] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await GetData("/settings");
+        console.log("Data:", data);
+        setApi(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const { setAuth } = useAuth();
+
+  const user = localStorage.getItem("name");
+  const email = localStorage.getItem("email");
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    localStorage.clear();
+    setAuth(false);
+    navigate("/");
+  };
+
   return (
     <>
       <header className="flex align-middle justify-around h-16 bg-slate-800 p-5">
-        <img src={logo} alt="logo" className="rounded mr-auto pl-[10vw]"></img>
+        <img
+          src={api.logo}
+          alt="logo"
+          className="rounded mr-auto pl-[10vw] cursor-pointer"
+          onClick={() => {
+            navigate("/");
+          }}
+        ></img>
         <Navbar />
         <div className="flex text-slate-200 text-xs pr-[8vw]">
           <div className="flex mr-2">
-            {/* <FaRegUserCircle className="w-6 h-6 mr-1 pb-2" /> */}
-            {/* <div 
-            className="cursor-pointer"
-            ref={buttonRef}
-            >{props.user}
-            </div> */}
-            <Menu
-              user="Binderiya"
-              email="binderiya.siticom@gmail.com"
-              className=" h-4"
-            />
+            {user ? (
+              <Menu user={user} email={email} className=" h-4" />
+            ) : (
+              <div>
+                <NavLink to="/login">Нэвтрэх</NavLink>
+              </div>
+            )}
           </div>
-          <div className="text-red-500">Гарах</div>
+          {user ? (
+            <div
+              className="text-red-500 cursor-pointer"
+              onClick={() => {
+                setModal(true);
+              }}
+            >
+              {/* <NavLink to="/">Гарах</NavLink> */}
+              Гарах
+            </div>
+          ) : (
+            <div className="text-red-500">
+              <NavLink to="/register">Бүртгүүлэх</NavLink>
+            </div>
+          )}
         </div>
-      </header>
-      {/* {modal && (
-        <div className="transition-opacity duration-300">
-          <ProfileMenu
-            closeModal={closeModal}
-            name="Binderiya"
-            email="binderiya.siticom@gmail.com"
-            ref={menuRef}
+        {modal && (
+          <Notification
+            name="Та системээс гарах гэж байна?"
+            button="Системээс гарах"
+            closeModal={() => setModal(false)}
+            path="/"
+            StateFunction={logOut}
           />
-        </div>
-      )} */}
+        )}
+      </header>
     </>
   );
 };

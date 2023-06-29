@@ -19,7 +19,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="flex align-middle justify-around h-16 bg-slate-800 p-5 text-white text-xs ">
+    <footer className="flex align-middle justify-around h-16 bg-slate-800 p-5 text-white text-xs">
       <div>{api.phone1}</div>
       <div>{api.address}</div>
       <div>{api.email1}</div>

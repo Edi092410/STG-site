@@ -1,15 +1,16 @@
 import React from "react";
 import { Menu } from "antd";
+import { WalletIcon } from "lucide-react";
 
 export const Sidebar = () => {
   return (
-    <div>
-      <Menu
+    <div className="w-1/5">
+      <Menu>
         onClick={(item) => {}}
-        items={[
+        items=
+        {[
           {
             label: "Хүсэлтүүд",
-            icon: "",
             key: "/",
           },
           {
@@ -17,7 +18,7 @@ export const Sidebar = () => {
             key: "/",
           },
         ]}
-      />
+      </Menu>
     </div>
   );
 };
