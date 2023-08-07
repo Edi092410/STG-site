@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 export const Notification = (props) => {
-  const { name, button, closeModal, path, StateFunction } = props;
+  const { name, button, closeModal, path, stateFunction } = props;
   const menuRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -10,7 +10,6 @@ export const Notification = (props) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         props.closeModal();
       }
-      // console.log(menuRef.current && !menuRef.current.contains(event.target));
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -20,10 +19,10 @@ export const Notification = (props) => {
     };
   }, [props]);
   return (
-    <div className="h-[80vh] w-[100vw] absolute top-16 left-0 bg-slate-300 bg-opacity-0">
+    <div className="h-[100vh] w-[100vw] fixed top-0 left-0 bg-slate-300 bg-opacity-50 z-10 overflow-hidden">
       <div className="flex justify-center ">
         <div
-          className="relative w-[400px] mt-[20vh] bg-white border border-slate-500 shadow-lg rounded-[20px] text-center"
+          className="relative w-[400px] mt-[20vh] bg-white shadow-lg rounded-[20px] text-center"
           ref={menuRef}
         >
           <div className=" text-center text-xl m-16 mb-0">{name}</div>
@@ -33,7 +32,7 @@ export const Notification = (props) => {
             onClick={() => {
               navigate(path);
               closeModal();
-              StateFunction();
+              stateFunction();
             }}
           >
             {button}

@@ -8,21 +8,18 @@ export default function Footer() {
     const fetchData = async () => {
       try {
         const data = await GetData("/settings");
-        console.log("Data:", data);
         setApi(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();
   }, []);
 
   return (
-    <footer className="flex align-middle justify-around h-16 bg-slate-800 p-5 text-white text-xs">
-      <div>{api.phone1}</div>
-      <div>{api.address}</div>
-      <div>{api.email1}</div>
+    <footer className="flex md:flex-row flex-col items-center justify-around md:h-[8vh] h-fit bg-[#1D3049] p-5 text-white text-xs">
+      <div className="md:m-0 my-2">{api.phone1}</div>
+      <div className="md:m-0 my-2">{api.address}</div>
+      <div className="md:m-0 my-2">{api.email1}</div>
     </footer>
   );
 }

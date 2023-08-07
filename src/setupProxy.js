@@ -4,9 +4,9 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 // setupProxy.js file нь src дотор байрладаг. (src/setupProxy.js)
 module.exports = (app) => {
   app.use(
-    "/api/login",
+    ["/api/login", "/api/register"],
     createProxyMiddleware({
-      target: "http://stgsite.mn",
+      target: "https://admin.e-siticom.com",
       changeOrigin: true,
       // secure: false,
     })
@@ -14,15 +14,6 @@ module.exports = (app) => {
 
   app.use(
     ["/api/users", "/api/services"],
-    createProxyMiddleware({
-      target: "https://service2.stg.mn",
-      changeOrigin: true,
-      secure: false, //it typically refers to the secure flag in the HTTP cookie. This flag determines whether the cookie should only be sent over secure (HTTPS) connections or also over non-secure (HTTP) connections.
-    })
-  );
-
-  app.use(
-    ["/api/services"],
     createProxyMiddleware({
       target: "https://service2.stg.mn",
       changeOrigin: true,

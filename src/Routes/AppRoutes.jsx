@@ -1,7 +1,6 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import { ServiceList } from "../pages/ServiceList";
-import { SecondLogin } from "../pages/SecondLogin";
 import { FirstLoginSecond } from "../pages/FirstLoginSecond";
 import { Main } from "../components/Regis--main/Main";
 import { SharedLayout } from "../layouts/SharedLayout";
@@ -14,10 +13,17 @@ import { MultipleCompanyInfo } from "../components/MultipleCompanyInfo/MultipleC
 import { ListService } from "../components/ListService/ListService";
 import { PaymentInfo } from "../components/PaymentInfo/PaymentInfo";
 import { Privacy } from "../components/Privacy/Privacy";
-import { PageNoteFound } from "../components/PageNoteFound/PageNoteFound";
+import { PageNoteFound } from "../pages/ErrorPages/PageNotFound";
 import { PrivateRoute } from "./PrivateRoute";
+import { Product } from "../components/Product/Product";
+import { Course } from "../components/Course/Course";
+import { Article } from "../components/Article/Article";
+import { VerificationPage } from "../components/VerificationPage/VerificationPage";
+import { ForgetPassword } from "../components/ForgetPassword/ForgetPassword";
+import { ForgetField } from "../components/ForgetPassword/ForgetField";
 
 export const AppRoutes = () => {
+  let { token } = useParams();
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
@@ -37,8 +43,17 @@ export const AppRoutes = () => {
         </Route>
         <Route path="login" element={<FirstLoginSecond />} />
         <Route path="register" element={<Main />} />
+        <Route path="product" element={<Product />}></Route>
+        <Route path="course" element={<Course />}></Route>
+        <Route path="article" element={<Article />}></Route>
+        <Route
+          path="verification"
+          element={<VerificationPage />}
+          token={token}
+        />
+        <Route path="forgetField" element={<ForgetField />} token={token} />
+        <Route path="forget" element={<ForgetPassword />}></Route>
       </Route>
-
       <Route path="*" element={<PageNoteFound />} />
     </Routes>
   );

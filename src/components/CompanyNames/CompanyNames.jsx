@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
+import { SlArrowDown } from "react-icons/sl";
+import { SlArrowUp } from "react-icons/sl";
 export const CompanyNames = ({
   selectedOption,
   onSelectedChange,
@@ -10,6 +12,7 @@ export const CompanyNames = ({
   };
 
   const companies = JSON.parse(localStorage.getItem("companies"));
+  // const companies = company.data;
 
   // Set the selected option on component render
   useState(() => {
@@ -18,21 +21,60 @@ export const CompanyNames = ({
     }
   }, [selected, onSelectedChange]);
 
+  const [isOpened, setIsOpened] = useState(false);
+  // Энэ component-н гадна дарахад алга болгох funtion
+  const menuRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpened(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpened]);
   return (
-    <>
+    <div className="w-full text-[14px]">
       <div className="mb-2">Компани</div>
-      <select
-        className="w-full h-full border bg-slate-300 pl-[15px] float-left text-center text-blue-500"
-        value={selectedOption}
-        onChange={handleSelectedChange}
+      <div
+        className="relative inline-block"
+        ref={menuRef}
+        onClick={() => {
+          setIsOpened(!isOpened);
+        }}
       >
-        <option></option>
-        {companies.map((prop) => (
-          <option value={prop.customerId} key={prop.customerId}>
-            {prop.name}
-          </option>
-        ))}
-      </select>
-    </>
+        <select
+          className=" appearance-none w-full md:w-[325px] h-[30px] border bg-[#D9D9D9] pl-[15px] float-left text-center text-[#0074E0] pr-14"
+          value={selectedOption}
+          onChange={handleSelectedChange}
+        >
+          <option>Компани аа сонгоно уу!</option>
+          {companies && companies.length > 0 ? (
+            companies.map((prop) => (
+              <option
+                value={prop.customerId}
+                key={prop.customerId}
+                className="text-sm"
+              >
+                {prop.name}
+              </option>
+            ))
+          ) : (
+            <option>Компани байхгүй байна</option>
+          )}
+        </select>
+        <div className="absolute inset-y-4 right-0 flex items-center pr-10 pointer-events-none">
+          {isOpened === true ? (
+            <SlArrowUp className="w-3 h-3 cursor-pointer" />
+          ) : (
+            <SlArrowDown className="w-3 h-3 cursor-pointer" />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };

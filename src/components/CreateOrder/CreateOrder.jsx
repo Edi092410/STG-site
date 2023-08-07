@@ -2,68 +2,90 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { CompanyNames } from "../CompanyNames/CompanyNames";
 import axios from "axios";
-import { OrderContext } from "../OrderList/OrderProvider";
+import { OrderContext } from "../../context/OrderProvider";
 import { PulseLoader } from "react-spinners";
+import { ServiceSelect } from "../ServiceSelect/ServiceSelect";
+import { toast } from "react-toastify";
 export const CreateOrder = ({ closeModal }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
-    watch,
   } = useForm();
 
   const { setRefresh } = useContext(OrderContext);
   const [loading, setLoading] = useState(false);
 
-  const [selectedOption, setSelectedOption] = useState(""); // Үйлчигээний
+  const [selectedOption, setSelectedOption] = useState(); // Үйлчигээний
+  const handleSelected = (selectedOption) => {
+    setSelectedOption(selectedOption);
+  };
   // companynames component-ээс ирж буй утгыг хадгалах
   const [selectedCompany, setSelectedCompany] = useState(""); // Сонгогдсон company-ны
   const handleSelectedCompany = (selectedCompany) => {
     setSelectedCompany(selectedCompany);
   };
+  const notify = ({ text }) => {
+    toast.success(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
 
   const onSubmit = async (e) => {
-    console.log("data: ", e);
-    console.log("Selected option:", selectedOption);
-    console.log("Selected company:", selectedCompany);
     if (selectedCompany !== "") {
-      if (watchOption !== "Санал хүсэлт") {
+      if (selectedOption !== "Санал хүсэлт") {
         setLoading(true);
         try {
-          await axios.post("/api/services/servicerequest", e, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          });
-          alert("Хүсэлт илгээгдлээ");
+          await axios.post(
+            // "https://service2.stg.mn/api/services/servicerequest",
+            "/api/services/servicerequest",
+            e,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-type": "application/json",
+              },
+            }
+          );
+          // alert("Хүсэлт илгээгдлээ");
+          notify("Хүсэлт илгээгдлээ.");
           setRefresh((prev) => !prev);
           closeModal();
         } catch (err) {
-          console.log(err.response);
+        } finally {
+          setLoading(false);
         }
       } else {
         delete e.servicetype;
         delete e.programcode;
         try {
-          await axios.post("/api/services/feedbackrequest", e, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          });
-          setLoading(false);
-          alert("Санал хүсэлт илгээгдлээ");
+          await axios.post(
+            // "https://service2.stg.mn/api/services/feedbackrequest",
+            "/api/services/feedbackrequest",
+            e,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-type": "application/json",
+              },
+            }
+          );
+          // alert("Санал хүсэлт илгээгдлээ");
+          notify("Санал хүсэлт илгээгдлээ.");
           setRefresh((prev) => !prev);
           closeModal();
         } catch (err) {
-          console.log(err.response);
+        } finally {
+          setLoading(false);
         }
       }
-    } else {
-      console.log("reight there");
     }
   };
   // Энэ component-н гадна дарахад алга болгох funtion
@@ -73,7 +95,6 @@ export const CreateOrder = ({ closeModal }) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         closeModal();
       }
-      // console.log(menuRef.current && !menuRef.current.contains(event.target));
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -83,63 +104,61 @@ export const CreateOrder = ({ closeModal }) => {
     };
   }, [closeModal]);
 
-  const watchOption = watch("servicetype");
-
   return (
-    <div className="w-screen h-screen absolute top-16 left-0 bg-slate-300 bg-opacity-50 z-20">
+    <div className="w-screen h-screen fixed top-0 left-0 bg-[#000000] bg-opacity-20 z-20">
       <div
-        className="mr-[20%] ml-[20%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-scroll"
+        className="lg:mr-[20%] lg:ml-[20%] mr-[10%] ml-[10%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
         ref={menuRef}
       >
         <div className="p-[10%] pt-[5%]">
           <form className=" text-sm" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full lg:w-1/2 h-fit md:h-[30px] mb-5">
-              <CompanyNames
-                selectedOption={selectedCompany}
-                onSelectedChange={handleSelectedCompany}
+              <div className="">
+                <CompanyNames
+                  selectedOption={selectedCompany}
+                  onSelectedChange={handleSelectedCompany}
+                />
+              </div>
+
+              <input
+                type="hidden"
+                {...register("customerId", {
+                  required: "Компаниа сонгоно уу!",
+                })}
               />
-              <input type="hidden" {...register("customerId")} />
             </div>
-            {selectedCompany === "" && (
+            <div className=" text-red-500 mt-8">
+              {errors.customerId?.message}
+            </div>
+            {/* {selectedCompany === "" && (
               <div className="text-red-500 mt-8">Компаниа сонгоно уу</div>
-            )}
+            )} */}
             <div className="m-0 p-0 w-1/2"></div>
 
-            <div className=" pt-5 pb-2">Захиалга үүсгэгч</div>
-            <div className="w-full lg:w-1/2 flex h-[30px] bg-slate-200  pl-[15px] items-center">
-              {localStorage.getItem("name")}{" "}
-              <span className=" text-blue-500 hidden md:inline">
+            <div className=" pt-5 pb-2">Цахим шуудан</div>
+            <div className="w-full lg:w-1/2 flex h-[30px] bg-[#D9D9D9] pl-[15px] items-center text-gray-400 mb-5">
+              {localStorage.getItem("email")}
+              <input type="hidden" {...register("email")} />
+              {/* <span className=" text-blue-500 hidden md:inline">
                 / {localStorage.getItem("position")}
-              </span>
+              </span> */}
             </div>
-            <div className="pt-4 pb-5">
-              <select
-                className="w-full h-[40px] border border-slate-500 focus:border-blue-500 pl-[15px]"
-                {...register("servicetype")}
-              >
-                <optgroup label="Үйлчилгээ">
-                  <option value="19">Pkass</option>
-                  <option value="18">Fiscus</option>
-                  <option value="17">Pharmacy</option>
-                  <option value="10">Нэхэмжлэх</option>
-                  <option value="9">Эрх сунгах</option>
-                  <option value="7">Техник засвар</option>
-                  <option value="6">Leader</option>
-                  <option value="4">Plastic</option>
-                  <option value="3">Payroll</option>
-                  <option value="2">Acolous</option>
-                </optgroup>
-                <optgroup label="Санал хүсэлт">
-                  <option>Санал хүсэлт</option>
-                </optgroup>
-              </select>
+            <div className="">
+              <ServiceSelect
+                selectedOption={selectedOption}
+                onSelectedChange={handleSelected}
+              />
+              <input type="hidden" {...register("serviceType")} />
             </div>
-            <div>Мэйл хаяг</div>
+            {/* <div>Мэйл хаяг</div>
             <input
               type="email"
               className="flex w-full lg:w-1/2 h-[30px] bg-slate-200 pl-[15px]"
-              {...register("email")}
+              {...register("email", {
+                required: "Та email хаягаа оруулна уу!",
+              })}
             ></input>
+            <div className=" text-red-500">{errors.email?.message}</div> */}
             <div className="flex flex-col lg:flex-row pt-5 pb-5 text-xs">
               <div className="w-full lg:w-1/2 pb-3">
                 <div>
@@ -150,10 +169,13 @@ export const CreateOrder = ({ closeModal }) => {
                 </div>
                 <input
                   className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
-                  {...register("phone")}
+                  {...register("phone", {
+                    required: "Та утасны дугаараа оруулна уу!",
+                  })}
                 ></input>
+                <div className=" text-red-500">{errors.phone?.message}</div>
               </div>
-              {watchOption !== "Санал хүсэлт" && (
+              {selectedOption !== "Санал хүсэлт" && (
                 <div className="w-full lg:w-1/2 pb-3">
                   <div>
                     Холбогдох программын код /{" "}
@@ -171,14 +193,17 @@ export const CreateOrder = ({ closeModal }) => {
             <textarea
               className="w-full border border-slate-500 p-[15px] mb-2"
               rows={4}
+              maxLength={2000}
               {...register("comment")}
             ></textarea>
             <button
               type="submit"
-              className="w-[100px] h-[50px] rounded-[30px] bg-slate-500 text-white float-right"
+              className="w-[80px] h-[40px] rounded-[30px] bg-slate-500 text-white float-right text-xs flex items-center justify-center"
               onClick={() => {
-                setSelectedOption(getValues("servicetype"));
+                // setSelectedOption(getValues("servicetype"));
                 setValue("customerId", selectedCompany);
+                setValue("serviceType", selectedOption);
+                setValue("email", localStorage.getItem("email"));
               }}
               disabled={loading}
             >

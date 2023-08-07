@@ -1,37 +1,44 @@
 import React, { useState } from "react";
-import { TiMessage } from "react-icons/ti";
-import { BiWalletAlt } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
+import request from "../Assets/reques.svg";
+import payment from "../Assets/payment.svg";
 export const SidebarService = () => {
   return (
-    <div className="w-[20vw] border-r-[0.2px] border-gray-500 flex-shrink-0">
-      <div className="p-[15%]">
-        <div className="pb-6 pl-4">Миний листүүд</div>
+    <div className="w-[10vw] md:w-[20vw] border-r-[0.5px] border-[#E1E1E1] flex-shrink-0 flex justify-center text-[16px]">
+      <div className="mt-10">
+        {/* <div className="pb-6 hidden md:block">Миний листүүд</div> */}
         <ul>
-          <li>
+          <li className="group flex items-center mb-5">
             <NavLink
               to="/service/list"
               className="flex"
               style={({ isActive }) => ({
                 fontWeight: isActive ? "bold" : "normal",
-                transition: "font-weight 0.3s",
               })}
             >
-              <TiMessage className="w-[50px] h-[50px] p-2 pt-0" />
-              <div className="pt-2">Хүсэлтүүд</div>
+              <img
+                src={request}
+                alt="Service"
+                className="w-8 h-8 transition-transform transform-gpu group-hover:scale-125"
+              />
+              <div className="hidden md:block ml-[20px]">Хүсэлт</div>
             </NavLink>
           </li>
-          <li className="flex">
+          <li className=" group flex items-center">
             <NavLink
               to="/service/payment"
               className="flex"
               style={({ isActive }) => ({
                 fontWeight: isActive ? "bold" : "normal",
-                transition: "font-weight 0.3s",
+                color: isActive ? "black" : "",
               })}
             >
-              <BiWalletAlt className="w-[50px] h-[45px] p-2" />
-              <div className="pt-2">Төлбөр</div>
+              <img
+                src={payment}
+                alt="payment"
+                className="w-8 h-8 transition-transform transform-gpu group-hover:scale-125"
+              />
+              <div className=" hidden ml-5 md:block">Төлбөр</div>
             </NavLink>
           </li>
         </ul>

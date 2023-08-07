@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@font/nunito";
-
-body, html {
-    font-family: var(--fontFamily-nunito);
+.font-link {
+  font-family: "Inter", sans-serif;
 }

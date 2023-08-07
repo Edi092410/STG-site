@@ -1,21 +1,24 @@
-import "./assets/App.css";
 import { AppRoutes } from "./Routes/AppRoutes";
-// import { Test } from "./components/Test/Test";
-import { CreateOrder } from "./components/CreateOrder/CreateOrder";
-import { Slogan } from "./components/Slogan/Slogan";
-// import { Test } from "./Axios/Test";
-import { Sidebar } from "./components/ProfileSidebar/Sidebar";
-import { SecondLogin } from "./pages/SecondLogin";
-import { OrderDetail } from "./components/OrderDetail/OrderDetail";
-import { Test } from "./components/OrderList/Test";
-import { Loading } from "./components/Loading/Loading";
+import { PublicPage } from "./pages/PublicPage";
+import { Opportunity } from "./components/Opportunity/Opportunity";
+import { Acalous } from "./components/Acalous/Acalous";
+import { MainBox } from "./components/MainBox/MainBox";
+import { Box } from "./components/MainBox/Box";
+import { Partner } from "./components/Partners/Partner";
+import { Partners } from "./components/Partners/Partners";
+import { Shape } from "./components/About/About";
+import { Toast } from "./components/Toast/Toast";
+import { SuccessToast } from "./components/Toast/SuccessToast";
+import { ToastContainer } from "react-toastify";
 import "./index.css";
+
 function App() {
   return (
     <div className="App">
       <AppRoutes />
-      {/* <Loading /> */}
-      {/* <OrderDetail /> */}
+      {/* <PublicPage /> */}
+      {/* <MainBox /> */}
+      <ToastContainer />
     </div>
   );
 }

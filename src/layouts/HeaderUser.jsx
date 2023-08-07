@@ -5,26 +5,36 @@ import { Menu } from "../components/ProfileMenu/Menu";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { Notification } from "../components/Notification/Notification";
-
-export const HeaderUser = (props) => {
+import { FaBars } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
+export const HeaderUser = () => {
   const [api, setApi] = useState([]);
   const [modal, setModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await GetData("/settings");
-        console.log("Data:", data);
-        setApi(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+        setApi(data.logo);
+        // console.log("logo", data.logo);
+      } catch (error) {}
     };
-
     fetchData();
   }, []);
 
   const { setAuth } = useAuth();
 
+  const notify = () => {
+    toast.success("Системээс гарлаа", {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
   const user = localStorage.getItem("name");
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
@@ -32,25 +42,47 @@ export const HeaderUser = (props) => {
   const logOut = () => {
     localStorage.clear();
     setAuth(false);
+    notify();
     navigate("/");
   };
 
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
   return (
     <>
-      <header className="flex align-middle justify-around h-16 bg-slate-800 p-5">
+      <header className=" flex items-center justify-between h-[55px] bg-[#2D3648] pl-4 md:pl-0">
+        <div className="absolute left-4 text-white md:hidden cursor-pointer">
+          {isMenuOpen === true ? (
+            <FaTimes onClick={() => setIsMenuOpen(false)} />
+          ) : (
+            <FaBars onClick={() => setIsMenuOpen(true)} />
+          )}
+        </div>
+
         <img
-          src={api.logo}
+          src={`https://admin.e-siticom.com/assets/images/${api}`}
           alt="logo"
-          className="rounded mr-auto pl-[10vw] cursor-pointer"
+          width="30px"
+          height="30px"
+          className="rounded-full  cursor-pointer ml-[35px]"
           onClick={() => {
             navigate("/");
           }}
         ></img>
-        <Navbar />
-        <div className="flex text-slate-200 text-xs pr-[8vw]">
-          <div className="flex mr-2">
+        <div
+          className={`transition-all duration-300 ease-in-out ${
+            isMenuOpen
+              ? "opacity-100 max-h-[400px] py-4"
+              : "opacity-0 max-h-0 py-0"
+          }`}
+        >
+          <Navbar isMenuOpen={isMenuOpen} />
+        </div>
+
+        <div className="flex text-slate-200 mr-[35px]">
+          <div className="flex mr-[10px]">
             {user ? (
-              <Menu user={user} email={email} className=" h-4" />
+              <Menu user={user} email={email} className="" />
             ) : (
               <div>
                 <NavLink to="/login">Нэвтрэх</NavLink>
@@ -79,7 +111,7 @@ export const HeaderUser = (props) => {
             button="Системээс гарах"
             closeModal={() => setModal(false)}
             path="/"
-            StateFunction={logOut}
+            stateFunction={logOut}
           />
         )}
       </header>

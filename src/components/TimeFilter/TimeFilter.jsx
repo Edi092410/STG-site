@@ -7,27 +7,25 @@ export const TimeFilter = ({ time, text, limit, onTimeChange }) => {
     if (limit > time) {
       onTimeChange(time + 1);
     } else onTimeChange(1);
-    console.log(time);
   };
 
   const handleDecrement = () => {
     if (time > 1) {
       onTimeChange(time - 1);
     } else onTimeChange(limit);
-    console.log(time);
   };
   return (
-    <div className="flex text-xs ">
+    <div className="flex text-xs items-center">
       <SlArrowLeft
-        className="mr-2 text-lg cursor-pointer"
+        className="mr-2 text-md cursor-pointer transition-transform transform-gpu hover:scale-125 "
         onClick={handleDecrement}
       />
-      <div id="num">
+      <div className="rounded-2xl shadow-md shadow-[rgba(0, 0, 0, 0.15)] px-[15px] py-[10px] bg-[#F6F6F6]">
         {time}
         {text}
       </div>
       <SlArrowRight
-        className="ml-2 text-lg cursor-pointer"
+        className="ml-2 text-md cursor-pointer transition-transform transform-gpu hover:scale-125"
         onClick={handleIncrement}
       />
     </div>

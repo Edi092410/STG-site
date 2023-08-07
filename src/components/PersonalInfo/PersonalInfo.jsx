@@ -1,44 +1,38 @@
-import React from 'react'
-import { ProfileHeading } from '../ProfileHeading/ProfileHeading'
-import { ProfileSidebar } from '../ProfileSidebar/ProfileSidebar'
+import React from "react";
+import { ProfileHeading } from "../ProfileHeading/ProfileHeading";
+import { SettingsButton } from "../MultipleCompanyInfo/MultipleCompanyInfo";
 export const PersonalInfo = () => {
-  
-
-  
   return (
-            <div>
-                <ProfileHeading 
-                heading="Хувийн тохиргоо"
-                main="Та өөрийнхөө мэдээллийг солигдох бүрт шинэчлэхээ мартуузай. Энэ нь ажлыг хөнгөвчлөх, мэдээлэл дутуу байснаас болж алдаатай бүртгэл үүсэхээс сэргийлэх юм."
-                />
-                <form className='text-sm h-full w-full'>
-                    <div className='mt-16'>
-                        <Input type="text" name="Таны овог "/>
-                    </div>
-                    <Input type="text" name="Таны нэр "/>
-                    <Input type="tel" name="Утасны дугаар "/>
-                    <Input type="email" name="Цахим шуудан "/>
-                    <button type='submit' className='w-[100px] h-[50px] bg-slate-800 rounded-[30px] text-white ml-[40%] mt-10'>Хадгалах</button>
-                 
-                    
-                </form>
-            </div>
-    
-  )
-}
-
+    <div className="w-[80vw]">
+      <ProfileHeading
+        heading="Хувийн тохиргоо"
+        main="Та өөрийнхөө мэдээллийг солигдох бүрт шинэчлэхээ мартуузай. Энэ нь ажлыг хөнгөвчлөх, мэдээлэл дутуу байснаас болж алдаатай бүртгэл үүсэхээс сэргийлэх юм."
+      />
+      <form className="text-sm h-full w-full">
+        <div className="">
+          <Input type="text" name="Таны овог " />
+        </div>
+        <Input type="text" name="Таны нэр " />
+        <Input type="tel" name="Утасны дугаар " />
+        <Input type="email" name="Цахим шуудан " />
+        <SettingsButton />
+      </form>
+    </div>
+  );
+};
 
 export default function Input(props) {
   return (
-    <div className='flex mt-8'>
-        <label className='flex items-center justify-end w-[40%] mr-4'>{props.name}</label>
-        <div className='w-[60%]'>
-            <input type={props.type} className='w-[400px] h-[50px] border border-slate-500 pl-[15px] float-left' />
-        </div>
+    <div className="flex flex-col md:flex-row mt-2 md:mt-8 px-[10%] md:p-0">
+      <label className="flex items-center justify-start md:justify-end w-full md:w-[30%] mr-4 my-2">
+        {props.name}
+      </label>
+      <div className=" w-full md:w-[65%]">
+        <input
+          type={props.type}
+          className="w-full md:w-[400px] h-[40px] border border-slate-500 pl-[15px] float-left"
+        />
+      </div>
     </div>
-  )
+  );
 }
-
-
-
-
