@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Slogan } from "../components/Slogan/Slogan";
 // import { SearchBar } from "../components/SearchBar.jsx/SearchBar";
 // import { SectionName } from "../components/SectionName/SectionName";
@@ -10,11 +10,9 @@ import { Opportunity } from "../components/Opportunity/Opportunity";
 import { Acalous } from "../components/Acalous/Acalous";
 import { Partners } from "../components/Partners/Partners";
 import { About } from "../components/About/About";
-import { ToastContext } from "../context/ToastProvider";
-import { Toast } from "../components/Toast/Toast";
 import { MainBox } from "../components/MainBox/MainBox";
+import { CallCenter } from "../components/CallCenter/CallCenter";
 export const PublicPage = () => {
-  const { showToast } = useContext(ToastContext);
   return (
     <div>
       <div className="mt-[90px]">
@@ -23,10 +21,10 @@ export const PublicPage = () => {
 
       <div className="mx-[20%] mt-[90px]">
         <Purpose />
-        <div className=" text-[#7B7B7B] h-[150px] font-normal flex items-center justify-center text-[14px] 3xl:text-base">
+        <div className=" text-[#7B7B7B] h-[150px] font-normal flex items-center justify-center text-[14px] 3xl:text-base mt-[50px]">
           Шийдэл
         </div>
-        <div className=" text-[#1D3049] text-[25px] 3xl:text-[36px] font-semibold h-[200px] text-center px-[10%]">
+        <div className=" text-[#1D3049] text-[25px] 3xl:text-[36px] font-semibold h-[150px] text-center px-[10%]">
           Таны санхүүгийн үйл ажиллагаанд дэмжлэг үзүүлэх гол боломжууд
         </div>
         <div className="mx-[-20vw]">
@@ -49,6 +47,16 @@ export const PublicPage = () => {
         <div className=" text-[#7B7B7B] h-[150px] font-normal flex items-center justify-center text-[14px] 3xl:text-base">
           Харилцагчийн үйлчилгээ
         </div>
+        <CallCenter />
+        <div className="text-[#1D3049] text-[28px] 3xl:text-[40px] font-semibold mt-[90px] mb-[40px] 3xl:mb-[55px] text-center px-[5vw]">
+          Хамтын үйл ажиллагаагаа бататгасан 3000+ харилцагчид
+        </div>
+        <div className="w-full flex justify-center">
+          <button className=" p-3 bg-[#015488] text-white rounded-md">
+            Онлайн хүсэлт илгээх
+          </button>
+        </div>
+
         <div className="mx-[-20vw] h-[50vh] mb-[90px]">
           {/* <About /> */}
           <MainBox location={"bottom"}>

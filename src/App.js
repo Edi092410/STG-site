@@ -10,14 +10,15 @@ import { Shape } from "./components/About/About";
 import { Toast } from "./components/Toast/Toast";
 import { SuccessToast } from "./components/Toast/SuccessToast";
 import { ToastContainer } from "react-toastify";
+import { MainPicture } from "./components/MainPicture/MainPicture";
 import "./index.css";
 
 function App() {
   return (
     <div className="App">
-      <AppRoutes />
+      {/* <AppRoutes /> */}
       {/* <PublicPage /> */}
-      {/* <MainBox /> */}
+      <MainPicture/>
       <ToastContainer />
     </div>
   );
