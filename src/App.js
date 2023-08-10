@@ -11,6 +11,7 @@ import { Toast } from "./components/Toast/Toast";
 import { SuccessToast } from "./components/Toast/SuccessToast";
 import { ToastContainer } from "react-toastify";
 import { MainPicture } from "./components/MainPicture/MainPicture";
+import { Email } from "./components/Email/Email"
 import "./index.css";
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
     <div className="App">
       {/* <AppRoutes /> */}
       {/* <PublicPage /> */}
-      <MainPicture/>
+      {/* <MainPicture/> */}
+      <Email />
       <ToastContainer />
     </div>
   );

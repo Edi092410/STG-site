@@ -13,47 +13,83 @@ export const Email = () => {
     console.log(e);
     if (window.Email) {
       window.Email.send({
-        SecureToken: "75e7c8f0-acc6-48cf-bfd8-d84e58225e1e",
+        // SecureToken: "75e7c8f0-acc6-48cf-bfd8-d84e58225e1e",
+        SecureToken: "d9eda9be-0a46-449c-965b-1860bafba90c",
         To: getValues("email"),
-        From: "m.erdenebayar.siticom@gmail.com",
+        From: "eba524682@gmail.com",
         Subject: getValues("description"),
-        Body: `<html>
+        Body: `
+        <html>
         <head>
-      
           <style>
-          button {
-            background-color: red;
-            border-style: none;
-            border-radius: 8px;
-            height: 30px;
-            color: white;
-            cursor: pointer;
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
           }
-          img {
-              height: 30px;
-              border-radius: 8px;
-              margin-right: 10px;
+
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
           }
-          .wrap {
-              display: flex;
-              margin-top: 0;
-              align-items: center;
-              width: 200px;
+          .header{
+            display: flex; 
           }
-          </style>
+
+          .header img {
+            max-width: 30px;
+            max-height: 30px;
+            height: auto;
+            border-radius: 10px;
+          }
+
+          .header h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-left: 10px;
+            margin-top: 0;
+          }
+
+          .content {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555555;
+          }
+
+          .content a {
+            color: #007bff;
+            text-decoration: none;
+          }
+
+          .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888888;
+          }
+        </style>
+
         </head>
         <body>
-        <div class="wrap"><img src="https://admin.e-siticom.com/assets/images/logo.jpg">
-        <p>Санхүүгийн Тооцоолох Групп Компани</p>
-        </div>
-        <div class="container">
-        <div>
-        <p>Нууц үг сэргээх <a href="https://e-siticom.com/forgetField?token=">холбоос</a> дээр даран нууц үгээ сэргээнэ үү. Хувийн мэдээллээ хамгаалж нууц үгээ бусдад дамжуулахгүй байна уу.</p>
-        <p>Таныг хүндэтгэсэн, "Санхүүгийн Тооцоолох Групп" компани.</p>
-        </div>
-        </div>
+          <div class="container">
+            <div class="header">
+              <img src="https://admin.e-siticom.com/assets/images/logo.jpg" alt="Logo" />
+              <h1>Санхүүгийн Тооцоолох Групп Компани</h1>
+            </div>
+            <div class="content">
+              <p>Нууц үг сэргээх <a href="https://e-siticom.com/forgetField?token=">холбоос</a> дээр даран нууц үгээ сэргээнэ үү. Хувийн мэдээллээ хамгаалж нууц үгээ бусдад дамжуулахгүй байна уу.</p>
+            </div>
+            <div class="footer">
+              <p>Таныг хүндэтгэсэн, "Санхүүгийн Тооцоолох Групп" компани.</p>
+            </div>
+          </div>
         </body>
-      </html>`,
+        </html>
+        `,
         Attachment: [
           {
             name: "logo.jpg",

@@ -36,6 +36,11 @@ module.exports = {
           "0%": { opacity: 0 },
           "100%": { opacity: 1 },
         },
+        appearAndDissapear: {
+          "0%": { opacity: 0 },
+          "50%": { opacity: 1 },
+          "100%": { opacity: 0 },
+        }
       },
       animation: {
         slideDownAndFade:
@@ -47,6 +52,7 @@ module.exports = {
           "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         upToDown: "down 400ms",
         appear: "appear 1000ms ease-in-out",
+        dissappear: "appearAndDissapear 1000ms ease-in-out"
       },
       screens: {
         "3xl": "1980px",
