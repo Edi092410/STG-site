@@ -79,7 +79,7 @@ export const Opportunity = () => {
   const first = data.slice(1, 9);
   const second = data.slice(8);
   return (
-    <div className="bg-[#F3F2EF] py-[90px]" on>
+    <div className="bg-[rgba(246,237,206,0.30)] py-[90px]" on>
       <div className="grid grid-cols-4 gap-[90px] gap-y-[70px] mb-[70px] mx-[20vw]">
         {first.map((data) => (
           <OpportunityElement

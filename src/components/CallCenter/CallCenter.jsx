@@ -5,7 +5,7 @@ export const CallCenter = () => {
   return (
     <div className="w-full h-[300px] 3xl:h-[415px] shadow-2xl">
       <Box location={"right"} vectorColor={"#F5F5F5"}>
-        <div className="flex items-center pr-[100px] ">
+        <div className="flex items-center pr-[120px] h-full ">
           <div className="text-[16px] 3xl:text-[24px] p-[5%] mr-auto">
             <div className=" font-bold">Call Center</div>
             <div className="mt-2">
@@ -21,8 +21,9 @@ export const CallCenter = () => {
           <img
             src={img}
             alt="character"
-            className="3xl:w-[350px] 3xl:h-[350px] w-[250px] h-[250px] "
+            className="3xl:w-[300px] 3xl:h-[300px] w-[200px] h-[200px] "
           />
+          
         </div>
       </Box>
     </div>

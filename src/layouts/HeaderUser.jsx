@@ -50,7 +50,7 @@ export const HeaderUser = () => {
 
   return (
     <>
-      <header className=" flex items-center justify-between h-[55px] bg-[#2D3648] pl-4 md:pl-0">
+      <header className=" flex items-center justify-between 3xl:h-[100px] h-[60px] bg-[#2D3648]  px-[10vw]">
         <div className="absolute left-4 text-white md:hidden cursor-pointer">
           {isMenuOpen === true ? (
             <FaTimes onClick={() => setIsMenuOpen(false)} />
@@ -62,9 +62,7 @@ export const HeaderUser = () => {
         <img
           src={`https://admin.e-siticom.com/assets/images/${api}`}
           alt="logo"
-          width="30px"
-          height="30px"
-          className="rounded-full  cursor-pointer ml-[35px]"
+          className="3xl:w-[50px] 3xl:h-[50px] w-[40px] h-[40px] rounded-full  cursor-pointer ml-[35px]"
           onClick={() => {
             navigate("/");
           }}
@@ -79,8 +77,8 @@ export const HeaderUser = () => {
           <Navbar isMenuOpen={isMenuOpen} />
         </div>
 
-        <div className="flex text-slate-200 mr-[35px]">
-          <div className="flex mr-[10px]">
+        <div className="flex text-slate-200 text-[16px] mr-[35px]">
+          <div className="flex 3xl:mr-[30px] mr-[20px]">
             {user ? (
               <Menu user={user} email={email} className="" />
             ) : (

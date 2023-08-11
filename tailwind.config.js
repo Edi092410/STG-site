@@ -40,6 +40,36 @@ module.exports = {
           "0%": { opacity: 0 },
           "50%": { opacity: 1 },
           "100%": { opacity: 0 },
+        },
+        revolveDrop: {
+          "30%" : {
+            transform: "translate(0, -50px) rotate(180deg) scale(1)",
+          },
+        
+          "60%": {
+            transform: "translate(0, 20px) scale(.8) rotate(0deg)",
+          },
+        
+          "100%": {
+            transform: "translate(0) scale(1) rotate(0deg)",
+            opacity: "1",
+          }
+        },
+        drop: {
+          "0%": {
+              opacity: 0,
+          },
+          "100%": {
+              opacity: 1,
+          }
+        },
+        wiggle: {
+          "0%, 100%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.15)",
+          }
         }
       },
       animation: {
@@ -52,7 +82,10 @@ module.exports = {
           "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         upToDown: "down 400ms",
         appear: "appear 1000ms ease-in-out",
-        dissappear: "appearAndDissapear 1000ms ease-in-out"
+        dissappear: "appearAndDissapear 1000ms ease-in-out",
+        revolveDrop: "revolveDrop 300ms forwards",
+        drop: "drop 1000ms forwards",
+        wiggle: "wiggle 1500ms infinite"
       },
       screens: {
         "3xl": "1980px",

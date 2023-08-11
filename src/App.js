@@ -10,17 +10,18 @@ import { Shape } from "./components/About/About";
 import { Toast } from "./components/Toast/Toast";
 import { SuccessToast } from "./components/Toast/SuccessToast";
 import { ToastContainer } from "react-toastify";
-import { MainPicture } from "./components/MainPicture/MainPicture";
-import { Email } from "./components/Email/Email"
+import { Help } from "./components/Help/Help";
+import { FirstLoginSecond } from "./pages/FirstLoginSecond";
 import "./index.css";
 
 function App() {
   return (
     <div className="App">
-      {/* <AppRoutes /> */}
+      <AppRoutes />
       {/* <PublicPage /> */}
-      {/* <MainPicture/> */}
-      <Email />
+      {/* <Help/> */}
+      {/* <FirstLoginSecond /> */}
+      {/* <Email /> */}
       <ToastContainer />
     </div>
   );
