@@ -8,7 +8,7 @@ import { Loading } from "./components/Loading/Loading";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorHandle } from "./components/ErrorHandle/ErrorHandle";
 import { OrderProvider } from "./context/OrderProvider";
-import { ToastProvider } from "./context/ToastProvider";
+import { ProgramProvider } from "./context/ProgramProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -16,11 +16,11 @@ root.render(
       <Suspense fallback={<Loading />}>
         <AuthProvider>
           <OrderProvider>
-            <ToastProvider>
+            <ProgramProvider>
               <BrowserRouter>
                 <App />
               </BrowserRouter>
-            </ToastProvider>
+            </ProgramProvider>
           </OrderProvider>
         </AuthProvider>
       </Suspense>

@@ -70,6 +70,15 @@ module.exports = {
           "50%": {
             transform: "scale(1.15)",
           }
+        },
+        redBorder: {
+          "0%, 100%": {
+            borderStyle: "none",
+          },
+          "50%": {
+            borderWidth: "1px",
+            borderColor: "rgb(239 68 68)",
+          }
         }
       },
       animation: {
@@ -85,7 +94,8 @@ module.exports = {
         dissappear: "appearAndDissapear 1000ms ease-in-out",
         revolveDrop: "revolveDrop 300ms forwards",
         drop: "drop 1000ms forwards",
-        wiggle: "wiggle 1500ms infinite"
+        wiggle: "wiggle 1500ms infinite",
+        redBorder: "redBorder 1000ms"
       },
       screens: {
         "3xl": "1980px",

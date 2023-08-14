@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
