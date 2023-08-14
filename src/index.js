@@ -9,6 +9,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ErrorHandle } from "./components/ErrorHandle/ErrorHandle";
 import { OrderProvider } from "./context/OrderProvider";
 import { ProgramProvider } from "./context/ProgramProvider";
+import { CompanyProvider } from "./context/CompanyProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -17,9 +18,11 @@ root.render(
         <AuthProvider>
           <OrderProvider>
             <ProgramProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
+              <CompanyProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </CompanyProvider>
             </ProgramProvider>
           </OrderProvider>
         </AuthProvider>

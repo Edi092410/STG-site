@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 export const Navbar = ({ isMenuOpen }) => {
   const navbar = [
     {
-      name: "Бүтээгдэхүүн",
+      name: "Шийдэл",
       to: "/",
       key: "product",
     },
     {
-      name: "Үйлчилгээ",
+      name: "Харилцагчийн үйлчилгээ",
       to: "/service/list",
       key: "service",
     },
@@ -29,12 +29,12 @@ export const Navbar = ({ isMenuOpen }) => {
         isMenuOpen ? "block" : "hidden md:block"
       } `}
     >
-      <ul className="flex md:flex-row flex-col text-[#717D96] text-base md:items-center gap-[6vh] md:gap-0 ml-4 md:ml-0 text-left">
+      <ul className="flex md:flex-row flex-col text-[#717D96] text-[12px] 3xl:text-base md:items-center gap-[6vh] md:gap-0 ml-4 md:ml-0 text-left">
         {navbar.map((prop, index) => (
           <li
             key={prop.key}
             className={`mr-5 ${
-              prop.name === "Үйлчилгээ" &&
+              prop.name === "Харилцагчийн үйлчилгээ" &&
               (localStorage.getItem("role") === "User" ||
                 !localStorage.getItem("name")) &&
               "hidden"

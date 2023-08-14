@@ -57,6 +57,7 @@ export const OrderList = ({ date, date2, month }) => {
             }
           );
           setOrderData(data.data);
+          console.log(data.data);
         } catch (err) {
           setHasError(true);
         } finally {
@@ -100,7 +101,7 @@ export const OrderList = ({ date, date2, month }) => {
       // setOrderData(OrderData.filter((order) => order.number !== storedNumber));
       setRefresh((prev) => !prev);
       // alert("Устгагдлаа");
-      notify("Устгагдлаа.")
+      notify("Устгагдлаа.");
     } catch (err) {}
   };
 

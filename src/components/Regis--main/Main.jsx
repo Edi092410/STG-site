@@ -41,8 +41,8 @@ export const Main = () => {
     console.log("name", getValues("name"));
     try {
       const data = await axios.post(
-        // "https://admin.e-siticom.com/api/register",
-        "/api/register",
+        "https://admin.e-siticom.com/api/register",
+        // "/api/register",
         e,
         {
           headers: {

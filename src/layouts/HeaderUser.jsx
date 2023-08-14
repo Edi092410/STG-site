@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { GetData } from "../Axios/Axios";
 import { Navbar } from "../components/Navbar/Navbar";
 import { Menu } from "../components/ProfileMenu/Menu";
@@ -8,6 +8,8 @@ import { Notification } from "../components/Notification/Notification";
 import { FaBars } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { ChooseCompany } from "../components/CompanyNames/ChooseCompany";
+import { CompanyContext } from "../context/CompanyProvider";
 export const HeaderUser = () => {
   const [api, setApi] = useState([]);
   const [modal, setModal] = useState(false);
@@ -48,9 +50,11 @@ export const HeaderUser = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(true);
 
+  const { selectedCompany, handleSelectedCompany } = useContext(CompanyContext);
+
   return (
     <>
-      <header className=" flex items-center justify-between 3xl:h-[100px] h-[60px] bg-[#2D3648]  px-[10vw]">
+      <header className=" flex items-center justify-between 3xl:h-[100px] h-[60px] bg-[#2D3648]">
         <div className="absolute left-4 text-white md:hidden cursor-pointer">
           {isMenuOpen === true ? (
             <FaTimes onClick={() => setIsMenuOpen(false)} />
@@ -77,27 +81,23 @@ export const HeaderUser = () => {
           <Navbar isMenuOpen={isMenuOpen} />
         </div>
 
-        <div className="flex text-slate-200 text-[16px] mr-[35px]">
-          <div className="flex 3xl:mr-[30px] mr-[20px]">
+        <div className="flex text-slate-200 text-[12px] 3xl:text-[16px] mr-[35px]">
+          <div className="flex ">
             {user ? (
-              <Menu user={user} email={email} className="" />
+              <>
+                <ChooseCompany
+                  selectedOption={selectedCompany}
+                  onSelectedChange={handleSelectedCompany}
+                />
+                <Menu user={user} email={email} className="" />
+              </>
             ) : (
-              <div>
+              <div className="3xl:mr-[30px] mr-[20px]">
                 <NavLink to="/login">Нэвтрэх</NavLink>
               </div>
             )}
           </div>
-          {user ? (
-            <div
-              className="text-red-500 cursor-pointer"
-              onClick={() => {
-                setModal(true);
-              }}
-            >
-              {/* <NavLink to="/">Гарах</NavLink> */}
-              Гарах
-            </div>
-          ) : (
+          {!user && (
             <div className="text-red-500">
               <NavLink to="/register">Бүртгүүлэх</NavLink>
             </div>

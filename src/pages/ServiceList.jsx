@@ -15,20 +15,8 @@ export const ServiceList = () => {
     <div>
         <div className='flex'>  
             <SidebarService />
-            {/*<div className='flex-1 mr-[10%] ml-[10%]'>
-                <div className=' inline-flex justify-around'>   
-                    <NewReq 
-                    className=""
-                    onClick={() => setModal(true)}
-                    />                                                                                                                                                                                            
-                    <SearchBar className="ml-[10%]"/>
-                </div>
-                <InfoReq />
-            </div> */}
             <Outlet />
-            {/* <RightSidebar /> */}
         </div>
-        {/* {modal && (<CreateOrder closeModal={() => setModal(false)}/>)} */}
     </div>
   )
 }
