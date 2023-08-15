@@ -20,12 +20,14 @@ export const TimeFilter = ({ time, text, limit, onTimeChange }) => {
         className="mr-2 text-md cursor-pointer transition-transform transform-gpu hover:scale-125 "
         onClick={handleDecrement}
       />
-      <div className="rounded-2xl shadow-md shadow-[rgba(0, 0, 0, 0.15)] px-[15px] py-[10px] bg-[#F6F6F6]">
+      <div className="rounded-lg shadow-[0px_4px_20px_0px rgba(0,0,0,0.15)] px-[15px] py-[10px] bg-[#F6F6F6]">
         {time}
         {text}
       </div>
       <SlArrowRight
-        className="ml-2 text-md cursor-pointer transition-transform transform-gpu hover:scale-125"
+        className={`ml-2 text-md cursor-pointer transition-transform transform-gpu hover:scale-125 ${
+          time === limit && " pointer-events-none"
+        }`}
         onClick={handleIncrement}
       />
     </div>

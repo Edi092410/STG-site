@@ -9,6 +9,7 @@ import { OrderContext, OrderProvider } from "../../context/OrderProvider";
 import { Loading } from "../Loading/Loading";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
   const {
     register,

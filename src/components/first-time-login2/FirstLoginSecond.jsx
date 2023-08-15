@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
@@ -66,7 +67,7 @@ export default function SecondLogin() {
         localStorage.setItem("role", data?.data?.data?.role);
         localStorage.setItem("email", data.data.data.email);
         setAuth(true);
-        navigate("/");
+        // navigate("/help");
         notify();
       }
     } catch (err) {
@@ -91,7 +92,7 @@ export default function SecondLogin() {
             localStorage.setItem("companies", JSON.stringify(data.data.orgs));
 
             setAuth(true);
-            navigate("/");
+            // navigate("/help");
             notify();
           }
         } catch (err) {

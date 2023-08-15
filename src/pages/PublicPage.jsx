@@ -12,7 +12,9 @@ import { Partners } from "../components/Partners/Partners";
 import { About } from "../components/About/About";
 import { MainBox } from "../components/MainBox/MainBox";
 import { CallCenter } from "../components/CallCenter/CallCenter";
+import { useNavigate } from "react-router-dom";
 export const PublicPage = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="mt-[90px]">
@@ -52,7 +54,10 @@ export const PublicPage = () => {
           Хамтын үйл ажиллагаагаа бататгасан 3000+ харилцагчид
         </div>
         <div className="w-full flex justify-center">
-          <button className=" p-3 bg-[#015488] text-white rounded-md">
+          <button
+            className=" p-3 bg-[#015488] text-white rounded-md"
+            onClick={() => navigate("/help")}
+          >
             Онлайн хүсэлт илгээх
           </button>
         </div>

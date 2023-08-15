@@ -21,6 +21,13 @@ export const CompanyNames = ({
     }
   }, [selected, onSelectedChange]);
 
+  useEffect(() => {
+    // Set the selected option on component render
+    if (selected) {
+      onSelectedChange(selected);
+    }
+  }, []);
+
   const [isOpened, setIsOpened] = useState(false);
   // Энэ component-н гадна дарахад алга болгох funtion
   const menuRef = useRef(null);

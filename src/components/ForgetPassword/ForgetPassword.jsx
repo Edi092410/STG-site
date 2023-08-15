@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import logo from "../../Assets/logo.jpg";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const ForgetPassword = () => {
   const {
     register,
@@ -104,7 +105,8 @@ export const ForgetPassword = () => {
               </body>
             </html>`,
           }).then((message) => notify(message));
-          setSuccess(`${response.data.message} Та цахим шуудангаа шалгана уу!`);
+          // ${response.data.message}
+          setSuccess(`Нууц үгийн сэргээлтийн бичлэг үүсгэлээ. Та цахим шуудангаа шалгана уу!`);
         }
       }
     } catch (err) {

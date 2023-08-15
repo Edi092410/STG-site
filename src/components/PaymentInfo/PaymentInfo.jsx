@@ -26,12 +26,6 @@ export const PaymentInfo = (props) => {
     setYear(year);
   };
   // Niit tuluh dun
-  // const totalPay = OrderData.reduce((total, props) => {
-  //   if (props.dtAmount) {
-  //     return total + parseFloat(props.dtAmount);
-  //   }
-  //   return total;
-  // }, 0);
   const totalPay =
     OrderData && OrderData.length > 0
       ? OrderData.reduce((total, props) => {
@@ -42,14 +36,18 @@ export const PaymentInfo = (props) => {
         }, 0)
       : 0;
 
-  // Niit tulburiin uldegdel
-  // const totalBalance = OrderData.reduce((total, props) => {
-  //   console.log(OrderData);
-  //   const balance =
-  //     props.dtAmount - props.ktAmount > 0 ? props.dtAmount - props.ktAmount : 0;
-  //   return total + parseFloat(balance);
-  // }, 0);
+  // Niit tulsun dun
+  const totalPayed =
+    OrderData && OrderData.length > 0
+      ? OrderData.reduce((total, props) => {
+          if (props.ktAmount) {
+            return total + parseFloat(props.ktAmount);
+          }
+          return total;
+        }, 0)
+      : 0;
 
+  // Niit tulburiin uldegdel
   const totalBalance =
     OrderData && OrderData.length > 0
       ? OrderData.reduce((total, props) => {
@@ -60,6 +58,42 @@ export const PaymentInfo = (props) => {
           return total + parseFloat(balance);
         }, 0)
       : 0;
+
+  useEffect(() => {
+    console.log("select", selectedOption);
+    const FetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await axios.get(
+          // `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+          // `,
+          `/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+              `,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setOrderData(data.data.transactions);
+        setBeginBalance(data.data.beginbalance);
+        setModal(false);
+      } catch (err) {
+        if (
+          err.response?.status === 400 ||
+          err.response?.status === 404 ||
+          err.response?.status === 500 ||
+          err.response?.status === 204
+        ) {
+          setModal(true);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    // };
+    FetchData();
+  }, []);
 
   useEffect(() => {
     const FetchData = async () => {
@@ -78,10 +112,6 @@ export const PaymentInfo = (props) => {
         );
         setOrderData(data.data.transactions);
         setBeginBalance(data.data.beginbalance);
-        // if (OrderData === undefined || OrderData === null) {
-        //   console.log("set modal to true in try");
-        //   setModal(true);
-        // } else setModal(false);
         setModal(false);
       } catch (err) {
         if (
@@ -158,7 +188,8 @@ export const PaymentInfo = (props) => {
                         <div
                           className={`flex ${
                             parseFloat(beginBalance) +
-                              parseFloat(totalBalance) ===
+                              parseFloat(totalPay) -
+                              parseFloat(totalPayed) ===
                               0 || beginBalance === null
                               ? "text-[#3FD4CF]"
                               : "text-[#F00]"
@@ -167,7 +198,8 @@ export const PaymentInfo = (props) => {
                           {beginBalance === null
                             ? "0"
                             : parseFloat(beginBalance) +
-                              parseFloat(totalBalance)}
+                              parseFloat(totalPay) -
+                              parseFloat(totalPayed)}
                           ₮
                         </div>
                       ) : (
@@ -188,7 +220,7 @@ export const PaymentInfo = (props) => {
             <div className="w-full md:w-[70%] mt-[5%] ">
               <InfoReq
                 main="Эрхэм харилцагч танд төлбөрийн үлдэгдэл байхгүй байна."
-                foot="Цаг тухайд нь төлбөрөө төлдөг төнд баярлалаа."
+                foot="Цаг тухайд нь төлбөрөө төлдөг танд баярлалаа."
               />
             </div>
           ) : (

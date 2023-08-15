@@ -21,9 +21,8 @@ export const CallCenter = () => {
           <img
             src={img}
             alt="character"
-            className="3xl:w-[300px] 3xl:h-[300px] w-[200px] h-[200px] "
+            className="3xl:w-[300px]  w-[200px]  "
           />
-          
         </div>
       </Box>
     </div>

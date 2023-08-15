@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Notification } from "../Notification/Notification";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const Menu = (props) => {
   const menu = [
     {

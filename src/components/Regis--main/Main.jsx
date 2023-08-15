@@ -5,6 +5,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../../Assets/logo.jpg";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const Main = () => {
   const {
     register,

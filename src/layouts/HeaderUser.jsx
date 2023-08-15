@@ -8,6 +8,7 @@ import { Notification } from "../components/Notification/Notification";
 import { FaBars } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ChooseCompany } from "../components/CompanyNames/ChooseCompany";
 import { CompanyContext } from "../context/CompanyProvider";
 export const HeaderUser = () => {
@@ -85,10 +86,10 @@ export const HeaderUser = () => {
           <div className="flex ">
             {user ? (
               <>
-                <ChooseCompany
+                {/* <ChooseCompany
                   selectedOption={selectedCompany}
                   onSelectedChange={handleSelectedCompany}
-                />
+                /> */}
                 <Menu user={user} email={email} className="" />
               </>
             ) : (

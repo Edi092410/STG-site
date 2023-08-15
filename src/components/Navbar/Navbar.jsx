@@ -9,7 +9,7 @@ export const Navbar = ({ isMenuOpen }) => {
     },
     {
       name: "Харилцагчийн үйлчилгээ",
-      to: "/service/list",
+      to: "/help",
       key: "service",
     },
     {
@@ -35,8 +35,7 @@ export const Navbar = ({ isMenuOpen }) => {
             key={prop.key}
             className={`mr-5 ${
               prop.name === "Харилцагчийн үйлчилгээ" &&
-              (localStorage.getItem("role") === "User" ||
-                !localStorage.getItem("name")) &&
+              localStorage.getItem("role") === "User" &&
               "hidden"
             }`}
           >

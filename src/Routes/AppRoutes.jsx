@@ -21,6 +21,9 @@ import { Article } from "../components/Article/Article";
 import { VerificationPage } from "../components/VerificationPage/VerificationPage";
 import { ForgetPassword } from "../components/ForgetPassword/ForgetPassword";
 import { ForgetField } from "../components/ForgetPassword/ForgetField";
+import { Help } from "../components/Help/Help";
+import { ChooseProgram } from "../components/ChooseProgram/ChooseProgram";
+import { LoginStatus } from "./LoginStatus";
 
 export const AppRoutes = () => {
   let { token } = useParams();
@@ -40,9 +43,12 @@ export const AppRoutes = () => {
             <Route path="privacy" element={<Privacy />} />
             <Route path="disable" element={<UserDisable />} />
           </Route>
+          <Route path="program" element={<ChooseProgram />} />
         </Route>
-        <Route path="login" element={<FirstLoginSecond />} />
-        <Route path="register" element={<Main />} />
+        <Route element={<LoginStatus />}>
+          <Route path="login" element={<FirstLoginSecond />} />
+          <Route path="register" element={<Main />} />
+        </Route>
         <Route path="product" element={<Product />}></Route>
         <Route path="course" element={<Course />}></Route>
         <Route path="article" element={<Article />}></Route>
@@ -53,6 +59,7 @@ export const AppRoutes = () => {
         />
         <Route path="forgetField" element={<ForgetField />} token={token} />
         <Route path="forget" element={<ForgetPassword />}></Route>
+        <Route path="help" element={<Help />} />
       </Route>
       <Route path="*" element={<PageNoteFound />} />
     </Routes>

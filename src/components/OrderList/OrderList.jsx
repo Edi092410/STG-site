@@ -10,6 +10,7 @@ import { LoadedContext } from "../../context/Loaded";
 import { ServerErrorPage } from "../../pages/ErrorPages/ServerErrorPage";
 import { Axios } from "../../Axios/Axios";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const OrderList = ({ date, date2, month }) => {
   const [selectedOption, setSelectedOption] = useState({});
   // UseContext ашиглан component refresh хийх
@@ -40,6 +41,33 @@ export const OrderList = ({ date, date2, month }) => {
   // api рүү явуулна
 
   const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const FetchData = async () => {
+      if (selectedOption !== "") {
+        setLoading(true);
+        try {
+          const data = await axios.get(
+            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-type": "application/json",
+              },
+            }
+          );
+          setOrderData(data.data);
+          console.log(data.data);
+        } catch (err) {
+          setHasError(true);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    FetchData();
+  }, []);
 
   useEffect(() => {
     const FetchData = async () => {

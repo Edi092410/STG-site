@@ -6,6 +6,7 @@ import { OrderContext } from "../../context/OrderProvider";
 import { PulseLoader } from "react-spinners";
 import { ServiceSelect } from "../ServiceSelect/ServiceSelect";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const CreateOrder = ({ closeModal }) => {
   const {
     register,
