@@ -14,8 +14,11 @@ export const List = ({ date, date2, month }) => {
   const [OrderData, setOrderData] = useState([]);
   // const serviceData = OrderData.filter((info) => !info.number.startsWith("Y"));
   // const feedbackData = OrderData.filter((info) => info.number.startsWith("Y"));
-  let serviceData = [];
-  let feedbackData = [];
+  // let serviceData = [];
+  // let feedbackData = [];
+  const [serviceData, setServiceData] = useState([])
+  const [feedbackData, setFeedbackData] = useState([]);
+
   const { refresh, setRefresh } = useContext(OrderContext);
   // Loading хийх
   const [loading, setLoading] = useState(false);
@@ -37,21 +40,22 @@ export const List = ({ date, date2, month }) => {
           }
         );
         setOrderData(data.data);
-        // serviceData = data.data.filter((info) => info.number.startsWith("Y"));
-        feedbackData = data.data.filter((info) => !info.number.startsWith("Y"));
-        console.log(
-          "service",
-          data.data.filter((info) => !info.number.startsWith("Ү"))
-        );
-        console.log(
-          "feedback",
-          data.data.filter((info) => info.number.startsWith("Ү"))
-        );
+        setServiceData(data.data.filter((info) => info.number.startsWith("Ү")));
+        setFeedbackData(data.data.filter((info) => !info.number.startsWith("Ү")));
         console.log("try");
       } catch (err) {
         console.log(err);
       } finally {
         setLoading(false);
+        
+        console.log(
+          "service",
+          serviceData
+        );
+        console.log(
+          "feedback",
+          feedbackData
+        );
       }
     };
     FetchData();
@@ -128,7 +132,7 @@ export const List = ({ date, date2, month }) => {
               <td>No data.</td>
               <td></td>
             </tr>
-          )}
+          )} 
         </tbody>
       </table>
 
@@ -172,12 +176,134 @@ export const List = ({ date, date2, month }) => {
               <td>No data.</td>
               <td></td>
             </tr>
-          )}
+          )} 
         </tbody>
       </table>
     </div>
   );
 };
+
+export const Payment = () => {
+
+  const [OrderData, setOrderData] = useState([]);
+  const [beginBalance, setBeginBalance] = useState("");
+  const [loading, setLoading] = useState(false);
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
+  const handleYearChange = (year) => {
+    setYear(year);
+  };
+  // Niit tuluh dun
+  const totalPay =
+    OrderData && OrderData.length > 0
+      ? OrderData.reduce((total, props) => {
+          if (props.dtAmount) {
+            return total + parseFloat(props.dtAmount);
+          }
+          return total;
+        }, 0)
+      : 0;
+
+  // Niit tulsun dun
+  const totalPayed =
+    OrderData && OrderData.length > 0
+      ? OrderData.reduce((total, props) => {
+          if (props.ktAmount) {
+            return total + parseFloat(props.ktAmount);
+          }
+          return total;
+        }, 0)
+      : 0;
+
+  // Niit tulburiin uldegdel
+  const totalBalance =
+    OrderData && OrderData.length > 0
+      ? OrderData.reduce((total, props) => {
+          const balance =
+            props.dtAmount - props.ktAmount > 0
+              ? props.dtAmount - props.ktAmount
+              : 0;
+          return total + parseFloat(balance);
+        }, 0)
+      : 0;
+
+  const {selectedOption} = useContext(CompanyContext);
+
+  useEffect(() => {
+    console.log("select", selectedOption);
+    const FetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await axios.get(
+          // `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+          // `,
+          `/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+              `,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setOrderData(data.data.transactions);
+        setBeginBalance(data.data.beginbalance);
+        
+      } catch (err) {
+        if (
+          err.response?.status === 400 ||
+          err.response?.status === 404 ||
+          err.response?.status === 500 ||
+          err.response?.status === 204
+        ) {
+          
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    // };
+    FetchData();
+  }, []);
+
+  useEffect(() => {
+    const FetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await axios.get(
+          // `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+          // `,
+          `/api/services/getbillinginfo?customerId=${selectedOption}&startDate=${year}-01-01&endDate=${year}-12-31
+          `,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setOrderData(data.data.transactions);
+        setBeginBalance(data.data.beginbalance);
+        ;
+      } catch (err) {
+        if (
+          err.response?.status === 400 ||
+          err.response?.status === 404 ||
+          err.response?.status === 500 ||
+          err.response?.status === 204
+        ) {
+          
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    // };
+    FetchData();
+  }, [selectedOption, year]);
+
+  return(
+    <div></div>
+  );
+}
 
 export const Test = () => {
   const currentYear = new Date().getFullYear();
