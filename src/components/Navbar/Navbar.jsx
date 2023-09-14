@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+// import { ProgramContext } from "../../context/ProgramProvider";
+
 export const Navbar = ({ isMenuOpen }) => {
+  // const { selectedChips } = useContext(ProgramContext);
+  const selectedChips = JSON.parse(localStorage.getItem("programmes"));
   const navbar = [
     {
       name: "Шийдэл",
@@ -9,7 +13,12 @@ export const Navbar = ({ isMenuOpen }) => {
     },
     {
       name: "Харилцагчийн үйлчилгээ",
-      to: "/help",
+      to:
+        selectedChips &&
+        selectedChips.length > 0 &&
+        !selectedChips.every((element) => element === false || null)
+          ? "/test"
+          : "/help",
       key: "service",
     },
     {
@@ -25,7 +34,7 @@ export const Navbar = ({ isMenuOpen }) => {
   ];
   return (
     <div
-      className={`absolute md:static md:min-h-fit min-h-[50vh] left-0 top-[55px] md:w-auto w-full flex items-center z-10 bg-[#2D3648]  ${
+      className={` md:min-h-fit min-h-[50vh]  bg-[#2D3648] ${
         isMenuOpen ? "block" : "hidden md:block"
       } `}
     >

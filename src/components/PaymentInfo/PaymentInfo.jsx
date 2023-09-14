@@ -60,7 +60,6 @@ export const PaymentInfo = (props) => {
       : 0;
 
   useEffect(() => {
-    console.log("select", selectedOption);
     const FetchData = async () => {
       setLoading(true);
       try {

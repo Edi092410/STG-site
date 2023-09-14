@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes, useParams } from "react-router-dom";
 import { ServiceList } from "../pages/ServiceList";
 import { FirstLoginSecond } from "../pages/FirstLoginSecond";
@@ -24,9 +24,15 @@ import { ForgetField } from "../components/ForgetPassword/ForgetField";
 import { Help } from "../components/Help/Help";
 import { ChooseProgram } from "../components/ChooseProgram/ChooseProgram";
 import { LoginStatus } from "./LoginStatus";
+import { ServicePage } from "../components/OrderList/List";
+import { PaymentPage } from "../components/OrderList/List";
+import { QA } from "../components/QA/QA";
+
+import { LoginPathContext } from "../context/LoginPathProvider";
 
 export const AppRoutes = () => {
   let { token } = useParams();
+  const { pathName } = useContext(LoginPathContext);
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
@@ -44,6 +50,10 @@ export const AppRoutes = () => {
             <Route path="disable" element={<UserDisable />} />
           </Route>
           <Route path="program" element={<ChooseProgram />} />
+          <Route path="test" element={<ServicePage />}>
+            <Route index element={<QA />} />
+            <Route path="payment" element={<PaymentPage />} />
+          </Route>
         </Route>
         <Route element={<LoginStatus />}>
           <Route path="login" element={<FirstLoginSecond />} />

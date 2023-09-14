@@ -26,7 +26,6 @@ export const ListService = () => {
     const service = async () => {
       setLoading(true);
       try {
-        console.log("try");
         const data = await axios.get(
           // `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
           `/api/services/getservicecount?email=${localStorage.getItem(
@@ -39,10 +38,8 @@ export const ListService = () => {
             },
           }
         );
-        console.log(data);
         setServiceCount(data.data.serviceCount);
       } catch (err) {
-        console.log(err);
       } finally {
         setLoading(false);
       }
@@ -54,7 +51,6 @@ export const ListService = () => {
     const service = async () => {
       setLoading(true);
       try {
-        console.log("try");
         const data = await axios.get(
           // `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
           `/api/services/getservicecount?email=${localStorage.getItem(
@@ -67,7 +63,6 @@ export const ListService = () => {
             },
           }
         );
-        console.log(data);
         setServiceCount(data.data.serviceCount);
       } catch (err) {
         console.log(err);

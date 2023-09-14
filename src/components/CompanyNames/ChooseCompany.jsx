@@ -1,23 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { CompanyContext } from "../../context/CompanyProvider";
 export const ChooseCompany = ({
-  selectedOption,
-  onSelectedChange,
+  // selectedOption,
+  // onSelectedChange,
   selected,
 }) => {
   const handleSelectedChange = (e) => {
-    onSelectedChange(e.target.value);
+    // onSelectedChange(e.target.value);
+    handleSelectedCompany(e.target.value);
   };
+  const { selectedCompany, handleSelectedCompany } = useContext(CompanyContext);
 
   const companies = JSON.parse(localStorage.getItem("companies"));
-  // const companies = company.data;
 
   // Set the selected option on component render
-  useState(() => {
+  useEffect(() => {
     if (selected) {
-      onSelectedChange(selected);
+      // onSelectedChange(selected);
+      handleSelectedCompany(selected);
     }
-  }, [selected, onSelectedChange]);
+  }, [selected, handleSelectedCompany]);
 
+  useEffect(() => {
+    handleSelectedCompany(
+      companies && companies.length > 0 && companies[0].customerId
+    );
+  }, []);
+  // [selected, onSelectedChange]
   const [isOpened, setIsOpened] = useState(false);
   // Энэ component-н гадна дарахад алга болгох funtion
   const menuRef = useRef(null);
@@ -51,7 +60,8 @@ export const ChooseCompany = ({
         > */}
         <select
           className=" appearance-none w-fit h-[30px] bg-transparent text-white focus:outline-none pr-6 text-right "
-          value={selectedOption}
+          // defaultValue={selectedCompany}
+          defaultValue={selectedCompany}
           onChange={handleSelectedChange}
         >
           {/* <option>Компани аа сонгоно уу!</option> */}

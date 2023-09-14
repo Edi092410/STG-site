@@ -48,8 +48,8 @@ export const OrderList = ({ date, date2, month }) => {
         setLoading(true);
         try {
           const data = await axios.get(
-            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
-            `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            // `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,7 +58,6 @@ export const OrderList = ({ date, date2, month }) => {
             }
           );
           setOrderData(data.data);
-          console.log(data.data);
         } catch (err) {
           setHasError(true);
         } finally {
@@ -85,7 +84,6 @@ export const OrderList = ({ date, date2, month }) => {
             }
           );
           setOrderData(data.data);
-          console.log(data.data);
         } catch (err) {
           setHasError(true);
         } finally {
@@ -129,7 +127,7 @@ export const OrderList = ({ date, date2, month }) => {
       // setOrderData(OrderData.filter((order) => order.number !== storedNumber));
       setRefresh((prev) => !prev);
       // alert("Устгагдлаа");
-      notify("Устгагдлаа.");
+      notify({ text: "Устгагдлаа." });
     } catch (err) {}
   };
 

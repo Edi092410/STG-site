@@ -9,6 +9,9 @@ module.exports = {
         ...blackA,
         ...mauve,
         ...violet,
+        "bg-light-blue": "#1d9cd380",
+        "bg-pale-blue": "#8fcee957",
+        "bg-transparent-white": "#ffffff00",
       },
       keyframes: {
         slideDownAndFade: {
@@ -42,26 +45,26 @@ module.exports = {
           "100%": { opacity: 0 },
         },
         revolveDrop: {
-          "30%" : {
+          "30%": {
             transform: "translate(0, -50px) rotate(180deg) scale(1)",
           },
-        
+
           "60%": {
             transform: "translate(0, 20px) scale(.8) rotate(0deg)",
           },
-        
+
           "100%": {
             transform: "translate(0) scale(1) rotate(0deg)",
             opacity: "1",
-          }
+          },
         },
         drop: {
           "0%": {
-              opacity: 0,
+            opacity: 0,
           },
           "100%": {
-              opacity: 1,
-          }
+            opacity: 1,
+          },
         },
         wiggle: {
           "0%, 100%": {
@@ -69,7 +72,7 @@ module.exports = {
           },
           "50%": {
             transform: "scale(1.15)",
-          }
+          },
         },
         redBorder: {
           "0%, 100%": {
@@ -78,8 +81,8 @@ module.exports = {
           "50%": {
             borderWidth: "1px",
             borderColor: "rgb(239 68 68)",
-          }
-        }
+          },
+        },
       },
       animation: {
         slideDownAndFade:
@@ -95,7 +98,7 @@ module.exports = {
         revolveDrop: "revolveDrop 300ms forwards",
         drop: "drop 1000ms forwards",
         wiggle: "wiggle 1500ms infinite",
-        redBorder: "redBorder 1000ms"
+        redBorder: "redBorder 1000ms",
       },
       screens: {
         "3xl": "1980px",

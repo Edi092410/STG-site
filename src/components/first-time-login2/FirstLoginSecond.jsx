@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
-import { PulseLoader } from "react-spinners";
+import { LoginPathContext } from "../../context/LoginPathProvider";
 export default function SecondLogin() {
   const {
     register,
@@ -19,6 +19,9 @@ export default function SecondLogin() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  const { pathName } = useContext(LoginPathContext);
   const { setAuth } = useAuth();
 
   const [errMsg, setErrMsg] = useState("");
@@ -39,7 +42,6 @@ export default function SecondLogin() {
   };
 
   const onSubmit = async (e) => {
-    console.log(e);
     setLoading(true);
     try {
       // Get CSRF cookie
@@ -67,7 +69,12 @@ export default function SecondLogin() {
         localStorage.setItem("role", data?.data?.data?.role);
         localStorage.setItem("email", data.data.data.email);
         setAuth(true);
-        // navigate("/help");
+        if (pathName) {
+          navigate(-1);
+        } else {
+          navigate(-2);
+        }
+        // navigate(-1);
         notify();
       }
     } catch (err) {
@@ -92,7 +99,11 @@ export default function SecondLogin() {
             localStorage.setItem("companies", JSON.stringify(data.data.orgs));
 
             setAuth(true);
-            // navigate("/help");
+            if (pathName) {
+              navigate(-1);
+            } else {
+              navigate(-2);
+            }
             notify();
           }
         } catch (err) {
@@ -116,7 +127,7 @@ export default function SecondLogin() {
         <div className="w-[430px]">
           <Box>
             <form
-              className="flex justify-center items-center"
+              className="flex justify-center items-cber"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="w-full mx-[10%]">

@@ -12,7 +12,6 @@ export const VerificationPage = () => {
   const [response, setResponse] = useState({});
 
   useEffect(() => {
-    console.log("token", token);
     if (token) {
       verifyToken();
     }
@@ -28,7 +27,6 @@ export const VerificationPage = () => {
           },
         }
       );
-      console.log(response);
       setResponse(response);
     } catch (error) {
       console.log(error);

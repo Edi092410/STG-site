@@ -25,10 +25,6 @@ export const MainPicture = () => {
     setLast(true);
   }  
 
-  useEffect(() => {
-    console.log("changed", first)
-  }, [first])
-
 
   
   return (

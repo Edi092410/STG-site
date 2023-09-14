@@ -22,10 +22,9 @@ export const CompanyNames = ({
   }, [selected, onSelectedChange]);
 
   useEffect(() => {
-    // Set the selected option on component render
-    if (selected) {
-      onSelectedChange(selected);
-    }
+    onSelectedChange(
+      companies && companies.length > 0 && companies[0].customerId
+    );
   }, []);
 
   const [isOpened, setIsOpened] = useState(false);
@@ -56,10 +55,10 @@ export const CompanyNames = ({
       >
         <select
           className=" appearance-none w-full md:w-[325px] h-[30px] border bg-[#D9D9D9] pl-[15px] float-left text-center text-[#0074E0] pr-14"
-          value={selectedOption}
+          defaultValue={selectedOption}
           onChange={handleSelectedChange}
         >
-          <option>Компани аа сонгоно уу!</option>
+          {/* <option>Компани аа сонгоно уу!</option> */}
           {companies && companies.length > 0 ? (
             companies.map((prop) => (
               <option

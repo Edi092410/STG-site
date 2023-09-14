@@ -38,8 +38,6 @@ export const Main = () => {
     setLoading(true);
     delete e.checkbox;
     let token = "";
-    console.log("data", e);
-    console.log("name", getValues("name"));
     try {
       const data = await axios.post(
         "https://admin.e-siticom.com/api/register",
@@ -52,10 +50,7 @@ export const Main = () => {
         }
       );
       if (data.request.status === 200) {
-        console.log(data);
-        console.log("token", data.data.data.token);
         token = data.data.data.token;
-        console.log("setToken:", token);
         // alert(data?.data?.message);
         notify(data?.data?.message);
         // Send verification email
@@ -108,7 +103,6 @@ export const Main = () => {
             </body>
           </html>`,
           }).then((message) => notify(message));
-          console.log(token);
           setValue(false);
         }
       }

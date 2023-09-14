@@ -14,7 +14,7 @@ export const ServiceSelect = ({
 
   const [isOpened, setIsOpened] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     if (selected !== undefined && selected !== null) {
       if (selected !== 0) {
         onSelectedChange(selected);
@@ -43,9 +43,13 @@ export const ServiceSelect = ({
           }
         );
         setOption(data.data);
+        // onSelectedChange(option && option.length > 0 ? option[0].id : "");
+        onSelectedChange(data.data && data.data.length > 0 && data.data[0].id);
       } catch (err) {
       } finally {
         setIsLoading(false);
+        // onSelectedChange(option && option.length > 0 && option[0].id);
+        // console.log(option && option.length > 0 && option[0].id);
       }
     };
     fetchData();

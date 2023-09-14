@@ -25,7 +25,11 @@ export const Help = () => {
               </div>
               <div
                 className="mb-[50px] mt-[30px]"
-                onClick={() => navigate("/program")}
+                targer="_blank"
+                onClick={() => {
+                  // navigate("/program")
+                  window.open("/program", "_blank", "noreferrer");
+                }}
               >
                 <Button name={"Танд туслая"} wiggleLength={100} />
               </div>

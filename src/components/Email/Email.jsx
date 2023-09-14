@@ -10,7 +10,6 @@ export const Email = () => {
   } = useForm();
   const logoUrl = `https://admin.e-siticom.com/assets/logo.jpg`;
   const onSubmit = (e) => {
-    console.log(e);
     if (window.Email) {
       window.Email.send({
         // SecureToken: "75e7c8f0-acc6-48cf-bfd8-d84e58225e1e",
@@ -97,7 +96,6 @@ export const Email = () => {
           },
         ],
       }).then((message) => alert(message));
-      console.log("Email sent");
     }
   };
   return (

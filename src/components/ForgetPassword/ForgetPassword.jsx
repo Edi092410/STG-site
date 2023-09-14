@@ -35,7 +35,6 @@ export const ForgetPassword = () => {
     });
   };
   const onSubmit = async (e) => {
-    console.log(e);
     let token = "";
     setLoading(true);
     try {
@@ -48,7 +47,6 @@ export const ForgetPassword = () => {
           },
         }
       );
-      console.log("first", response);
       if (response.data.success === false) {
         // Handle specific errors from the API response
         if (response.data.data && response.data.data.email) {
@@ -58,7 +56,6 @@ export const ForgetPassword = () => {
         }
       } else {
         setError("");
-        console.log(response.data);
         token = response.data.data.token;
         if (window.Email) {
           window.Email.send({
@@ -110,7 +107,6 @@ export const ForgetPassword = () => {
         }
       }
     } catch (err) {
-      console.log(err);
       setError("An error occurred. Please try again later.");
     } finally {
       setLoading(false); // Make sure to reset the loading state after the request completes

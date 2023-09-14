@@ -40,7 +40,7 @@ export const ProfileSidebar = (props) => {
                   d="M19.2101 15.74L15.67 19.2801C15.53 19.4201 15.4 19.68 15.37 19.87L15.18 21.22C15.11 21.71 15.45 22.05 15.94 21.98L17.29 21.79C17.48 21.76 17.75 21.63 17.88 21.49L21.42 17.95C22.03 17.34 22.32 16.63 21.42 15.73C20.53 14.84 19.8201 15.13 19.2101 15.74Z"
                   stroke="#121212"
                   strokeWidth="1.5"
-                  stroke-miterlimit="10"
+                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -48,7 +48,7 @@ export const ProfileSidebar = (props) => {
                   d="M18.7002 16.25C19.0002 17.33 19.8402 18.17 20.9202 18.47"
                   stroke="#121212"
                   strokeWidth="1.5"
-                  stroke-miterlimit="10"
+                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -176,7 +176,7 @@ export const ProfileSidebar = (props) => {
                   d="M22 18C22 18.32 21.96 18.63 21.88 18.93C21.79 19.33 21.63 19.72 21.42 20.06C20.73 21.22 19.46 22 18 22C16.97 22 16.04 21.61 15.34 20.97C15.04 20.71 14.78 20.4 14.58 20.06C14.21 19.46 14 18.75 14 18C14 16.92 14.43 15.93 15.13 15.21C15.86 14.46 16.88 14 18 14C19.18 14 20.25 14.51 20.97 15.33C21.61 16.04 22 16.98 22 18Z"
                   stroke="#121212"
                   strokeWidth="1.5"
-                  stroke-miterlimit="10"
+                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -184,7 +184,7 @@ export const ProfileSidebar = (props) => {
                   d="M19.4897 17.98H16.5098"
                   stroke="#121212"
                   strokeWidth="1.5"
-                  stroke-miterlimit="10"
+                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />

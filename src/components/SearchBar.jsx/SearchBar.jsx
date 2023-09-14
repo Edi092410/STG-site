@@ -2,11 +2,11 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 export const SearchBar = () => {
   return (
-    <div className="flex justify-center">
-      <div className="relative w-[350px]">
+    <div className="flex justify-center w-full h-full">
+      <div className="relative w-full h-full">
         <input
           type="text"
-          className="w-full h-10 rounded-[20px] bg-[#DEDEDE] focus:outline-none pr-[30px] pl-[15px]"
+          className="w-full h-full rounded-[20px] bg-[#DFE3EE] focus:outline-none pr-[30px] pl-[15px]"
         />
         {/* <FaSearch className="absolute top-1/2 transform -translate-y-1/2 right-2 text-black cursor-pointer" /> */}
         <div className="absolute top-1/2 transform -translate-y-1/2 right-6     text-black cursor-pointer">

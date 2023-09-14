@@ -41,11 +41,8 @@ export const ForgetField = () => {
     setLoading(true);
     const formdata = { ...e };
     delete formdata.confirmPassword;
-    console.log("token onsubmit:", token);
     // setValue("token", token);
     formdata.token = token;
-    console.log(getValues("token"));
-    console.log(formdata);
     try {
       const response = await axios.post(
         `https://admin.e-siticom.com/api/setpassword`,
@@ -56,15 +53,11 @@ export const ForgetField = () => {
           },
         }
       );
-      console.log(response);
       if (response.data.success === false) setErr(response.data.message);
       else setMsg(response.data.message);
     } catch (err) {
-      console.log(err);
     } finally {
       setLoading(false);
-      console.log("Message", msg);
-      console.log("Error", err);
     }
   };
   return (

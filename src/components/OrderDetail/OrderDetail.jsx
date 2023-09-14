@@ -9,7 +9,7 @@ import { OrderContext, OrderProvider } from "../../context/OrderProvider";
 import { Loading } from "../Loading/Loading";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
   const {
     register,
@@ -102,7 +102,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
       );
       setRefresh((prev) => !prev);
       // alert("Устгагдлаа");
-      notify("Устгагдлаа");
+      notify({ text: "Устгагдлаа" });
       closeModal();
     } catch (err) {}
   };
@@ -156,7 +156,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
     <OrderProvider>
       <div className="w-screen h-screen fixed top-0 left-0 bg-slate-300 bg-opacity-50 z-20">
         <div
-          className="lg:mr-[20%] lg:ml-[20%] mr-[10%] ml-[10%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
+          className="relative lg:mr-[20%] lg:ml-[20%] mr-[10%] ml-[10%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
           ref={menuRef}
         >
           {data.length > 0 ? (
@@ -262,6 +262,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                       </div>
                       <input
                         className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
+                        type="number"
                         defaultValue={props.phone}
                         {...register("phone", {
                           required: true,
@@ -332,6 +333,27 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
               stateFunction={deleteOrder}
             />
           )}
+          <div
+            className="absolute top-5 right-5 w-[30px] h-[30px] bg-[rgba(0,0,0,0.25)] rounded-full text-white flex items-center justify-center cursor-pointer hover:scale-105 translition duration-300"
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-x"
+              viewBox="0 0 16 16"
+            >
+              {" "}
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                fill="white"
+              ></path>{" "}
+            </svg>
+          </div>
         </div>
       </div>
     </OrderProvider>

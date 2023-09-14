@@ -10,6 +10,9 @@ import { ErrorHandle } from "./components/ErrorHandle/ErrorHandle";
 import { OrderProvider } from "./context/OrderProvider";
 import { ProgramProvider } from "./context/ProgramProvider";
 import { CompanyProvider } from "./context/CompanyProvider";
+import { TimeFilterProvider } from "./context/TimeFilterProvider";
+import { PaymentProvider } from "./context/PaymentProvider";
+import { LoginPathProvider } from "./context/LoginPathProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -19,9 +22,15 @@ root.render(
           <OrderProvider>
             <ProgramProvider>
               <CompanyProvider>
-                <BrowserRouter>
-                  <App />
-                </BrowserRouter>
+                <TimeFilterProvider>
+                  <PaymentProvider>
+                    <LoginPathProvider>
+                      <BrowserRouter>
+                        <App />
+                      </BrowserRouter>
+                    </LoginPathProvider>
+                  </PaymentProvider>
+                </TimeFilterProvider>
               </CompanyProvider>
             </ProgramProvider>
           </OrderProvider>

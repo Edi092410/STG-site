@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Notification } from "../Notification/Notification";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 export const Menu = (props) => {
   const menu = [
     {
@@ -50,7 +50,7 @@ export const Menu = (props) => {
     localStorage.clear();
     setAuth(false);
     notify();
-    navigate("/");
+    navigate(-1);
   };
   return (
     <div className="flex">
@@ -112,7 +112,7 @@ export const Menu = (props) => {
               name="Та системээс гарах гэж байна?"
               button="Системээс гарах"
               closeModal={() => setModal(false)}
-              path="/"
+              // path="/"
               stateFunction={logOut}
             />
           </div>

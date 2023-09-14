@@ -1,18 +1,13 @@
 import React from "react";
 import { Slogan } from "../components/Slogan/Slogan";
-// import { SearchBar } from "../components/SearchBar.jsx/SearchBar";
-// import { SectionName } from "../components/SectionName/SectionName";
-// import { RightSection } from "../components/RightSection/RightSection";
-// import { LeftSection } from "../components/LeftSection/LeftSection";
-
 import { Purpose } from "../components/Purpose/Purpose";
 import { Opportunity } from "../components/Opportunity/Opportunity";
 import { Acalous } from "../components/Acalous/Acalous";
 import { Partners } from "../components/Partners/Partners";
-import { About } from "../components/About/About";
 import { MainBox } from "../components/MainBox/MainBox";
 import { CallCenter } from "../components/CallCenter/CallCenter";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/Main/Button";
 export const PublicPage = () => {
   const navigate = useNavigate();
   return (
@@ -51,15 +46,18 @@ export const PublicPage = () => {
         </div>
         <CallCenter />
         <div className="text-[#1D3049] text-[28px] 3xl:text-[40px] font-semibold mt-[90px] mb-[40px] 3xl:mb-[55px] text-center px-[5vw]">
-          Хамтын үйл ажиллагаагаа бататгасан 3000+ харилцагчид
+          Харилцагчийн үйлчилгээг онлайнаар авах боломжтой боллоо!
         </div>
         <div className="w-full flex justify-center">
-          <button
+          {/* <button
             className=" p-3 bg-[#015488] text-white rounded-md"
             onClick={() => navigate("/help")}
           >
             Онлайн хүсэлт илгээх
-          </button>
+          </button> */}
+          <div className="" onClick={() => navigate("/help")}>
+            <Button name={"Онлайн хүсэлт илгээх"} wiggleLength={7} />
+          </div>
         </div>
 
         <div className="mx-[-20vw] h-[50vh] mb-[90px]">

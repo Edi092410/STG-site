@@ -7,8 +7,8 @@ import fiscus from "../../Assets/ChooseProgram/fiscus.png";
 import leader from "../../Assets/ChooseProgram/leader.png";
 import payroll from "../../Assets/ChooseProgram/payroll.png";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { ProgramContext } from "../../context/ProgramProvider";
+import "react-toastify/dist/ReactToastify.css";
+// import { ProgramContext } from "../../context/ProgramProvider";
 import { useNavigate } from "react-router-dom";
 
 export const ChooseProgram = () => {
@@ -18,50 +18,78 @@ export const ChooseProgram = () => {
       img: acalous,
       width: "40px",
       height: "34px",
+      id: 0,
     },
     {
       name: "fiscus",
       img: fiscus,
       width: "32px",
       height: "35px",
+      id: 1,
     },
     {
       name: "leader",
       img: leader,
       width: "38px",
       height: "32px",
+      id: 2,
     },
     {
       name: "payrol",
       img: payroll,
       width: "37px",
       height: "32px",
+      id: 3,
     },
   ];
 
-  //   const [selectedChips, setSelectedChips] = useState([]);
-  const { selectedChips, setSelectedChips } = useContext(ProgramContext);
+  const [selectedChips, setSelectedChips] = useState([]);
+  // const { selectedChips, setSelectedChips } = useContext(ProgramContext);
+  // console.log("local storage:", localStorage.getItem("programmes"));
+
+  // useeffect
 
   const toggleChip = (index) => {
     setSelectedChips((prevSelected) => {
       const updatedSelected = [...prevSelected];
       updatedSelected[index] = !updatedSelected[index];
+      // console.log("Index:", (updatedSelected[index] = !updatedSelected[index]));
       return updatedSelected;
     });
   };
 
+  // const saveSelectedChips = () => {
+  //   const selectedChipNames = data
+  //     .filter((item, index) => selectedChips[index])
+  //     .map((item) => item.id);
+  //   if (selectedChipNames.length !== 0) {
+  //     SetSelected(true);
+  //     // navigate("/service/list");
+  //     console.log("Iffffff");
+  //     console.log("selected chips:", selectedChips);
+  //     localStorage.setItem("programmes", JSON.stringify(selectedChipNames));
+  //     console.log("local storage:", localStorage.getItem("programmes"));
+  //     navigate("/test");
+  //   } else {
+  //     SetSelected(false);
+  //     notify();
+  //     setTimeout(() => {
+  //       SetSelected(true);
+  //     }, 1000); // Reset the animation after 1 second
+  //   }
+  // };
+
   const saveSelectedChips = () => {
-    const selectedChipNames = data
-      .filter((item, index) => selectedChips[index])
-      .map((item) => item.name);
-    if (selectedChipNames.length !== 0) {
+    if (selectedChips.length !== 0) {
       SetSelected(true);
-      console.log("true");
-      console.log(selectedChipNames);
-      navigate("/service/list");
+      // navigate("/service/list");
+      console.log("Iffffff");
+      console.log("selected chips:", selectedChips);
+      localStorage.setItem("programmes", JSON.stringify(selectedChips));
+      console.log("local storage:", localStorage.getItem("programmes"));
+      navigate("/test");
     } else {
       SetSelected(false);
-      console.log("false");
       notify();
       setTimeout(() => {
         SetSelected(true);
