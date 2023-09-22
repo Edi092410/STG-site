@@ -48,8 +48,8 @@ export const OrderList = ({ date, date2, month }) => {
         setLoading(true);
         try {
           const data = await axios.get(
-            `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
-            // `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

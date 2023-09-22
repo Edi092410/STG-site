@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
@@ -10,80 +10,79 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { ProgramContext } from "../../context/ProgramProvider";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const ChooseProgram = () => {
-  const data = [
-    {
-      name: "acolous",
-      img: acalous,
-      width: "40px",
-      height: "34px",
-      id: 0,
-    },
-    {
-      name: "fiscus",
-      img: fiscus,
-      width: "32px",
-      height: "35px",
-      id: 1,
-    },
-    {
-      name: "leader",
-      img: leader,
-      width: "38px",
-      height: "32px",
-      id: 2,
-    },
-    {
-      name: "payrol",
-      img: payroll,
-      width: "37px",
-      height: "32px",
-      id: 3,
-    },
-  ];
+  // const data = [
+  //   {
+  //     name: "acolous",
+  //     img: acalous,
+  //     width: "40px",
+  //     height: "34px",
+  //     id: 0,
+  //   },
+  //   {
+  //     name: "fiscus",
+  //     img: fiscus,
+  //     width: "32px",
+  //     height: "35px",
+  //     id: 1,
+  //   },
+  //   {
+  //     name: "leader",
+  //     img: leader,
+  //     width: "38px",
+  //     height: "32px",
+  //     id: 2,
+  //   },
+  //   {
+  //     name: "payrol",
+  //     img: payroll,
+  //     width: "37px",
+  //     height: "32px",
+  //     id: 3,
+  //   },
+  // ];
+
+  const [data, setData] = useState([]);
 
   const [selectedChips, setSelectedChips] = useState([]);
-  // const { selectedChips, setSelectedChips } = useContext(ProgramContext);
-  // console.log("local storage:", localStorage.getItem("programmes"));
 
-  // useeffect
-
-  const toggleChip = (index) => {
+  const toggleChip = (index, id) => {
     setSelectedChips((prevSelected) => {
       const updatedSelected = [...prevSelected];
-      updatedSelected[index] = !updatedSelected[index];
-      // console.log("Index:", (updatedSelected[index] = !updatedSelected[index]));
+      const currentChip = updatedSelected[index] || {}; // Initialize as an empty object if undefined
+      updatedSelected[index] = {
+        id: data[index].id,
+        select: !currentChip.select, // Toggle the select property
+      };
+      console.log("chips:", updatedSelected);
       return updatedSelected;
     });
   };
 
-  // const saveSelectedChips = () => {
-  //   const selectedChipNames = data
-  //     .filter((item, index) => selectedChips[index])
-  //     .map((item) => item.id);
-  //   if (selectedChipNames.length !== 0) {
-  //     SetSelected(true);
-  //     // navigate("/service/list");
-  //     console.log("Iffffff");
-  //     console.log("selected chips:", selectedChips);
-  //     localStorage.setItem("programmes", JSON.stringify(selectedChipNames));
-  //     console.log("local storage:", localStorage.getItem("programmes"));
-  //     navigate("/test");
-  //   } else {
-  //     SetSelected(false);
-  //     notify();
-  //     setTimeout(() => {
-  //       SetSelected(true);
-  //     }, 1000); // Reset the animation after 1 second
-  //   }
-  // };
+  useEffect(() => {
+    const solutions = async () => {
+      try {
+        const data = await axios.get(
+          "https://admin.e-siticom.com/api/solutions"
+        );
+        const modifiedData = data.data.data.data.map((item) => ({
+          ...item,
+          image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
+        }));
+        setData(modifiedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    solutions();
+  }, []);
 
   const saveSelectedChips = () => {
     if (selectedChips.length !== 0) {
       SetSelected(true);
       // navigate("/service/list");
-      console.log("Iffffff");
       console.log("selected chips:", selectedChips);
       localStorage.setItem("programmes", JSON.stringify(selectedChips));
       console.log("local storage:", localStorage.getItem("programmes"));
@@ -128,24 +127,29 @@ export const ChooseProgram = () => {
                 хэрэгтэй.
               </div>
               <div className=" grid grid-cols-2 gap-[30px] mt-4 mb-8">
-                {data.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`w-[120px] h-[60px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
-                      selectedChips[index]
-                        ? " transition duration-300 bg-slate-200"
-                        : " transition duration-300 hover:scale-110"
-                    } ${selected === false && " border border-red-500"} `}
-                    onClick={() => toggleChip(index)}
-                  >
-                    <img
-                      src={item.img}
-                      alt={index}
-                      width={item.width}
-                      height={item.height}
-                    />
-                  </div>
-                ))}
+                {data &&
+                  data.length > 0 &&
+                  data.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`w-[120px] h-[60px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
+                        selectedChips[index].select
+                          ? " transition duration-300 bg-slate-200"
+                          : " transition duration-300 hover:scale-110"
+                      } ${selected === false && " border border-red-500"} `}
+                      onClick={() => {
+                        console.log("id:", item.id);
+                        toggleChip(index, item.id);
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={index}
+                        width={"40px"}
+                        height={"35px"}
+                      />
+                    </div>
+                  ))}
               </div>
               <div
                 className={`w-full `}
@@ -155,8 +159,6 @@ export const ChooseProgram = () => {
               >
                 <Button name={"Сонгох"} />
               </div>
-
-              {/* {selected == false && <div className='gal w-full text-center mt-4'>Та дор хаяж нэг бүтээгдэхүүн сонгоно уу!</div>} */}
             </div>
           </Box>
         </div>

@@ -16,7 +16,7 @@ export const Navbar = ({ isMenuOpen }) => {
       to:
         selectedChips &&
         selectedChips.length > 0 &&
-        !selectedChips.every((element) => element === false || null)
+        !selectedChips.every((element) => element === false || element === null)
           ? "/test"
           : "/help",
       key: "service",
