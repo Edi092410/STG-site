@@ -133,7 +133,8 @@ export const ChooseProgram = () => {
                     <div
                       key={index}
                       className={`w-[120px] h-[60px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
-                        selectedChips[index].select
+                        selectedChips[index]?.select
+                        // selectedChips[index]
                           ? " transition duration-300 bg-slate-200"
                           : " transition duration-300 hover:scale-110"
                       } ${selected === false && " border border-red-500"} `}

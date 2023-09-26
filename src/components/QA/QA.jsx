@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -7,39 +6,12 @@ import React, {
 } from "react";
 import { SearchBar } from "../SearchBar.jsx/SearchBar";
 import axios from "axios";
-import acalous from "../../Assets/ChooseProgram/acalous.png";
-import fiscus from "../../Assets/ChooseProgram/fiscus.png";
-import leader from "../../Assets/ChooseProgram/leader.png";
-import payroll from "../../Assets/ChooseProgram/payroll.png";
 import { Button } from "../Main/Button";
 import { useForm } from "react-hook-form";
 import { Image } from "antd";
-import Carousel from "react-multi-carousel";
+import "./style.css";
 
 export const QA = () => {
-  // const data = [
-  //   {
-  //     name: "acolous",
-  //     img: acalous,
-  //     id: 0,
-  //   },
-  //   {
-  //     name: "fiscus",
-  //     img: fiscus,
-  //     id: 1,
-  //   },
-  //   {
-  //     name: "leader",
-  //     img: leader,
-  //     id: 2,
-  //   },
-  //   {
-  //     name: "payrol",
-  //     img: payroll,
-  //     id: 3,
-  //   },
-  // ];
-
   const [data, setData] = useState([]);
 
   const [selectedChips, setSelectedChips] = useState(
@@ -52,8 +24,10 @@ export const QA = () => {
     // Create a copy of the current selectedChips array
     const updatedSelectedChips = [...selectedChips];
     // Remove the chip at the specified index
-    // updatedSelectedChips.splice(index, 1);
-    updatedSelectedChips[index] = true;
+    updatedSelectedChips[index] = {
+        id: data[index].id,
+        select: true, // Toggle the select property
+      };
     // Update the state with the modified array
     setSelectedChips(updatedSelectedChips);
     // Update localStorage
@@ -64,8 +38,11 @@ export const QA = () => {
     // Create a copy of the current selectedChips array
     const updatedSelectedChips = [...selectedChips];
     // Remove the chip at the specified index
-    // updatedSelectedChips.splice(index, 1);
-    updatedSelectedChips[index] = false;
+    // updatedSelectedChips[index] = false;
+    updatedSelectedChips[index] = {
+      id: data[index].id,
+      select: false, // Toggle the select property
+    };
     // Update the state with the modified array
     setSelectedChips(updatedSelectedChips);
     // Update localStorage
@@ -82,12 +59,24 @@ export const QA = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+    const data = localStorage.getItem("programmes");
+    const parsedData = JSON.parse(data); // Parse the string into an array
+
+      const ids = parsedData
+        .filter(element => element.select === true)
+        .map(element => element.id); // Extract the 'id' values
+
+    const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
+    console.log("ids:", idsString);
       try {
         const [data, data2] = await Promise.all([
-          axios.get("https://admin.e-siticom.com/api/articles", {
+          axios.get("https://admin.e-siticom.com/api/solarticles", {
             headers: {
               "Content-Type": "application/json",
             },
+            params: {
+              ids: idsString
+            }
           }),
           axios.get("https://admin.e-siticom.com/api/solutions"),
         ]);
@@ -116,7 +105,14 @@ export const QA = () => {
       console.log(error);
     }
   };
-
+  const handleMouseMove = (e) => {
+    const btn = e.target;
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    btn.style.setProperty('--x', `${x}px`);
+    btn.style.setProperty('--y', `${y}px`);
+  };
   return (
     <div className="w-full h-full">
       <div className="flex items-center">
@@ -135,7 +131,7 @@ export const QA = () => {
                 img={data.image}
                 index={index}
                 remove={handleRemove}
-                bool={selectedChips[index]}
+                bool={selectedChips[index]?.select}
                 select={handleSelectedChips}
               />
             </div>
@@ -143,8 +139,11 @@ export const QA = () => {
         </div>
       </div>
       <div
-        className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
+        // className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
+        // ref={iframeRef}
+        className="mouse-cursor-gradient-tracking w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
         ref={iframeRef}
+        onMouseMove={handleMouseMove}
       >
         {articleData &&
           articleData.length > 0 &&
@@ -672,3 +671,25 @@ export const Feedback = () => {
     </div>
   );
 };
+
+
+export const QuestionBox = () => {
+  const iframeRef = useRef(null);
+  const handleMouseMove = (e) => {
+    const btn = e.target;
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    btn.style.setProperty('--x', `${x}px`);
+    btn.style.setProperty('--y', `${y}px`);
+  };
+    
+  return (
+    <div
+    // className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
+    className="mouse-cursor-gradient-tracking w-[90vw] h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
+    ref={iframeRef}
+    onMouseMove={handleMouseMove}
+  ></div> 
+  )
+}
