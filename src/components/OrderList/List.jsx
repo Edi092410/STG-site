@@ -59,8 +59,8 @@ export const List = ({ date, date2, month }) => {
   }, [selectedCompany, month, refresh]);
 
   return (
-    <div>
-      <div className=" flex justify-between items-center px-[2%] mb-4">
+    <div className=" mb-4">
+      <div className=" flex justify-between items-center px-[2%]">
         <div className="flex items-center">
           <div className=" text-[16px] 3xl:text-[24px] font-semibold mr-4">
             Санал хүсэлт
@@ -307,6 +307,7 @@ export const Payment = ({ year }) => {
           }
         );
         setOrderData(data.data.transactions);
+        console.log("Payment info:", data.data.transactions);
         setBeginBalance(data.data.beginbalance);
       } catch (err) {
         if (
@@ -337,18 +338,20 @@ export const Payment = ({ year }) => {
           <div className="h-full px-[10px] border-[2px] border-[#DFE3EE] rounded-t-sm bg-white flex items-center">
             Эхний үлдэгдэл
           </div>
-          <div className="flex items-center bg-[#DFE3EE] rounded-b-sm text-[#032D60] text-sm 3xl:text-lg px-[10px]">
-            {parseFloat(beginBalance)}₮
+          <div className="flex items-center justify-center bg-[#DFE3EE] rounded-b-sm text-[#032D60] text-sm 3xl:text-lg px-[10px]">
+            {OrderData ? parseFloat(beginBalance) : "0"}₮
           </div>
         </div>
         <div className="flex flex-col w-fit h-[25px]">
           <div className="h-full px-[10px] border-[2px] border-[#DFE3EE] rounded-l-sm bg-white flex items-center">
             Эцсийн үлдэгдэл
           </div>
-          <div className="flex items-center bg-[#DFE3EE] rounded-r-sm text-[#032D60] text-sm 3xl:text-lg px-[10px]">
-            {parseFloat(beginBalance) +
-              parseFloat(totalPay) -
-              parseFloat(totalPayed)}
+          <div className="flex items-center justify-center bg-[#DFE3EE] rounded-r-sm text-[#032D60] text-sm 3xl:text-lg px-[10px]">
+            {OrderData
+              ? parseFloat(beginBalance) +
+                parseFloat(totalPay) -
+                parseFloat(totalPayed)
+              : "0"}
             ₮
           </div>
         </div>
@@ -384,68 +387,62 @@ export const PaymentList = ({ OrderData }) => {
   const { number, setNumber } = useContext(PaymentContext);
   return (
     <div className="w-full p-[25px] pb-2 text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
-      {/* {OrderData && OrderData.lenght > 0 ? ( */}
-      <div className=" overflow-y-auto h-[20vh]">
-        <table className="w-full text-xs 3xl:text-base">
-          <thead className=" text-left">
-            <tr>
-              <th className="w-[30%]">Огноо</th>
-              <th className="w-[50%]">Ажил үйлчилгээ</th>
-              <th className="w-[20%]">Төлбөр</th>
-            </tr>
-          </thead>
-          <tbody>
-            {OrderData && OrderData.length > 0 ? (
-              OrderData.map((props) => {
-                return (
-                  <React.Fragment key={props.number}>
-                    <tr>
-                      <td className="w-[30%] py-[5px]">
-                        <div>
-                          {props.date.substring(0, 10)}-
-                          {props.date.substring(11, 16)}
-                        </div>
-                      </td>
-                      <td
-                        className="w-[50%] py-[5px] cursor-pointer"
-                        onClick={() => {
-                          setNumber(props.number);
-                          navigate("/test/payment");
-                        }}
-                      >
-                        {props.transactionReference.substring(0, 20)}...
-                      </td>
-                      <td className="w-[20%] py-[5px]">
-                        {props.dtAmount.toLocaleString("en-US")}₮
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })
-            ) : (
+      {OrderData && OrderData.lenght > 0 ? (
+        <div className=" overflow-y-auto h-[20vh]">
+          <table className="w-full text-xs 3xl:text-base">
+            <thead className=" text-left">
               <tr>
-                <td colSpan={3} className="text-center text-lg">
-                  Мэдээлэл байхгүй байна.
-                </td>
+                <th className="w-[30%]">Огноо</th>
+                <th className="w-[50%]">Ажил үйлчилгээ</th>
+                <th className="w-[20%]">Төлбөр</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      {/* ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center px-[10%] text-center 3xl:text-[20px] text-sm">
-          <div>Итгэлт харилцагч танд энэ өдрийн мэнд хүргэе!</div>
-          <img
-            src={character}
-            alt="character image"
-            className=" w-[80px] my-2"
-          />
-          <div>
-            Одоогоор харилцагч танд төлбөрийн үлдэгдэл илүү төлөлт байхгүй
-            байна.{" "}
-          </div>
+            </thead>
+            <tbody>
+              {OrderData && OrderData.length > 0 ? (
+                OrderData.map((props) => {
+                  return (
+                    <React.Fragment key={props.number}>
+                      <tr>
+                        <td className="w-[30%] py-[5px]">
+                          <div>
+                            {props.date.substring(0, 10)}-
+                            {props.date.substring(11, 16)}
+                          </div>
+                        </td>
+                        <td
+                          className="w-[50%] py-[5px] cursor-pointer"
+                          onClick={() => {
+                            setNumber(props.number);
+                            navigate("/test/payment");
+                          }}
+                        >
+                          {props.transactionReference.substring(0, 20)}...
+                        </td>
+                        <td className="w-[20%] py-[5px]">
+                          {props.dtAmount.toLocaleString("en-US")}₮
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={3} className="text-center text-lg">
+                    Мэдээлэл байхгүй байна.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )} */}
+      ) : (
+        <NoData
+          head={"Итгэлт харилцагч танд энэ өдрийн мэнд хүргэе!"}
+          foot={
+            "Одоогоор харилцагч танд төлбөрийн үлдэгдэл илүү төлөлт байхгүй байна."
+          }
+        />
+      )}
 
       <div className="w-full flex justify-end mt-4">
         <div className=" w-[30px] h-[30px] rounded-full bg-[#D9D9D9] flex items-center justify-center rotate-180 cursor-pointer transition duration-150 hover:scale-105 mr-2">
@@ -748,6 +745,16 @@ export const ServicePage = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+export const NoData = ({ head, foot }) => {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center px-[10%] text-center 3xl:text-[20px] text-sm">
+      <div>{head}</div>
+      <img src={character} alt="character image" className=" w-[80px] my-2" />
+      <div>{foot}</div>
     </div>
   );
 };

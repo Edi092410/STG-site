@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 export const Navbar = ({ isMenuOpen }) => {
   // const { selectedChips } = useContext(ProgramContext);
   const selectedChips = JSON.parse(localStorage.getItem("programmes"));
+  const companies = JSON.parse(localStorage.getItem("companies"));
   const navbar = [
     {
       name: "Шийдэл",

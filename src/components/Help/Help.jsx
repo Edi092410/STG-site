@@ -4,8 +4,23 @@ import { Box } from "../Main/Box";
 import { Button } from "../Main/Button";
 import image from "../../Assets/help/help.png";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const Help = () => {
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  const notify = () => {
+    toast.warn("Харилцагчийн үйлчилгээ цэс рүү орох боломжгүй байна.", {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
+
   return (
     <Main head="Харилцагчийн туслах">
       <div className="w-full h-full flex justify-center items-center 3xl:mt-[90px] mt-[50px]">
@@ -27,8 +42,12 @@ export const Help = () => {
                 className="mb-[50px] mt-[30px]"
                 targer="_blank"
                 onClick={() => {
-                  // navigate("/program")
-                  window.open("/program", "_blank", "noreferrer");
+                  // if (role) {
+                  //   notify();
+                  //   navigate("/");
+                  // } else {
+                  //   window.open("/program", "_blank", "noreferrer");
+                  navigate("/pass");
                 }}
               >
                 <Button name={"Танд туслая"} wiggleLength={100} />

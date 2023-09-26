@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Routes, useParams } from "react-router-dom";
 import { ServiceList } from "../pages/ServiceList";
 import { FirstLoginSecond } from "../pages/FirstLoginSecond";
-import { Main } from "../components/Regis--main/Main";
+import { Registration } from "../components/Regis--main/Registration";
 import { SharedLayout } from "../layouts/SharedLayout";
 import { PublicPage } from "../pages/PublicPage";
 import { ProfileSettings } from "../pages/ProfileSettings";
@@ -23,10 +23,11 @@ import { ForgetPassword } from "../components/ForgetPassword/ForgetPassword";
 import { ForgetField } from "../components/ForgetPassword/ForgetField";
 import { Help } from "../components/Help/Help";
 import { ChooseProgram } from "../components/ChooseProgram/ChooseProgram";
-import { LoginStatus } from "./LoginStatus";
+import { PublicRoute } from "./PublicRoute";
 import { ServicePage } from "../components/OrderList/List";
 import { PaymentPage } from "../components/OrderList/List";
 import { QA } from "../components/QA/QA";
+import { Pass } from "../components/Pass/Pass";
 
 import { LoginPathContext } from "../context/LoginPathProvider";
 
@@ -54,10 +55,11 @@ export const AppRoutes = () => {
             <Route index element={<QA />} />
             <Route path="payment" element={<PaymentPage />} />
           </Route>
+          <Route path="pass" element={<Pass />} />
         </Route>
-        <Route element={<LoginStatus />}>
+        <Route element={<PublicRoute />}>
           <Route path="login" element={<FirstLoginSecond />} />
-          <Route path="register" element={<Main />} />
+          <Route path="register" element={<Registration />} />
         </Route>
         <Route path="product" element={<Product />}></Route>
         <Route path="course" element={<Course />}></Route>

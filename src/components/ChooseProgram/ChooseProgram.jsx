@@ -2,10 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
-import acalous from "../../Assets/ChooseProgram/acalous.png";
-import fiscus from "../../Assets/ChooseProgram/fiscus.png";
-import leader from "../../Assets/ChooseProgram/leader.png";
-import payroll from "../../Assets/ChooseProgram/payroll.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { ProgramContext } from "../../context/ProgramProvider";
@@ -13,40 +9,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const ChooseProgram = () => {
-  // const data = [
-  //   {
-  //     name: "acolous",
-  //     img: acalous,
-  //     width: "40px",
-  //     height: "34px",
-  //     id: 0,
-  //   },
-  //   {
-  //     name: "fiscus",
-  //     img: fiscus,
-  //     width: "32px",
-  //     height: "35px",
-  //     id: 1,
-  //   },
-  //   {
-  //     name: "leader",
-  //     img: leader,
-  //     width: "38px",
-  //     height: "32px",
-  //     id: 2,
-  //   },
-  //   {
-  //     name: "payrol",
-  //     img: payroll,
-  //     width: "37px",
-  //     height: "32px",
-  //     id: 3,
-  //   },
-  // ];
-
   const [data, setData] = useState([]);
 
   const [selectedChips, setSelectedChips] = useState([]);
+
+  const navigate = useNavigate();
 
   const toggleChip = (index, id) => {
     setSelectedChips((prevSelected) => {
@@ -82,7 +49,6 @@ export const ChooseProgram = () => {
   const saveSelectedChips = () => {
     if (selectedChips.length !== 0) {
       SetSelected(true);
-      // navigate("/service/list");
       console.log("selected chips:", selectedChips);
       localStorage.setItem("programmes", JSON.stringify(selectedChips));
       console.log("local storage:", localStorage.getItem("programmes"));
@@ -110,8 +76,6 @@ export const ChooseProgram = () => {
     });
   };
 
-  const navigate = useNavigate();
-
   return (
     <Main
       head={
@@ -134,8 +98,8 @@ export const ChooseProgram = () => {
                       key={index}
                       className={`w-[120px] h-[60px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
                         selectedChips[index]?.select
-                        // selectedChips[index]
-                          ? " transition duration-300 bg-slate-200"
+                          ? // selectedChips[index]
+                            " transition duration-300 bg-slate-200"
                           : " transition duration-300 hover:scale-110"
                       } ${selected === false && " border border-red-500"} `}
                       onClick={() => {

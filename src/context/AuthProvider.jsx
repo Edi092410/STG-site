@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({});
 
@@ -7,7 +7,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(null);
+  const [auth, setAuth] = useState(
+    localStorage.getItem("token") ? true : false
+  );
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {children}

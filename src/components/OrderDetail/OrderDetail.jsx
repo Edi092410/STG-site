@@ -109,6 +109,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
 
   const onSubmit = async (e) => {
     setSubmitLoading(true);
+    console.log("Data: ", e);
     if (selected !== "Санал хүсэлт") {
       try {
         axios.post(
@@ -208,11 +209,8 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                     Цахим шуудан
                   </div>
                   <div className="lg:w-1/2 w-full flex h-[30px] bg-[#D9D9D9]  pl-[15px] items-center ">
-                    {/* {localStorage.getItem("name")}{" "}
-                    <span className=" text-blue-500 hidden md:inline">
-                      / {localStorage.getItem("position")}
-                    </span> */}
                     {props.email}
+                    <input type="hidden" {...register("email")} />
                   </div>
                   <div className="pt-4 pb-5">
                     <ServiceSelect
@@ -310,6 +308,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                       setValue("customerId", selectedCompany);
                       setValue("number", number);
                       setValue("serviceType", selected);
+                      setValue("email", props.email);
                     }}
                     disabled={submitLoading}
                   >

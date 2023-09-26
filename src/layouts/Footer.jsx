@@ -16,7 +16,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="flex md:flex-row flex-col items-center justify-around md:h-[8vh] h-fit bg-[#1D3049] p-5 text-white text-xs">
+    <footer className="flex md:flex-row flex-col items-center justify-around md:h-[8vh] h-fit bg-[#2D3648] p-5 text-white text-xs">
       <div className="md:m-0 my-2">{api.phone1}</div>
       <div className="md:m-0 my-2">{api.address}</div>
       <div className="md:m-0 my-2">{api.email1}</div>

@@ -33,8 +33,8 @@ export const ServiceSelect = ({
       setIsLoading(true);
       try {
         const data = await axios.get(
-          "https://service2.stg.mn/api/services/getservicetypes",
-          // "/api/services/getservicetypes",
+          // "https://service2.stg.mn/api/services/getservicetypes",
+          "/api/services/getservicetypes",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

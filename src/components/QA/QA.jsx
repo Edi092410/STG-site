@@ -3,12 +3,15 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
+  useContext,
 } from "react";
 import { SearchBar } from "../SearchBar.jsx/SearchBar";
 import axios from "axios";
 import { Button } from "../Main/Button";
 import { useForm } from "react-hook-form";
 import { Image } from "antd";
+import { useNavigate } from "react-router-dom";
+import { OrderContext } from "../../context/OrderProvider";
 import "./style.css";
 
 export const QA = () => {
@@ -18,6 +21,8 @@ export const QA = () => {
     JSON.parse(localStorage.getItem("programmes"))
   );
 
+  const { refresh, setRefresh } = useContext(OrderContext);
+
   const handleSelectedChips = (index) => {
     // setSelectedChips(chip);
 
@@ -25,13 +30,14 @@ export const QA = () => {
     const updatedSelectedChips = [...selectedChips];
     // Remove the chip at the specified index
     updatedSelectedChips[index] = {
-        id: data[index].id,
-        select: true, // Toggle the select property
-      };
+      id: data[index].id,
+      select: true, // Toggle the select property
+    };
     // Update the state with the modified array
     setSelectedChips(updatedSelectedChips);
     // Update localStorage
     localStorage.setItem("programmes", JSON.stringify(updatedSelectedChips));
+    setRefresh((prev) => !prev);
   };
 
   const handleRemove = (index) => {
@@ -47,6 +53,7 @@ export const QA = () => {
     setSelectedChips(updatedSelectedChips);
     // Update localStorage
     localStorage.setItem("programmes", JSON.stringify(updatedSelectedChips));
+    setRefresh((prev) => !prev);
   };
 
   const [articleData, setArticleData] = useState([]);
@@ -57,17 +64,20 @@ export const QA = () => {
     setWidth(iframeRef.current.offsetWidth);
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (localStorage.getItem("role")) navigate("/");
     const fetchData = async () => {
-    const data = localStorage.getItem("programmes");
-    const parsedData = JSON.parse(data); // Parse the string into an array
+      const data = localStorage.getItem("programmes");
+      const parsedData = JSON.parse(data); // Parse the string into an array
 
       const ids = parsedData
-        .filter(element => element.select === true)
-        .map(element => element.id); // Extract the 'id' values
+        .filter((element) => element?.select === true)
+        .map((element) => element.id); // Extract the 'id' values
 
-    const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
-    console.log("ids:", idsString);
+      const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
+      console.log("ids:", idsString);
       try {
         const [data, data2] = await Promise.all([
           axios.get("https://admin.e-siticom.com/api/solarticles", {
@@ -75,8 +85,8 @@ export const QA = () => {
               "Content-Type": "application/json",
             },
             params: {
-              ids: idsString
-            }
+              ids: idsString,
+            },
           }),
           axios.get("https://admin.e-siticom.com/api/solutions"),
         ]);
@@ -95,9 +105,41 @@ export const QA = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = localStorage.getItem("programmes");
+      const parsedData = JSON.parse(data); // Parse the string into an array
+
+      const ids = parsedData
+        .filter((element) => element?.select === true)
+        .map((element) => element.id); // Extract the 'id' values
+
+      const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
+      console.log("ids:", idsString);
+      try {
+        const data = await axios.get(
+          "https://admin.e-siticom.com/api/solarticles",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            params: {
+              ids: idsString,
+            },
+          }
+        );
+        setArticleData(data.data.data.data);
+        console.log("data:", data.data.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [refresh]);
+
   const viewIncrement = async (data) => {
     try {
-      const response = axios.get(
+      const response = await axios.get(
         `https://admin.e-siticom.com/api/articles/${data}`
       );
       console.log(response);
@@ -110,8 +152,8 @@ export const QA = () => {
     const rect = btn.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    btn.style.setProperty('--x', `${x}px`);
-    btn.style.setProperty('--y', `${y}px`);
+    btn.style.setProperty("--x", `${x}px`);
+    btn.style.setProperty("--y", `${y}px`);
   };
   return (
     <div className="w-full h-full">
@@ -139,11 +181,11 @@ export const QA = () => {
         </div>
       </div>
       <div
-        // className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
-        // ref={iframeRef}
-        className="mouse-cursor-gradient-tracking w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
+        className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
         ref={iframeRef}
-        onMouseMove={handleMouseMove}
+        // className="mouse-cursor-gradient-tracking w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
+        // ref={iframeRef}
+        // onMouseMove={handleMouseMove}
       >
         {articleData &&
           articleData.length > 0 &&
@@ -672,7 +714,6 @@ export const Feedback = () => {
   );
 };
 
-
 export const QuestionBox = () => {
   const iframeRef = useRef(null);
   const handleMouseMove = (e) => {
@@ -680,16 +721,16 @@ export const QuestionBox = () => {
     const rect = btn.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    btn.style.setProperty('--x', `${x}px`);
-    btn.style.setProperty('--y', `${y}px`);
+    btn.style.setProperty("--x", `${x}px`);
+    btn.style.setProperty("--y", `${y}px`);
   };
-    
+
   return (
     <div
-    // className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
-    className="mouse-cursor-gradient-tracking w-[90vw] h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
-    ref={iframeRef}
-    onMouseMove={handleMouseMove}
-  ></div> 
-  )
-}
+      // className="w-full h-full min-h-[90vh] py-[3%] px-[5%] mt-4 bg-gradient-to-b from-bg-light-blue via-bg-pale-blue via-64% to-bg-transparent-white rounded-lg"
+      className="mouse-cursor-gradient-tracking w-[90vw] h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
+      ref={iframeRef}
+      onMouseMove={handleMouseMove}
+    ></div>
+  );
+};

@@ -19,8 +19,6 @@ export default function SecondLogin() {
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
   const { pathName } = useContext(LoginPathContext);
   const { setAuth } = useAuth();
 
@@ -74,7 +72,6 @@ export default function SecondLogin() {
         } else {
           navigate(-2);
         }
-        // navigate(-1);
         notify();
       }
     } catch (err) {
@@ -122,7 +119,10 @@ export default function SecondLogin() {
   };
 
   return (
-    <Main head="Системд бүртгэгдсэн харилцагчийн бүртгэлээ ашиглана уу.">
+    <Main
+      head="Системд бүртгэгдсэн харилцагчийн бүртгэлээ ашиглана уу."
+      image={"login"}
+    >
       <div className="w-full h-full flex justify-center items-center 3xl:mt-[90px] mt-[50px]">
         <div className="w-[430px]">
           <Box>
@@ -208,77 +208,5 @@ export default function SecondLogin() {
         </div>
       </div>
     </Main>
-    // <form
-    //   className="flex justify-center min-h-[84vh] items-center"
-    //   onSubmit={handleSubmit(onSubmit)}
-    // >
-    //   <div className="w-96">
-    //     <div className="float-left text-xl font-bold w-full mb-5">
-    //       Та STG системд нэвтрэх гэж байна
-    //     </div>
-    //     <div className=" text-blue-500 font-bold w-full mb-3">Цахим шуудан</div>
-    //     <input
-    //       type={"email"}
-    //       className="w-full h-12  border border-gray-600 pl-[15px]"
-    //       {...register("email", {
-    //         required: "Та mail хаягаа оруулна уу",
-    //         pattern: {
-    //           value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-    //           message: "Invalid email format",
-    //         },
-    //       })}
-    //     />
-    //     <div className=" text-red-500">{errors.email?.message}</div>
-    //     <div className="relative mt-6">
-    //       {showPassword ? (
-    //         <FaEye
-    //           className="h-5 w-5 absolute left-[90%] top-[30%] cursor-pointer"
-    //           onClick={toggleShowPassword}
-    //         />
-    //       ) : (
-    //         <FaEyeSlash
-    //           className="h-5 w-5 absolute left-[90%] top-[30%] cursor-pointer"
-    //           onClick={toggleShowPassword}
-    //         />
-    //       )}
-    //       <input
-    //         type={showPassword ? "text" : "password"}
-    //         {...register("password", {
-    //           required: true,
-    //           // minLength: 8,
-    //           // pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%&])/,
-    //         })}
-    //         className="w-full h-12 border border-gray-600 pl-[15px]"
-    //       />
-    //     </div>
-    //     {/* <div className="text-red-500">
-    //       {errors.password?.type === "required" && "Нууц үгээ оруулна уу"}
-    //     </div>
-    //     <div className="text-red-500">
-    //       {errors.password?.type === "minLength" &&
-    //         "Дор хаяж 8 тэмдэгт оруулна уу"}
-    //     </div>
-    //     <div className="text-red-500">
-    //       {errors.password?.type === "pattern" &&
-    //         "Дор хаяж 1 жижиг үсэг, 1 том үсэг, 1 тоо, 1 тэмдэгт агуулна"}
-    //     </div> */}
-    //     <Link to="/forget">
-    //       <div
-    //         className="text-right text-blue-500 font-bold w-full mb-3 cursor-pointer"
-    //         // onClick={() => navigate("/forget")}
-    //       >
-    //         Нууц үг мартсан
-    //       </div>
-    //     </Link>
-    //     <div className=" text-red-500 text-center">{errMsg}</div>
-    //     <button
-    //       type="submit"
-    //       className="w-full h-12 bg-slate-800 text-white rounded-3xl mt-6"
-    //       disabled={loading}
-    //     >
-    //       {loading ? <PulseLoader color="#fff" size={5} /> : "Нэвтрэх"}
-    //     </button>
-    //   </div>
-    // </form>
   );
 }

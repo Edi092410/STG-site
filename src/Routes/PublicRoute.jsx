@@ -1,9 +1,9 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
-export const LoginStatus = () => {
+export const PublicRoute = () => {
   // const user = localStorage.getItem("name");
-  const {auth} = useContext(AuthContext)
+  const { auth } = useContext(AuthContext);
   return auth ? <Navigate to="/" /> : <Outlet />;
 };
