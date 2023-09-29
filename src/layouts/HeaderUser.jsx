@@ -44,13 +44,6 @@ export const HeaderUser = () => {
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
 
-  const logOut = () => {
-    localStorage.clear();
-    setAuth(false);
-    notify();
-    navigate(-1);
-  };
-
   const [isMenuOpen, setIsMenuOpen] = useState(true);
 
   // const { selectedCompany, handleSelectedCompany } = useContext(CompanyContext);
@@ -123,14 +116,6 @@ export const HeaderUser = () => {
             </div>
           )}
         </div>
-        {modal && (
-          <Notification
-            name="Та системээс гарах гэж байна?"
-            button="Системээс гарах"
-            closeModal={() => setModal(false)}
-            stateFunction={logOut}
-          />
-        )}
       </header>
     </div>
   );

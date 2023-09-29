@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 // import { ProgramContext } from "../../context/ProgramProvider";
 
 export const Navbar = ({ isMenuOpen }) => {
   // const { selectedChips } = useContext(ProgramContext);
   const selectedChips = JSON.parse(localStorage.getItem("programmes"));
   const companies = JSON.parse(localStorage.getItem("companies"));
+  const location = useLocation();
   const navbar = [
     {
       name: "Шийдэл",
@@ -15,11 +16,9 @@ export const Navbar = ({ isMenuOpen }) => {
     {
       name: "Харилцагчийн үйлчилгээ",
       to:
-        selectedChips &&
-        selectedChips.length > 0 &&
-        !selectedChips.every((element) => element === false || element === null)
-          ? "/test"
-          : "/help",
+        !selectedChips || (selectedChips && selectedChips.length == 0)
+          ? "/help"
+          : "/test",
       key: "service",
     },
     {
@@ -45,14 +44,17 @@ export const Navbar = ({ isMenuOpen }) => {
             key={prop.key}
             className={`mr-5 ${
               prop.name === "Харилцагчийн үйлчилгээ" &&
-              localStorage.getItem("role") === "User" &&
+              (localStorage.getItem("role") === "User" ||
+                localStorage.getItem("role") === "Admin") &&
               "hidden"
             }`}
           >
             <NavLink
               to={prop.to}
               className={({ isActive }) =>
-                isActive
+                isActive ||
+                (location.pathname == "/program" &&
+                  prop.name === "Харилцагчийн үйлчилгээ")
                   ? "pb-[5px] text-[#DEDEDE] border-b-2 border-white"
                   : "hover:pb-[5px] hover:border-b-2 hover:border-white hover:text-white  transition-all duration-300"
               }

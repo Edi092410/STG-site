@@ -226,7 +226,10 @@ export const QA = () => {
                 key={index}
                 increment={() => viewIncrement(data.id)}
               >
-                <div dangerouslySetInnerHTML={{ __html: data.intro }} />
+                <div
+                  dangerouslySetInnerHTML={{ __html: data.intro }}
+                  className="my-4"
+                />
                 <Image.PreviewGroup
                   preview={{
                     onChange: (current, prev) =>
@@ -338,7 +341,7 @@ export const Tab = ({ head, increment, children }) => {
         className="border-[#1D3049] p-4 text-sm 3xl:text-base"
         // style={{ borderBottomWidth: ".1px" }}
       >
-        <div className="flex mt-3">
+        <div className="flex">
           <div className="mr-auto font-medium">{head}</div>
           <div className={`flex gap-3 `}>
             <div className={`flex ${open === false && "hidden"}  `}>
@@ -531,7 +534,7 @@ export const Tab = ({ head, increment, children }) => {
         </div>
       </div>
       <div
-        className="absolute inset-x-0 bottom-0 h-[0.3px] bg-[#1D3049]"
+        className="absolute inset-x-0 bottom-0 h-[0.3px] bg-slate-500"
         style={{ opacity: 0.3 }}
       ></div>
     </div>

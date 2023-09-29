@@ -124,14 +124,12 @@ export const Registration = () => {
         <div className="w-[430px]">
           <Box>
             <form
-              className="flex justify-center min-h-[84vh]  items-center"
+              className="flex justify-center pt-[30px]"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="w-full mx-[10%]">
                 {/* <input type="hidden" {...register("url")}></input> */}
-                <div className=" text-[#032D60] font-bold w-full mb-3 mt-[30px]">
-                  Нэр
-                </div>
+                <div className=" text-[#032D60] font-bold w-full mb-3">Нэр</div>
                 <input
                   type={"text"}
                   className="w-full h-[50px] bg-[#DFE3EE] pl-[15px]"

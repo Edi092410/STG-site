@@ -22,7 +22,7 @@ export const List = ({ date, date2, month }) => {
 
   const { selectedCompany } = useContext(CompanyContext);
   // UseContext ашиглан component refresh хийх
-  // const [OrderData, setOrderData] = useState([]);
+  const [OrderData, setOrderData] = useState([]);
   const [serviceData, setServiceData] = useState([]);
   const [feedbackData, setFeedbackData] = useState([]);
 
@@ -44,7 +44,7 @@ export const List = ({ date, date2, month }) => {
             },
           }
         );
-        // setOrderData(data.data);
+        setOrderData(data.data);
         setServiceData(data.data.filter((info) => info.number.startsWith("Ү")));
         setFeedbackData(
           data.data.filter((info) => !info.number.startsWith("Ү"))
@@ -69,12 +69,16 @@ export const List = ({ date, date2, month }) => {
         </div>
         <img src={character} alt="character image" className=" w-[80px]" />
       </div>
-      <ServiceList serviceData={serviceData} feedbackData={feedbackData} />
+      <ServiceList
+        serviceData={serviceData}
+        feedbackData={feedbackData}
+        OrderData={OrderData}
+      />
     </div>
   );
 };
 
-export const ServiceList = ({ serviceData, feedbackData }) => {
+export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
   let type;
 
   const State = ({ data }) => {
@@ -109,121 +113,125 @@ export const ServiceList = ({ serviceData, feedbackData }) => {
   const closeModal = () => {
     setModal(false);
   };
-
+  console.log("Service", serviceData);
+  console.log("Feedback", feedbackData);
   const { selectedCompany } = useContext(CompanyContext);
   return (
-    <div className="w-full h-[25vh] overflow-y-auto p-[25px] text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
-      <table className=" text-xs 3xl:text-base  w-full ">
-        <thead className=" text-left">
-          <tr>
-            <th className="w-[30%]">Огноо</th>
-            <th className="w-[50%]">Үйлчилгээ</th>
-            <th className="w-[20%]">Төлөв</th>
-          </tr>
-        </thead>
-        <tbody>
-          {serviceData && serviceData.length > 0 ? (
+    <div className="w-full p-[25px] text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
+      {OrderData && OrderData.length > 0 ? (
+        <div className="h-[25vh] overflow-y-auto">
+          {serviceData &&
+            serviceData.length > 0 &&
             serviceData.map((info) => {
               type = info.serviceType;
               return (
-                <React.Fragment key={info.number}>
-                  <tr>
-                    <td className="">
-                      {info.registrationTime && (
-                        <div>
-                          {info.registrationTime.substring(0, 10)}-
-                          {info.registrationTime.substring(11, 16)}
-                        </div>
-                      )}
-                    </td>
-                    <td
-                      className=" cursor-pointer"
-                      onClick={() => {
-                        setId(info.number);
-                        setState(info.serviceType);
-                        setModal(true);
-                      }}
-                    >
-                      {info.comment.substring(0, 20)}...
-                    </td>
-                    <td className="pl-3">
-                      <State data={info.state} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan="5"></td>
-                  </tr>
-                </React.Fragment>
+                <table className=" text-xs 3xl:text-base  w-full ">
+                  <thead className=" text-left">
+                    <tr>
+                      <th className="w-[30%]">Огноо</th>
+                      <th className="w-[50%]">Үйлчилгээ</th>
+                      <th className="w-[20%]">Төлөв</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <React.Fragment key={info.number}>
+                      <tr>
+                        <td className="">
+                          {info.registrationTime && (
+                            <div>
+                              {info.registrationTime.substring(0, 10)}-
+                              {info.registrationTime.substring(11, 16)}
+                            </div>
+                          )}
+                        </td>
+                        <td
+                          className=" cursor-pointer"
+                          onClick={() => {
+                            setId(info.number);
+                            setState(info.serviceType);
+                            setModal(true);
+                          }}
+                        >
+                          {info.comment.substring(0, 20)}...
+                        </td>
+                        <td className="pl-3">
+                          <State data={info.state} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan="5"></td>
+                      </tr>
+                    </React.Fragment>
+                  </tbody>
+                </table>
               );
-            })
-          ) : (
-            <tr>
-              <td></td>
-              <td>No data.</td>
-              <td></td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            })}
 
-      <table className=" text-xs 3xl:text-base  w-full ">
-        <thead className=" text-left">
-          <tr>
-            <th className="w-[30%]">Огноо</th>
-            <th className="w-[50%]">Санал хүсэлт</th>
-            <th className="w-[20%]">Төлөв</th>
-          </tr>
-        </thead>
-        <tbody>
-          {feedbackData && feedbackData.length > 0 ? (
-            feedbackData.map((info) => {
-              type = info.serviceType;
-              return (
-                <React.Fragment key={info.number}>
-                  <tr>
-                    <td className="py-[5px]">
-                      {info.registrationTime && (
-                        <div>
-                          {info.registrationTime.substring(0, 10)}-
-                          {info.registrationTime.substring(11, 16)}
-                        </div>
-                      )}
-                    </td>
-                    <td
-                      className="py-[5px] cursor-pointer"
-                      onClick={() => {
-                        setId(info.number);
-                        setState(info.serviceType);
-                        setModal(true);
-                      }}
-                    >
-                      {info.comment.substring(0, 20)}...
-                    </td>
-                    <td className="pl-3 py-[5px]">
-                      <State data={info.state} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan="5"></td>
-                  </tr>
-                </React.Fragment>
-              );
-            })
-          ) : (
-            <tr>
-              <td></td>
-              <td>No data.</td>
-              <td></td>
-            </tr>
+          {
+            feedbackData &&
+              feedbackData.length > 0 &&
+              feedbackData.map((info) => {
+                type = info.serviceType;
+                return (
+                  <table className=" text-xs 3xl:text-base  w-full ">
+                    <thead className=" text-left">
+                      <tr>
+                        <th className="w-[30%]">Огноо</th>
+                        <th className="w-[50%]">Санал хүсэлт</th>
+                        <th className="w-[20%]">Төлөв</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <React.Fragment key={info.number}>
+                        <tr>
+                          <td className="py-[5px]">
+                            {info.registrationTime && (
+                              <div>
+                                {info.registrationTime.substring(0, 10)}-
+                                {info.registrationTime.substring(11, 16)}
+                              </div>
+                            )}
+                          </td>
+                          <td
+                            className="py-[5px] cursor-pointer"
+                            onClick={() => {
+                              setId(info.number);
+                              setState(info.serviceType);
+                              setModal(true);
+                            }}
+                          >
+                            {info.comment.substring(0, 20)}...
+                          </td>
+                          <td className="pl-3 py-[5px]">
+                            <State data={info.state} />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="5"></td>
+                        </tr>
+                      </React.Fragment>
+                    </tbody>
+                  </table>
+                );
+              })
+          }
+          {modal && (
+            <OrderDetail
+              closeModal={closeModal}
+              number={id}
+              selectedOption={selectedCompany}
+              type={state}
+            />
           )}
-        </tbody>
-      </table>
-      {modal && (
-        <OrderDetail
-          closeModal={closeModal}
-          number={id}
-          selectedOption={selectedCompany}
-          type={state}
+        </div>
+      ) : (
+        <NoData
+          head={
+            "Одоогоор хүсэлт үүсгээгүй байна. Шинэ товч дээр дарж хүсэлтээ үүсгэх боломжтой"
+          }
+          foot={
+            "Та 24 цагт онлайнаар үйлчилгээний хүсэлтээ цаг алдалгүй үүсгээрэй."
+          }
         />
       )}
     </div>
@@ -333,7 +341,11 @@ export const Payment = ({ year }) => {
         </div>
         <img src={character} className="w-[80px] " />
       </div>
-      <div className="flex justify-between text-xs 3xl:text-base px-[5%] my-5 mb-10">
+      <div
+        className={`flex justify-between text-xs 3xl:text-base px-[5%] my-5 mb-10 ${
+          OrderData && OrderData.length > 0 ? "" : "hidden"
+        }`}
+      >
         <div className="flex flex-col w-fit ">
           <div className="h-full px-[10px] border-[2px] border-[#DFE3EE] rounded-t-sm bg-white flex items-center">
             Эхний үлдэгдэл
@@ -387,7 +399,7 @@ export const PaymentList = ({ OrderData }) => {
   const { number, setNumber } = useContext(PaymentContext);
   return (
     <div className="w-full p-[25px] pb-2 text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
-      {OrderData && OrderData.lenght > 0 ? (
+      {OrderData && OrderData.length > 0 ? (
         <div className=" overflow-y-auto h-[20vh]">
           <table className="w-full text-xs 3xl:text-base">
             <thead className=" text-left">
@@ -751,7 +763,7 @@ export const ServicePage = () => {
 
 export const NoData = ({ head, foot }) => {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center px-[10%] text-center 3xl:text-[20px] text-sm">
+    <div className="w-full h-full flex flex-col items-center justify-center 3xl:px-[15%] px-[10%] text-center 3xl:text-[18px] text-sm">
       <div>{head}</div>
       <img src={character} alt="character image" className=" w-[80px] my-2" />
       <div>{foot}</div>

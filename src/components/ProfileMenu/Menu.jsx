@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Notification } from "../Notification/Notification";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Loading } from "../Loading/Loading";
 export const Menu = (props) => {
   const menu = [
     {
@@ -46,12 +47,26 @@ export const Menu = (props) => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const { setAuth } = useAuth();
+  const [loading, setLoading] = useState(false);
   const logOut = () => {
     localStorage.clear();
     setAuth(false);
     notify();
     navigate(-1);
+    // setLoading(true);
   };
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     console.log("log out");
+  //     setLoading(false);
+  //     localStorage.clear();
+  //     setAuth(false);
+  //     notify();
+  //     navigate(-1);
+  //   }, 1000);
+  //   return () => clearTimeout(timer);
+  // }, [loading]);
+
   return (
     <div className="flex">
       <DropdownMenu.Root className="">
@@ -117,6 +132,7 @@ export const Menu = (props) => {
             />
           </div>
         )}
+        {loading && <Loading />}
       </DropdownMenu.Root>
     </div>
   );

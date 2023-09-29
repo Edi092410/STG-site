@@ -10,6 +10,7 @@ import { Loading } from "../Loading/Loading";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "../Main/Button";
 export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
   const {
     register,
@@ -100,10 +101,10 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
           },
         }
       );
-      setRefresh((prev) => !prev);
       // alert("Устгагдлаа");
       notify({ text: "Устгагдлаа" });
       closeModal();
+      setRefresh((prev) => !prev);
     } catch (err) {}
   };
 
@@ -124,7 +125,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
           }
         );
         // alert("Хүсэлт засагдлаа");
-        notify("Хүсэлт засагдлаа.");
+        notify({ text: "Хүсэлт засагдлаа." });
         setRefresh((prev) => !prev);
         setSubmitLoading(false);
         closeModal();
@@ -222,7 +223,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                   </div>
                   <div className="pb-2">Дэлгэрэнгүй тайлбар</div>
                   <textarea
-                    className="w-full border border-slate-500 p-[15px] mb-2"
+                    className="w-full border border-[#E1E1E1] p-[15px] mb-2"
                     rows={4}
                     maxLength={2000}
                     defaultValue={props.comment}
@@ -259,7 +260,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                         </span>
                       </div>
                       <input
-                        className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
+                        className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                         type="number"
                         defaultValue={props.phone}
                         {...register("phone", {
@@ -278,7 +279,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                           </span>
                         </div>
                         <input
-                          className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
+                          className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                           defaultValue={props.programCode}
                           {...register("programcode")}
                         ></input>
@@ -288,7 +289,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                   <div className="flex flex-col lg:flex-row pt-5 pb-5 ">
                     <div className="w-full lg:w-1/2 pb-3">
                       <div className="">Хариуцсан ажилтан</div>
-                      <div className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px] flex items-center">
+                      <div className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px] flex items-center">
                         {props.servedUser}
                       </div>
                     </div>
@@ -296,28 +297,24 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                       <div className="">
                         Хариуцсан ажилтан таны дуудлагаас гадна
                       </div>
-                      <div className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px] rounded-3xl flex justify-center items-center">
+                      <div className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px] rounded-3xl flex justify-center items-center">
                         {props.servedUserCount} захиалгатай байна
                       </div>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-[100px] h-[50px] rounded-[30px] bg-slate-500 text-white float-right"
-                    onClick={() => {
-                      setValue("customerId", selectedCompany);
-                      setValue("number", number);
-                      setValue("serviceType", selected);
-                      setValue("email", props.email);
-                    }}
-                    disabled={submitLoading}
-                  >
-                    {submitLoading ? (
-                      <PulseLoader color="#fff" size={5} />
-                    ) : (
-                      "Хадгалах"
-                    )}
-                  </button>
+                  <div className="w-full">
+                    <div
+                      className="w-[20%] float-right"
+                      onClick={() => {
+                        setValue("customerId", selectedCompany);
+                        setValue("number", number);
+                        setValue("serviceType", selected);
+                        setValue("email", props.email);
+                      }}
+                    >
+                      <Button loading={submitLoading} name={"Хадгалах"} />
+                    </div>
+                  </div>
                 </form>
               </div>
             ))

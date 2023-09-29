@@ -7,6 +7,7 @@ import { PulseLoader } from "react-spinners";
 import { ServiceSelect } from "../ServiceSelect/ServiceSelect";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "../Main/Button";
 export const CreateOrder = ({ closeModal }) => {
   const {
     register,
@@ -169,7 +170,7 @@ export const CreateOrder = ({ closeModal }) => {
                   </span>
                 </div>
                 <input
-                  className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
+                  className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                   type="number"
                   {...register("phone", {
                     required: "Та утасны дугаараа оруулна уу!",
@@ -184,7 +185,7 @@ export const CreateOrder = ({ closeModal }) => {
                     <span className="text-[10px]">Anydesk, Teamviewer</span>
                   </div>
                   <input
-                    className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
+                    className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                     {...register("programcode")}
                   ></input>
                 </div>
@@ -193,24 +194,24 @@ export const CreateOrder = ({ closeModal }) => {
 
             <div className="pb-2">Дэлгэрэнгүй тайлбар</div>
             <textarea
-              className="w-full border border-slate-500 p-[15px] mb-2"
+              className="w-full border border-[#E1E1E1] p-[15px] mb-2"
               rows={4}
               maxLength={2000}
               {...register("comment")}
             ></textarea>
-            <button
-              type="submit"
-              className="w-[80px] h-[40px] rounded-[30px] bg-slate-500 text-white float-right text-xs flex items-center justify-center"
-              onClick={() => {
-                // setSelectedOption(getValues("servicetype"));
-                setValue("customerId", selectedCompany);
-                setValue("serviceType", selectedOption);
-                setValue("email", localStorage.getItem("email"));
-              }}
-              disabled={loading}
-            >
-              {loading ? <PulseLoader color="#fff" size={5} /> : "Хадгалах"}
-            </button>
+            <div className="w-full">
+              <div
+                className="w-[20%] float-right"
+                onClick={() => {
+                  // setSelectedOption(getValues("servicetype"));
+                  setValue("customerId", selectedCompany);
+                  setValue("serviceType", selectedOption);
+                  setValue("email", localStorage.getItem("email"));
+                }}
+              >
+                <Button loading={loading} name={"Хадгалах"} />
+              </div>
+            </div>
           </form>
         </div>
         <div

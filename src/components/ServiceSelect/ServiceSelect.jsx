@@ -80,7 +80,7 @@ export const ServiceSelect = ({
       ref={menuRef}
     >
       <select
-        className=" appearance-none w-full h-full border border-slate-500 focus:border-blue-500 pl-[15px] rounded"
+        className=" appearance-none w-full h-full border border-[#E1E1E1] focus:border-blue-500 pl-[15px] rounded"
         value={selectedOption}
         onChange={handleSelectedChange}
       >

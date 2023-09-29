@@ -28,7 +28,7 @@ import { ServicePage } from "../components/OrderList/List";
 import { PaymentPage } from "../components/OrderList/List";
 import { QA } from "../components/QA/QA";
 import { Pass } from "../components/Pass/Pass";
-
+import { Loading } from "../components/Loading/Loading";
 import { LoginPathContext } from "../context/LoginPathProvider";
 
 export const AppRoutes = () => {

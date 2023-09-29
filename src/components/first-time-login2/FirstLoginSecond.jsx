@@ -105,6 +105,7 @@ export default function SecondLogin() {
           }
         } catch (err) {
           message(err);
+          console.log(err);
         }
       }
     } finally {
@@ -127,7 +128,7 @@ export default function SecondLogin() {
         <div className="w-[430px]">
           <Box>
             <form
-              className="flex justify-center items-cber"
+              className="flex justify-center"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="w-full mx-[10%]">
