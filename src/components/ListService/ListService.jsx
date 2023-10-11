@@ -27,10 +27,10 @@ export const ListService = () => {
       setLoading(true);
       try {
         const data = await axios.get(
-          // `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
-          `/api/services/getservicecount?email=${localStorage.getItem(
-            "email"
-          )}`,
+          `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
+          // `/api/services/getservicecount?email=${localStorage.getItem(
+          //   "email"
+          // )}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -52,10 +52,10 @@ export const ListService = () => {
       setLoading(true);
       try {
         const data = await axios.get(
-          // `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
-          `/api/services/getservicecount?email=${localStorage.getItem(
-            "email"
-          )}`,
+          `https://service2.stg.mn/api/services/getservicecount?email=${localStorage.getItem("email")}`,
+          // `/api/services/getservicecount?email=${localStorage.getItem(
+          //   "email"
+          // )}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

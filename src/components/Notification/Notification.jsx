@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../Main/Button";
 export const Notification = (props) => {
   const { name, button, closeModal, path, stateFunction } = props;
   const menuRef = useRef(null);
@@ -27,7 +28,7 @@ export const Notification = (props) => {
         >
           <div className=" text-center text-xl m-16 mb-0">{name}</div>
 
-          <button
+          {/* <button
             className="bg-slate-800 text-white rounded-[30px] w-[350px] h-10 mt-20 mb-10"
             onClick={() => {
               navigate(path);
@@ -36,7 +37,19 @@ export const Notification = (props) => {
             }}
           >
             {button}
-          </button>
+          </button> */}
+          <div className="flex justify-center my-10">
+            <div
+              className="w-fit"
+              onClick={() => {
+                navigate(path);
+                closeModal();
+                stateFunction();
+              }}
+            >
+              <Button name={button} />
+            </div>
+          </div>
 
           <FaTimes
             className="absolute top-4 right-4 cursor-pointer"

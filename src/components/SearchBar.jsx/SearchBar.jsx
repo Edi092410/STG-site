@@ -1,8 +1,7 @@
 import React from "react";
-import { FaSearch } from "react-icons/fa";
 export const SearchBar = () => {
   return (
-    <div className="flex justify-center w-full h-full">
+    <div className="flex justify-center w-full h-full z-0">
       <div className="relative w-full h-full">
         <input
           type="text"

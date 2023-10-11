@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { CompanyNames } from "../CompanyNames/CompanyNames";
 import { OrderDetail } from "../OrderDetail/OrderDetail";
 import { Notification } from "../Notification/Notification";
 import { InfoReq } from "../InfoReq/InfoReq";
 import axios from "axios";
 import { Loading } from "../Loading/Loading";
 import { OrderContext } from "../../context/OrderProvider";
-import { LoadedContext } from "../../context/Loaded";
 import { ServerErrorPage } from "../../pages/ErrorPages/ServerErrorPage";
-import { Axios } from "../../Axios/Axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CompanyContext } from "../../context/CompanyProvider";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../Main/Button";
 export const OrderList = ({ date, date2, month }) => {
   const [selectedOption, setSelectedOption] = useState({});
   // UseContext ашиглан component refresh хийх
@@ -18,6 +18,8 @@ export const OrderList = ({ date, date2, month }) => {
   const { refresh, setRefresh } = useContext(OrderContext);
   // Loading хийх
   const [loading, setLoading] = useState(false);
+
+  const { selectedCompany } = useContext(CompanyContext);
 
   const [modal, setModal] = useState(false);
   const [notif, setNotif] = useState(false);
@@ -42,14 +44,16 @@ export const OrderList = ({ date, date2, month }) => {
 
   const [hasError, setHasError] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const FetchData = async () => {
-      if (selectedOption !== "") {
+      if (selectedCompany !== "") {
         setLoading(true);
         try {
           const data = await axios.get(
-            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
-            `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedCompany}&startDate=${date}&endDate=${date2}`,
+            `/api/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,6 +62,7 @@ export const OrderList = ({ date, date2, month }) => {
             }
           );
           setOrderData(data.data);
+          console.log("list:", data.data);
         } catch (err) {
           setHasError(true);
         } finally {
@@ -70,12 +75,12 @@ export const OrderList = ({ date, date2, month }) => {
 
   useEffect(() => {
     const FetchData = async () => {
-      if (selectedOption !== "") {
+      if (selectedCompany !== "") {
         setLoading(true);
         try {
           const data = await axios.get(
-            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
-            `/api/services/getservicelist?customerId=${selectedOption}&startDate=${date}&endDate=${date2}`,
+            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedCompany}&startDate=${date}&endDate=${date2}`,
+            `/api/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -92,7 +97,7 @@ export const OrderList = ({ date, date2, month }) => {
       }
     };
     FetchData();
-  }, [selectedOption, month, refresh]);
+  }, [selectedCompany, month, refresh]);
 
   const notify = ({ text }) => {
     toast.success(text, {
@@ -105,9 +110,9 @@ export const OrderList = ({ date, date2, month }) => {
       bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
     });
   };
-  const handleSelectedChange = (selectedOption) => {
-    if (selectedOption !== "") {
-      setSelectedOption(selectedOption);
+  const handleSelectedChange = (selectedCompany) => {
+    if (selectedCompany !== "") {
+      setSelectedOption(selectedCompany);
     }
   };
   // Захиалга цуцлах
@@ -133,17 +138,17 @@ export const OrderList = ({ date, date2, month }) => {
 
   let type;
   return (
-    <div className="mb-[5vh] w-full rounded-lg shadow-2xl px-[10%] py-[5%]">
+    <div className="mb-[5vh] w-full rounded-lg shadow-xl px-[5%] py-[5%]">
       <div className=" ">
         {/* <div className="m-[5%]"> */}
-        <div className="">
+        {/* <div className="">
           <CompanyNames
             selectedOption={selectedOption}
             onSelectedChange={handleSelectedChange}
           />
-        </div>
+        </div> */}
         <div className="lg:overflow-visible overflow-auto w-full mt-4">
-          {OrderData.length > 0 ||
+          {(OrderData && OrderData.length > 0) ||
           OrderData === null ||
           OrderData === undefined ? (
             <table className=" text-xs  w-full ">
@@ -232,12 +237,48 @@ export const OrderList = ({ date, date2, month }) => {
           )}
         </div>
         {/* </div> */}
+        <div className="w-full flex justify-end my-4">
+          {/* <button
+            className=" w-fit rounded-full text-white bg-[#2D3648] flex p-[10px] transition duration-300 hover:scale-105 3xl:text-base text-xs"
+            onClick={() => navigate("/test")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="19"
+              viewBox="0 0 25 24"
+              fill="none"
+              className="mr-1"
+            >
+              <path
+                d="M10.07 5.92969L4 11.9997L10.07 18.0697"
+                stroke="#FEFEFE"
+                strokeWidth="1.5"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M21.0019 12H4.17188"
+                stroke="#FEFEFE"
+                strokeWidth="1.5"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Буцах
+          </button> */}
+          <div className="w-fit" onClick={() => navigate("/test")}>
+            <Button name={"Буцах"} text={"3xl:text-base text-xs"} />
+          </div>
+        </div>
       </div>
       {modal && (
         <OrderDetail
           closeModal={closeModal}
           number={storedNumber}
-          selectedOption={selectedOption}
+          selectedOption={selectedCompany}
           type={type}
         />
       )}

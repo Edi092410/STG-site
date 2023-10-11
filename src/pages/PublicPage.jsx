@@ -16,12 +16,12 @@ export const PublicPage = () => {
         <Slogan />
       </div>
 
-      <div className="mx-[20%] mt-[90px]">
+      <div className="lg:mx-[20%] md:mx-[10%] mx-[5%] mt-[90px]">
         <Purpose />
         <div className=" text-[#7B7B7B] h-[150px] font-normal flex items-center justify-center text-[14px] 3xl:text-base mt-[50px]">
           Шийдэл
         </div>
-        <div className=" text-[#1D3049] text-[25px] 3xl:text-[36px] font-semibold h-[150px] text-center px-[10%]">
+        <div className=" text-[#1D3049] text-[25px] 3xl:text-[36px] font-semibold h-[150px] text-center px-[10%] md:block hidden">
           Таны санхүүгийн үйл ажиллагаанд дэмжлэг үзүүлэх гол боломжууд
         </div>
         <div className="mx-[-20vw]">
@@ -55,21 +55,20 @@ export const PublicPage = () => {
           >
             Онлайн хүсэлт илгээх
           </button> */}
-          <div className="" onClick={() => navigate("/help")}>
+          <div className="" onClick={() => navigate("/test")}>
             <Button name={"Онлайн хүсэлт илгээх"} wiggleLength={7} />
           </div>
         </div>
-
-        <div className="mx-[-20vw] h-[50vh] mb-[90px]">
-          {/* <About /> */}
-          <MainBox location={"bottom"}>
-            <div className="flex justify-center items-end h-full text-[16px] 3xl:text-[24px] font-bold text-[#032D60] text-center gap-[80px] 3xl:gap-[110px] pb-[50px]">
-              <div className="w-[10%]">Онлайн харилцагчийн үйлчилгээ</div>
-              <div className="w-[10%]">3000+ Харилцагч</div>
-              <div className="w-[10%]">Итгэлт түнш найдвартай ажиллагаа</div>
-            </div>
-          </MainBox>
-        </div>
+      </div>
+      <div className="h-[50vh] mb-[90px]">
+        {/* <About /> */}
+        <MainBox location={"bottom"}>
+          <div className="flex justify-center items-end w-full h-full text-[16px] 3xl:text-[24px] font-bold text-[#032D60] text-center gap-[80px] 3xl:gap-[110px] pb-[50px]">
+            <div className="w-[10%]">Онлайн харилцагчийн үйлчилгээ</div>
+            <div className="w-[10%]">3000+ Харилцагч</div>
+            <div className="w-[10%]">Итгэлт түнш найдвартай ажиллагаа</div>
+          </div>
+        </MainBox>
       </div>
     </div>
   );

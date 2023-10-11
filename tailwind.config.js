@@ -101,7 +101,10 @@ module.exports = {
         redBorder: "redBorder 1000ms",
       },
       screens: {
-        "3xl": "1980px",
+        "3xl": "1900px",
+      },
+      zIndex: {
+        100: "100",
       },
     },
   },

@@ -35,7 +35,7 @@ export const Navbar = ({ isMenuOpen }) => {
   return (
     <div
       className={` md:min-h-fit min-h-[50vh]  bg-[#2D3648] ${
-        isMenuOpen ? "block" : "hidden md:block"
+        isMenuOpen ? "block animate-upToDown" : "hidden md:block"
       } `}
     >
       <ul className="flex md:flex-row flex-col text-[#717D96] text-[12px] 3xl:text-base md:items-center gap-[6vh] md:gap-0 ml-4 md:ml-0 text-left">

@@ -11,7 +11,7 @@ export const Acalous = () => {
             alt="acolous logo"
             className="3xl:w-[250px] 3xl:h-[250px] w-[150px] h-[150px]"
           />
-          <div className=" text-base 3xl:text-[24px] font-normal mx-[100px]">
+          <div className=" text-base 3xl:text-[24px] font-normal mx-[100px] md:block hidden">
             “Fiscus платформын эхний хувилбар болох Acolous програм нь төсвийн
             байгууллагын санхүүгийн бүртгэл тайланг гаргахад чиглэсэн
             найдвартай, итгэлтэй үйлчилгээг харилцагчдаа хүргэн 20 жилийн хамтын

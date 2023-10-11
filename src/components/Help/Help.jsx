@@ -3,7 +3,7 @@ import { Main } from "../../layouts/Main";
 import { Box } from "../Main/Box";
 import { Button } from "../Main/Button";
 import image from "../../Assets/help/help.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const Help = () => {
@@ -40,17 +40,18 @@ export const Help = () => {
               </div>
               <div
                 className="mb-[50px] mt-[30px]"
-                targer="_blank"
                 onClick={() => {
                   // if (role) {
                   //   notify();
                   //   navigate("/");
                   // } else {
                   //   window.open("/program", "_blank", "noreferrer");
-                  navigate("/pass");
+                  // navigate("/pass");
                 }}
               >
-                <Button name={"Танд туслая"} wiggleLength={100} />
+                <Link to="/program" target="_blank">
+                  <Button name={"Танд туслая"} wiggleLength={100} />
+                </Link>
               </div>
             </div>
           </Box>

@@ -59,7 +59,7 @@ export const ChooseCompany = ({
           onChange={handleSelectedChange}
         > */}
         <select
-          className=" appearance-none w-fit h-[30px] bg-transparent text-white focus:outline-none pr-6 text-right "
+          className=" appearance-none w-fit h-[30px] bg-transparent text-white focus:outline-none pr-6 text-right cursor-pointer "
           // defaultValue={selectedCompany}
           defaultValue={selectedCompany}
           onChange={handleSelectedChange}
@@ -70,7 +70,7 @@ export const ChooseCompany = ({
               <option
                 value={prop.customerId}
                 key={prop.customerId}
-                className="text-black"
+                className="text-black "
               >
                 {prop.name.split("[")[0]}
               </option>

@@ -78,8 +78,8 @@ export default function SecondLogin() {
       if (err.request.status === 401) {
         try {
           const data = await axios.post(
-            // "https://service2.stg.mn/api/users/authenticate",
-            "/api/users/authenticate",
+            "https://service2.stg.mn/api/users/authenticate",
+            // "/api/users/authenticate",
             e,
             {
               headers: {

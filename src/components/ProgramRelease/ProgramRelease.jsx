@@ -21,7 +21,7 @@ export const Box = ({ head, img, children }) => {
       <div className="3xl:text-[24px] text-[16px] font-semibold mb-4">
         {head}
       </div>
-      <div className="w-full max-h-[25%] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)] text-[#7B7B7B] 3xl:text-sm text-xs p-[8%] overflow-y-auto">
+      <div className="w-full max-h-[25%] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)] text-[#7B7B7B] 3xl:text-base text-xs p-[8%] overflow-y-auto">
         {children}
       </div>
     </div>

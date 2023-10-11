@@ -6,7 +6,7 @@ export const CallCenter = () => {
     <div className="w-full h-[300px] 3xl:h-[415px] shadow-2xl">
       <Box location={"right"} vectorColor={"#F5F5F5"}>
         <div className="flex items-center pr-[120px] h-full ">
-          <div className="text-[16px] 3xl:text-[24px] p-[5%] mr-auto">
+          <div className="text-[16px] 3xl:text-[24px] p-[5%] mr-auto md:block hidden">
             <div className=" font-bold">Call Center</div>
             <div className="mt-2">
               Санхүү, нягтлан бодох бүртгэлийн өдөр тутмын үйл ажиллагааг

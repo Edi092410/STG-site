@@ -9,7 +9,7 @@ export const Slogan = () => {
     <div className="w-full h-[50vh]">
       <MainBox location={"top"}>
         <div className="relative h-full flex text-[#1D3049] items-center">
-          <div className="mr-auto md:w-[25vw] ml-[20vw]">
+          <div className="mr-auto md:w-[25vw] ml-[20vw] md:block hidden">
             <div className=" font-semibold text-[25px] 3xl:text-[36px] ">
               Стрессгүй амьдралын итгэлт үйлчилгээг
             </div>

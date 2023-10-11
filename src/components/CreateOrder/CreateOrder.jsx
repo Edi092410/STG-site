@@ -46,8 +46,8 @@ export const CreateOrder = ({ closeModal }) => {
         setLoading(true);
         try {
           await axios.post(
-            // "https://service2.stg.mn/api/services/servicerequest",
-            "/api/services/servicerequest",
+            "https://service2.stg.mn/api/services/servicerequest",
+            // "/api/services/servicerequest",
             e,
             {
               headers: {
@@ -69,8 +69,8 @@ export const CreateOrder = ({ closeModal }) => {
         delete e.programcode;
         try {
           await axios.post(
-            // "https://service2.stg.mn/api/services/feedbackrequest",
-            "/api/services/feedbackrequest",
+            "https://service2.stg.mn/api/services/feedbackrequest",
+            // "/api/services/feedbackrequest",
             e,
             {
               headers: {
@@ -107,14 +107,14 @@ export const CreateOrder = ({ closeModal }) => {
   }, [closeModal]);
 
   return (
-    <div className="w-screen h-screen fixed top-0 left-0 bg-[#000000] bg-opacity-20 z-20">
+    <div className="w-screen h-screen fixed top-0 left-0 bg-[#000000] bg-opacity-20 z-40">
       <div
-        className="relative lg:mr-[20%] lg:ml-[20%] mr-[10%] ml-[10%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
+        className="relative lg:mr-[20%] lg:ml-[20%] mr-[5%] ml-[5%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
         ref={menuRef}
       >
         <div className="p-[10%] pt-[5%]">
           <form className=" text-sm" onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full lg:w-1/2 h-fit md:h-[30px] mb-5">
+            <div className="w-full lg:w-1/2 h-fit md:h-[30px] md:mb-5">
               <div className="">
                 <CompanyNames
                   selectedOption={selectedCompany}
@@ -129,15 +129,15 @@ export const CreateOrder = ({ closeModal }) => {
                 })}
               />
             </div>
-            <div className=" text-red-500 mt-8">
+            {/* <div className=" text-red-500 mt-8">
               {errors.customerId?.message}
-            </div>
+            </div> */}
             {/* {selectedCompany === "" && (
               <div className="text-red-500 mt-8">Компаниа сонгоно уу</div>
             )} */}
             <div className="m-0 p-0 w-1/2"></div>
 
-            <div className=" pt-5 pb-2">Цахим шуудан</div>
+            <div className="md:pt-5 pb-2">Цахим шуудан</div>
             <div className="w-full lg:w-1/2 flex h-[30px] bg-[#D9D9D9] pl-[15px] items-center text-gray-400 mb-5">
               {localStorage.getItem("email")}
               <input type="hidden" {...register("email")} />
@@ -152,15 +152,6 @@ export const CreateOrder = ({ closeModal }) => {
               />
               <input type="hidden" {...register("serviceType")} />
             </div>
-            {/* <div>Мэйл хаяг</div>
-            <input
-              type="email"
-              className="flex w-full lg:w-1/2 h-[30px] bg-slate-200 pl-[15px]"
-              {...register("email", {
-                required: "Та email хаягаа оруулна уу!",
-              })}
-            ></input>
-            <div className=" text-red-500">{errors.email?.message}</div> */}
             <div className="flex flex-col lg:flex-row pt-5 pb-5 text-xs">
               <div className="w-full lg:w-1/2 pb-3">
                 <div>
@@ -201,9 +192,8 @@ export const CreateOrder = ({ closeModal }) => {
             ></textarea>
             <div className="w-full">
               <div
-                className="w-[20%] float-right"
+                className="md:w-[20%]  float-right"
                 onClick={() => {
-                  // setSelectedOption(getValues("servicetype"));
                   setValue("customerId", selectedCompany);
                   setValue("serviceType", selectedOption);
                   setValue("email", localStorage.getItem("email"));

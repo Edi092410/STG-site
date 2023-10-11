@@ -30,6 +30,7 @@ import { QA } from "../components/QA/QA";
 import { Pass } from "../components/Pass/Pass";
 import { Loading } from "../components/Loading/Loading";
 import { LoginPathContext } from "../context/LoginPathProvider";
+import { OrderList } from "../components/OrderList/OrderList";
 
 export const AppRoutes = () => {
   let { token } = useParams();
@@ -54,6 +55,7 @@ export const AppRoutes = () => {
           <Route path="test" element={<ServicePage />}>
             <Route index element={<QA />} />
             <Route path="payment" element={<PaymentPage />} />
+            <Route path="list" element={<OrderList />} />
           </Route>
           <Route path="pass" element={<Pass />} />
         </Route>

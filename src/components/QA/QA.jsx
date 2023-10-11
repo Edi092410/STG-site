@@ -13,7 +13,6 @@ import { Image } from "antd";
 import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../context/OrderProvider";
 import "./style.css";
-
 export const QA = () => {
   const [data, setData] = useState([]);
 
@@ -67,17 +66,7 @@ export const QA = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("role")) navigate("/");
-    const fetchData = async () => {
-      const data = localStorage.getItem("programmes");
-      const parsedData = JSON.parse(data); // Parse the string into an array
-
-      const ids = parsedData
-        .filter((element) => element?.select === true)
-        .map((element) => element.id); // Extract the 'id' values
-
-      const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
-      console.log("ids:", idsString);
+    const data = async (idsString) => {
       try {
         const [data, data2] = await Promise.all([
           axios.get("https://admin.e-siticom.com/api/solarticles", {
@@ -102,38 +91,82 @@ export const QA = () => {
         console.log("Error:", error);
       }
     };
+
+    if (localStorage.getItem("role")) {
+      navigate("/");
+    }
+
+    const fetchData = async () => {
+      const parsedData = JSON.parse(localStorage.getItem("programmes"));
+
+      if (!parsedData) {
+        // Update the state directly when parsedData exists
+        // setRefresh((prev) => !prev);
+
+        navigate("/help");
+      } else {
+        const ids = parsedData
+          .filter((element) => element?.select === true)
+          .map((element) => element.id); // Extract the 'id' values
+
+        const idsString = ids.join(",");
+        // console.log("ids:", idsString);
+        data(idsString);
+      }
+    };
+
     fetchData();
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = localStorage.getItem("programmes");
-      const parsedData = JSON.parse(data); // Parse the string into an array
-
-      const ids = parsedData
-        .filter((element) => element?.select === true)
-        .map((element) => element.id); // Extract the 'id' values
-
-      const idsString = ids.join(","); // Convert the array of ids to a comma-separated string
-      console.log("ids:", idsString);
+    const data = async (idsString) => {
       try {
-        const data = await axios.get(
-          "https://admin.e-siticom.com/api/solarticles",
-          {
+        const [data, data2] = await Promise.all([
+          axios.get("https://admin.e-siticom.com/api/solarticles", {
             headers: {
               "Content-Type": "application/json",
             },
             params: {
               ids: idsString,
             },
-          }
-        );
+          }),
+          axios.get("https://admin.e-siticom.com/api/solutions"),
+        ]);
         setArticleData(data.data.data.data);
         console.log("data:", data.data.data.data);
+        const modifiedData = data2.data.data.data.map((item) => ({
+          ...item,
+          image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
+        }));
+        setData(modifiedData);
+        console.log("modified:", modifiedData);
       } catch (error) {
-        console.log(error);
+        console.log("Error:", error);
       }
     };
+
+    if (localStorage.getItem("role")) {
+      navigate("/");
+    }
+
+    const fetchData = async () => {
+      const parsedData = JSON.parse(localStorage.getItem("programmes"));
+
+      if (!parsedData) {
+        // Update the state directly when parsedData exists
+        // setRefresh((prev) => !prev);
+        navigate("/help");
+      } else {
+        const ids = parsedData
+          .filter((element) => element?.select === true)
+          .map((element) => element.id); // Extract the 'id' values
+
+        const idsString = ids.join(",");
+        // console.log("ids:", idsString);
+        data(idsString);
+      }
+    };
+
     fetchData();
   }, [refresh]);
 
@@ -157,27 +190,29 @@ export const QA = () => {
   };
   return (
     <div className="w-full h-full">
-      <div className="flex items-center">
-        <div className="w-[30%] h-[30px] 3xl:h-[40px]">
+      <div className="flex lg:flex-row flex-col items-center">
+        <div className="md:w-[30%] w-full h-[30px] 3xl:h-[40px]">
           <SearchBar />
         </div>
-        <div className="text-[16px] 3xl:text-[24px] font-semibold mx-2">
-          Таны хэрэглэдэг програм
-        </div>
-        <div className="flex">
-          {data.map((data, index) => (
-            //   data[index] &&
-            // <div className={`mr-2 ${selectedChips[index] ? "" : "hidden"}`}>
-            <div className={`mr-2`}>
-              <Box
-                img={data.image}
-                index={index}
-                remove={handleRemove}
-                bool={selectedChips[index]?.select}
-                select={handleSelectedChips}
-              />
-            </div>
-          ))}
+        <div className="flex items-center mt-2 lg:mt-0">
+          <div className="md:block hidden text-[16px] 3xl:text-[24px] font-semibold mx-2">
+            Таны хэрэглэдэг програм
+          </div>
+          <div className="flex">
+            {data.map((data, index) => (
+              //   data[index] &&
+              // <div className={`mr-2 ${selectedChips[index] ? "" : "hidden"}`}>
+              <div className={`mr-2`}>
+                <Box
+                  img={data.image}
+                  index={index}
+                  remove={handleRemove}
+                  bool={selectedChips[index]?.select}
+                  select={handleSelectedChips}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div
@@ -189,10 +224,10 @@ export const QA = () => {
       >
         {articleData &&
           articleData.length > 0 &&
-          articleData.map((data, index) => {
+          articleData.map((prop, index) => {
             // console.log("Content:", data.content);
             const contentWithUpload = [];
-            const modifiedContent = data.content.replace(
+            const modifiedContent = prop.content.replace(
               /src="(\/uploads\/[^"]+)"/g,
               'src="https://admin.e-siticom.com/$1"'
             );
@@ -215,19 +250,21 @@ export const QA = () => {
             // data.content.forEach((video) => {
             const regex = /<iframe[^>]*src="([^"]+)"/g;
             let match;
-            while ((match = regex.exec(data.content)) !== null) {
+            while ((match = regex.exec(prop.content)) !== null) {
               videoUrls.push(match[1]);
             }
             // });
 
             return (
               <Tab
-                head={data.title}
+                head={prop.title}
                 key={index}
-                increment={() => viewIncrement(data.id)}
+                increment={() => viewIncrement(prop.id)}
+                data={data}
+                id={prop.solution_id}
               >
                 <div
-                  dangerouslySetInnerHTML={{ __html: data.intro }}
+                  dangerouslySetInnerHTML={{ __html: prop.intro }}
                   className="my-4"
                 />
                 <Image.PreviewGroup
@@ -286,14 +323,18 @@ export const Box = ({ img, index, remove, select, bool }) => {
   const [selected, setSelected] = useState(bool); // Initialize selected to false
   return (
     <div
-      className="relative w-[80px] h-[40px] cursor-pointer"
+      className="relative 3xl:w-[80px] 3xl:h-[40px] w-[60px] h-[30px] cursor-pointer"
       onClick={() => {
         select(index);
         setSelected(true); // Toggle the selected state
       }}
     >
       <div className="flex justify-center items-center w-full h-full rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)]">
-        <img src={img} alt={index} className="w-[20px] h-[20px]" />
+        <img
+          src={img}
+          alt={index}
+          className="3xl:w-[20px] 3xl:h-[20px] w-[15px] h-[15px]"
+        />
       </div>
       <div
         className={`absolute top-0 right-0 w-5 h-5 text-white text-xs bg-[rgba(217,217,217,0.80)] cursor-pointer rounded-full transition duration-300 hover:scale-110 ${
@@ -314,7 +355,7 @@ export const Box = ({ img, index, remove, select, bool }) => {
   );
 };
 
-export const Tab = ({ head, increment, children }) => {
+export const Tab = ({ head, increment, data, id, children }) => {
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState(0);
   const [dislike, setDislike] = useState(0);
@@ -335,6 +376,16 @@ export const Tab = ({ head, increment, children }) => {
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
 
+  console.log(
+    "fata:",
+    // data.filter((element) => element.id === 6).map((element) => element.name)
+    id
+  );
+
+  useEffect(() => {
+    console.log("changed");
+  }, [open]);
+
   return (
     <div className="relative">
       <div
@@ -344,6 +395,15 @@ export const Tab = ({ head, increment, children }) => {
         <div className="flex">
           <div className="mr-auto font-medium">{head}</div>
           <div className={`flex gap-3 `}>
+            <div
+              className={`${
+                open === true && "hidden"
+              } text-slate-100 mr-2 text-[14px]`}
+            >
+              {data
+                .filter((element) => element.id === id)
+                .map((element) => element.name)}
+            </div>
             <div className={`flex ${open === false && "hidden"}  `}>
               <div
                 onClick={() => {
@@ -479,9 +539,17 @@ export const Tab = ({ head, increment, children }) => {
 
               <p className="ml-1 text-white">{dislike}</p>
             </div>
+
             <div
               className="flex items-center justify-center w-[20px] h-[20px] rounded-full bg-[#032D60] cursor-pointer"
               onClick={() => {
+                console.log(
+                  "firstaa",
+                  // data
+                  // .filter((element) => element.id === id)
+                  // .map((element) => element.name)
+                  id
+                );
                 open === false && increment();
                 setOpen(!open);
               }}
@@ -717,7 +785,7 @@ export const Feedback = () => {
   );
 };
 
-export const QuestionBox = () => {
+export const QuestionBox = ({ children }) => {
   const iframeRef = useRef(null);
   const handleMouseMove = (e) => {
     const btn = e.target;
@@ -734,6 +802,8 @@ export const QuestionBox = () => {
       className="mouse-cursor-gradient-tracking w-[90vw] h-[90vh] py-[3%] px-[5%] mt-4 rounded-lg"
       ref={iframeRef}
       onMouseMove={handleMouseMove}
-    ></div>
+    >
+      {children}
+    </div>
   );
 };

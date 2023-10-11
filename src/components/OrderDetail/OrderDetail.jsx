@@ -55,8 +55,8 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
       setLoading(true);
       try {
         const data = await axios.get(
-          // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}`,
-          `/api/services/getservicelist?customerId=${selectedOption}`,
+          `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}`,
+          // `/api/services/getservicelist?customerId=${selectedOption}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -91,8 +91,8 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
   const deleteOrder = async () => {
     try {
       axios.post(
-        // `https://service2.stg.mn/api/services/deleteservice?number=${number}&type=${type}`,
-        `/api/services/deleteservice?number=${number}&type=${type}`,
+        `https://service2.stg.mn/api/services/deleteservice?number=${number}&type=${type}`,
+        // `/api/services/deleteservice?number=${number}&type=${type}`,
         {},
         {
           headers: {
@@ -114,8 +114,8 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
     if (selected !== "Санал хүсэлт") {
       try {
         axios.post(
-          // "https://service2.stg.mn/api/services/servicerequest",
-          "/api/services/servicerequest",
+          "https://service2.stg.mn/api/services/servicerequest",
+          // "/api/services/servicerequest",
           e,
           {
             headers: {
@@ -135,8 +135,8 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
       try {
         setSubmitLoading(true);
         axios.post(
-          // "https://service2.stg.mn/api/services/feedbackrequest",
-          "/api/services/feedbackrequest",
+          "https://service2.stg.mn/api/services/feedbackrequest",
+          // "/api/services/feedbackrequest",
           e,
           {
             headers: {
@@ -158,7 +158,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
     <OrderProvider>
       <div className="w-screen h-screen fixed top-0 left-0 bg-slate-300 bg-opacity-50 z-20">
         <div
-          className="relative lg:mr-[20%] lg:ml-[20%] mr-[10%] ml-[10%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
+          className="relative lg:mx-[20%] mx-[5%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
           ref={menuRef}
         >
           {data.length > 0 ? (
@@ -229,28 +229,6 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                     defaultValue={props.comment}
                     {...register("comment")}
                   ></textarea>
-                  {/* <div
-                  className="w-full lg:w-1/2 pb-3"
-                  style={props.serviceType === 0 ? { display: "none" } : null}
-                >
-                  <div>
-                    Холбогдох программын код /{" "}
-                    <span className="text-[10px]">Anydesk, Teamviewer</span>
-                  </div>
-                  <input
-                    className="w-full lg:w-[90%] h-[30px] border border-slate-500 pl-[15px]"
-                    {...register("programCode")}
-                  ></input>
-                </div> */}
-                  {/* <div>Мэйл хаяг</div>
-                  <input
-                    type="email"
-                    className="flex w-full lg:w-1/2 h-[30px] bg-slate-200 pl-[15px]"
-                    defaultValue={props.email}
-                    {...register("email", {
-                      required: true,
-                    })}
-                  ></input> */}
                   <div className="flex flex-col lg:flex-row pt-5 pb-5 text-xs">
                     <div className="w-full lg:w-1/2 pb-3">
                       <div>
@@ -304,7 +282,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                   </div>
                   <div className="w-full">
                     <div
-                      className="w-[20%] float-right"
+                      className="md:w-[20%] float-right"
                       onClick={() => {
                         setValue("customerId", selectedCompany);
                         setValue("number", number);

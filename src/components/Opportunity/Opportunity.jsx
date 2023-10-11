@@ -80,7 +80,7 @@ export const Opportunity = () => {
   const second = data.slice(8);
   return (
     <div className="bg-[rgba(246,237,206,0.30)] py-[90px]" on>
-      <div className="grid grid-cols-4 gap-[90px] gap-y-[70px] mb-[70px] mx-[20vw]">
+      <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[90px] gap-y-[70px] mb-[70px] mx-[20vw] md:place-items-start place-items-center">
         {first.map((data) => (
           <OpportunityElement
             key={data.head}
@@ -92,15 +92,17 @@ export const Opportunity = () => {
       </div>
       {showMore === true ? (
         <div
-          className="w-[100vw] flex justify-center cursor-pointer"
+          className="w-[100vw] flex justify-center cursor-pointer "
           onClick={() => {
             setShowMore(false);
           }}
         >
-          Дэлгэрэнгүй
+          <div className="transition duration-300 hover:scale-105 hover:pb-2 hover:border-b-2 hover:border-black 3xl:text-[18px] text-sm">
+            Дэлгэрэнгүй
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-[90px] m-[20vw] my-0 animate-upToDown">
+        <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[90px] m-[20vw] my-0 animate-upToDown md:place-items-start place-items-center">
           {second.map((data) => (
             <OpportunityElement
               key={data.head}

@@ -43,6 +43,7 @@ export const ChooseProgram = () => {
         console.log(error);
       }
     };
+    if (localStorage.getItem("role")) navigate("/");
     solutions();
   }, []);
 
