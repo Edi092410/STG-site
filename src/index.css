@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.font-link {
-  font-family: 'Nunito', sans-serif;
+.App {
+  font-family: Nunito;
+}
+
+@font-face {
+  font-family: Nunito;
+  src:
+    local("Nunito"),
+    url("./Fonts/Nunito-VariableFont_wght.ttf") format("truetype");
 }

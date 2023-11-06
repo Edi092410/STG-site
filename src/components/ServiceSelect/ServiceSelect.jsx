@@ -1,18 +1,33 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { SlArrowDown } from "react-icons/sl";
 import { SlArrowUp } from "react-icons/sl";
+import { GetDataWithAuthorization } from "../../Axios/AxiosService2";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const ServiceSelect = ({
   selectedOption,
   onSelectedChange,
   selected,
+  disabled,
 }) => {
   const handleSelectedChange = (e) => {
     onSelectedChange(e.target.value);
   };
 
   const [isOpened, setIsOpened] = useState(false);
+
+  const notify = ({ text }) => {
+    toast.error(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
 
   useEffect(() => {
     if (selected !== undefined && selected !== null) {
@@ -32,24 +47,17 @@ export const ServiceSelect = ({
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await axios.get(
-          "https://service2.stg.mn/api/services/getservicetypes",
-          // "/api/services/getservicetypes",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          "/services/getservicetypes"
         );
         setOption(data.data);
         // onSelectedChange(option && option.length > 0 ? option[0].id : "");
         onSelectedChange(data.data && data.data.length > 0 && data.data[0].id);
       } catch (err) {
+        console.log("service error:", err);
+        notify({ text: err.message });
       } finally {
         setIsLoading(false);
-        // onSelectedChange(option && option.length > 0 && option[0].id);
-        // console.log(option && option.length > 0 && option[0].id);
       }
     };
     fetchData();
@@ -83,6 +91,7 @@ export const ServiceSelect = ({
         className=" appearance-none w-full h-full border border-[#E1E1E1] focus:border-blue-500 pl-[15px] rounded"
         value={selectedOption}
         onChange={handleSelectedChange}
+        disabled={disabled}
       >
         {isLoading ? (
           <option disabled value="Үйлчилгээ">
@@ -91,18 +100,20 @@ export const ServiceSelect = ({
         ) : (
           <>
             <optgroup label="Үйлчилгээ" className="text-[#0074E0]">
-              {option.map((option) => {
-                return (
-                  <option
-                    key={option.id}
-                    value={option.id}
-                    className="text-black"
-                    // style="padding: 5px"
-                  >
-                    {option.name}
-                  </option>
-                );
-              })}
+              {option &&
+                option.length > 0 &&
+                option.map((option) => {
+                  return (
+                    <option
+                      key={option.id}
+                      value={option.id}
+                      className="text-black"
+                      // style="padding: 5px"
+                    >
+                      {option.name}
+                    </option>
+                  );
+                })}
             </optgroup>
             <optgroup label="Санал хүсэлт" className="text-[#0074E0]">
               <option className="text-black">Санал хүсэлт</option>

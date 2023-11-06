@@ -55,7 +55,7 @@ export const PublicPage = () => {
           >
             Онлайн хүсэлт илгээх
           </button> */}
-          <div className="" onClick={() => navigate("/test")}>
+          <div className="h-10" onClick={() => navigate("/test")}>
             <Button name={"Онлайн хүсэлт илгээх"} wiggleLength={7} />
           </div>
         </div>

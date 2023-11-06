@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,7 @@ import { Main } from "../../layouts/Main";
 import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
 import { LoginPathContext } from "../../context/LoginPathProvider";
+import { PostData } from "../../Axios/AxiosService2";
 export default function SecondLogin() {
   const {
     register,
@@ -24,8 +25,8 @@ export default function SecondLogin() {
 
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const notify = () => {
-    toast.success("Амжилттай нэвтэрлээ", {
+  const notify = ({ text }) =>
+    toast.success(text, {
       position: "top-center", // Change the position of the toast
       autoClose: 1000, // Auto close the toast after 1 seconds
       hideProgressBar: true, // Hide the progress bar
@@ -34,26 +35,30 @@ export default function SecondLogin() {
       className: "custom-toast", // Apply a custom CSS class to the toast
       bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
     });
-  };
   const message = (err) => {
-    setErrMsg(err.response?.statusText);
+    // console.log("response:", err.response?.data?.message);
+    // setErrMsg(err.response?.data?.msg);
+    setErrMsg(err);
+    // Set errMsgEmail to null after one second
+    setTimeout(() => {
+      setErrMsg(null);
+    }, 2000); // 1000 milliseconds = 1 second
   };
 
   const onSubmit = async (e) => {
     setLoading(true);
     try {
       // Get CSRF cookie
-      await axios.get("https://admin.e-siticom.com/sanctum/csrf-cookie", {
-        header: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      });
+      // await axios.get("https://admin.e-siticom.com/sanctum/csrf-cookie", {
+      //   header: {
+      //     "X-Requested-With": "XMLHttpRequest",
+      //   },
+      //   withCredentials: true,
+      // });
 
       // Proceed with the login request
       const data = await axios.post(
         "https://admin.e-siticom.com/api/login",
-        // "/api/login",
         e,
         {
           headers: {
@@ -72,22 +77,13 @@ export default function SecondLogin() {
         } else {
           navigate(-2);
         }
-        notify();
+        notify({ text: "Амжилттай нэвтэрлээ.", success: true });
       }
     } catch (err) {
+      console.log("error-admin", err);
       if (err.request.status === 401) {
         try {
-          const data = await axios.post(
-            "https://service2.stg.mn/api/users/authenticate",
-            // "/api/users/authenticate",
-            e,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const data = await PostData("/users/authenticate", e);
           if (data.status === 200) {
             // role?
             localStorage.setItem("name", data?.data?.user?.username);
@@ -101,14 +97,23 @@ export default function SecondLogin() {
             } else {
               navigate(-2);
             }
-            notify();
+            notify({ text: "Амжилттай нэвтэрлээ.", success: true });
           }
+          console.log("data", data);
+          if (data.request.status === 401) {
+            message(data.response?.data?.msg);
+          } else if (data?.request?.status === 0)
+            message("Сүлжээнд асуудал гарсан байна!");
         } catch (err) {
-          message(err);
-          console.log(err);
+          console.log("error-service:", err);
+          message(err?.response?.statusText);
+          message(err.response?.data?.msg);
         }
-      }
+      } else if (err?.request?.status === 0)
+        message("Сүлжээнд асуудал гарсан байна!");
     } finally {
+      const currentTime = new Date().getTime();
+      localStorage.setItem("firstDate", currentTime);
       setLoading(false);
     }
   };
@@ -193,14 +198,7 @@ export default function SecondLogin() {
                 </Link>
 
                 <div className=" text-red-500 text-center">{errMsg}</div>
-                {/* <button
-                      type="submit"
-                      className="w-full h-12 bg-slate-800 text-white rounded-3xl mt-6"
-                      disabled={loading}
-                    >
-                      {loading ? <PulseLoader color="#fff" size={5} /> : "Нэвтрэх"}
-                    </button> */}
-                <div className="mb-[50px] mt-[30px] mx-[25%]">
+                <div className="mb-[50px] mt-[30px] mx-[25%] h-[40px]">
                   <Button name={"Нэвтрэх"} loading={loading} />
                 </div>
               </div>

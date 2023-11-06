@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { State } from "../OrderList/OrderList";
 import { CompanyNames } from "../CompanyNames/CompanyNames";
 import { ServiceSelect } from "../ServiceSelect/ServiceSelect";
 import { Notification } from "../Notification/Notification";
 import { OrderContext, OrderProvider } from "../../context/OrderProvider";
 import { Loading } from "../Loading/Loading";
-import { PulseLoader } from "react-spinners";
+import {
+  GetDataWithAuthorization,
+  PostDataWithAuthorization,
+} from "../../Axios/AxiosService2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "../Main/Button";
@@ -54,21 +56,15 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
     const FetchData = async () => {
       setLoading(true);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedOption}`,
-          // `/api/services/getservicelist?customerId=${selectedOption}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getservicelist?customerId=${selectedOption}`
         );
         const result = data.data.filter(
           (OrderNumber) => OrderNumber.number === number
         );
         setData(result);
       } catch (err) {
+        notify({ text: err.message, success: false });
       } finally {
         setLoading(false);
       }
@@ -76,87 +72,74 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
     FetchData();
   }, [number]);
 
-  const notify = ({ text }) => {
-    toast.success(text, {
-      position: "top-center", // Change the position of the toast
-      autoClose: 1000, // Auto close the toast after 1 seconds
-      hideProgressBar: true, // Hide the progress bar
-      closeOnClick: true, // Close the toast when clicked
-      draggable: true, // Allow dragging the toast
-      className: "custom-toast", // Apply a custom CSS class to the toast
-      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
-    });
+  const notify = ({ text, success }) => {
+    {
+      success
+        ? toast.success(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          })
+        : toast.error(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          });
+    }
   };
   // Захиалга цуцлах
   const deleteOrder = async () => {
     try {
-      axios.post(
-        `https://service2.stg.mn/api/services/deleteservice?number=${number}&type=${type}`,
-        // `/api/services/deleteservice?number=${number}&type=${type}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-type": "application/json",
-          },
-        }
+      await PostDataWithAuthorization(
+        `/services/deleteservice?number=${number}&type=${type}`,
+        {}
       );
-      // alert("Устгагдлаа");
-      notify({ text: "Устгагдлаа" });
+      notify({ text: "Устгагдлаа", success: true });
       closeModal();
       setRefresh((prev) => !prev);
-    } catch (err) {}
+    } catch (err) {
+      notify({ text: err.message, success: false });
+    }
   };
 
   const onSubmit = async (e) => {
     setSubmitLoading(true);
-    console.log("Data: ", e);
     if (selected !== "Санал хүсэлт") {
       try {
-        axios.post(
-          "https://service2.stg.mn/api/services/servicerequest",
-          // "/api/services/servicerequest",
-          e,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          }
-        );
-        // alert("Хүсэлт засагдлаа");
-        notify({ text: "Хүсэлт засагдлаа." });
+        await PostDataWithAuthorization("/services/servicerequest", e);
+        notify({ text: "Хүсэлт засагдлаа.", success: true });
         setRefresh((prev) => !prev);
         setSubmitLoading(false);
         closeModal();
-      } catch (err) {}
+      } catch (err) {
+        notify({ text: err.message, success: false });
+      }
     } else {
       delete e.programCode;
       try {
         setSubmitLoading(true);
-        axios.post(
-          "https://service2.stg.mn/api/services/feedbackrequest",
-          // "/api/services/feedbackrequest",
-          e,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          }
-        );
-        // alert("Санал хүсэлт засагдлаа");
-        notify("Санал хүсэлт засагдлаа.");
+        await PostDataWithAuthorization("/services/feedbackrequest", e);
+        notify({ text: "Санал хүсэлт засагдлаа.", success: true });
         setRefresh((prev) => !prev);
         setSubmitLoading(false);
         closeModal();
-      } catch (err) {}
+      } catch (err) {
+        notify({ text: err.message, success: false });
+      }
     }
   };
 
   return (
     <OrderProvider>
-      <div className="w-screen h-screen fixed top-0 left-0 bg-slate-300 bg-opacity-50 z-20">
+      <div className="w-screen h-screen fixed top-0 left-0 bg-slate-300 bg-opacity-50 z-30">
         <div
           className="relative lg:mx-[20%] mx-[5%] mt-[2%] mb-[2%] bg-white rounded-lg h-[90vh] overflow-y-auto"
           ref={menuRef}
@@ -187,14 +170,16 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                       </div>
                       <div className="flex items-center h-fit md:h-[50px]">
                         <State data={props.state} />
-                        <div
-                          className="text-red-500 ml-5 cursor-pointer"
-                          onClick={() => {
-                            setModal(true);
-                          }}
-                        >
-                          Захиалга цуцлах
-                        </div>
+                        {!props.servedUser && props.state === 0 && (
+                          <div
+                            className="text-red-500 ml-5 cursor-pointer"
+                            onClick={() => {
+                              setModal(true);
+                            }}
+                          >
+                            Захиалга цуцлах
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -218,6 +203,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                       selectedOption={selected}
                       onSelectedChange={handleSelected}
                       selected={props.serviceType}
+                      disabled={props.state !== 0}
                     />
                     <input type="hidden" {...register("serviceType")} />
                   </div>
@@ -227,6 +213,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                     rows={4}
                     maxLength={2000}
                     defaultValue={props.comment}
+                    disabled={props.state !== 0}
                     {...register("comment")}
                   ></textarea>
                   <div className="flex flex-col lg:flex-row pt-5 pb-5 text-xs">
@@ -241,6 +228,7 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                         className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                         type="number"
                         defaultValue={props.phone}
+                        disabled={props.state !== 0}
                         {...register("phone", {
                           required: true,
                         })}
@@ -259,40 +247,53 @@ export const OrderDetail = ({ closeModal, number, selectedOption, type }) => {
                         <input
                           className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px]"
                           defaultValue={props.programCode}
+                          disabled={props.state !== 0}
                           {...register("programcode")}
                         ></input>
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col lg:flex-row pt-5 pb-5 ">
-                    <div className="w-full lg:w-1/2 pb-3">
-                      <div className="">Хариуцсан ажилтан</div>
-                      <div className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px] flex items-center">
-                        {props.servedUser}
+
+                  {!(
+                    props.serviceType === 0 && selected === "Санал хүсэлт"
+                  ) && (
+                    <div className="flex flex-col lg:flex-row pt-5 pb-5 ">
+                      <div className="w-full lg:w-1/2 pb-3">
+                        <div className="">Хариуцсан ажилтан</div>
+                        <div className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px] flex items-center">
+                          {props.servedUser}
+                        </div>
+                      </div>
+                      {props.servedUserCount > 0 && (
+                        <div className="w-full lg:w-1/2 pb-3">
+                          <div className="">
+                            Хариуцсан ажилтан таны дуудлагаас гадна
+                          </div>
+                          <div className="w-full lg:w-[90%] h-[30px] pl-[15px] flex items-center">
+                            <p className="px-2 bg-[#FAA61A] rounded-2xl mr-2">
+                              {props.servedUserCount}
+                            </p>
+                            <p>захиалгатай байна</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {props.state === 0 && (
+                    <div className="w-full">
+                      <div
+                        className="md:w-[20%] h-10 float-right"
+                        onClick={() => {
+                          setValue("customerId", selectedCompany);
+                          setValue("number", number);
+                          setValue("serviceType", selected);
+                          setValue("email", props.email);
+                        }}
+                      >
+                        <Button loading={submitLoading} name={"Хадгалах"} />
                       </div>
                     </div>
-                    <div className="w-full lg:w-1/2 pb-3">
-                      <div className="">
-                        Хариуцсан ажилтан таны дуудлагаас гадна
-                      </div>
-                      <div className="w-full lg:w-[90%] h-[30px] border border-[#E1E1E1] pl-[15px] rounded-3xl flex justify-center items-center">
-                        {props.servedUserCount} захиалгатай байна
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full">
-                    <div
-                      className="md:w-[20%] float-right"
-                      onClick={() => {
-                        setValue("customerId", selectedCompany);
-                        setValue("number", number);
-                        setValue("serviceType", selected);
-                        setValue("email", props.email);
-                      }}
-                    >
-                      <Button loading={submitLoading} name={"Хадгалах"} />
-                    </div>
-                  </div>
+                  )}
                 </form>
               </div>
             ))

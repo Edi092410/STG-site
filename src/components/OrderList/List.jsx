@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import { Loading } from "../Loading/Loading";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { OrderContext } from "../../context/OrderProvider";
 import { TimeFilter } from "../TimeFilter/TimeFilter";
 import { CompanyContext } from "../../context/CompanyProvider";
@@ -16,47 +14,61 @@ import { ProgramRelease } from "../ProgramRelease/ProgramRelease";
 import { MostSearched } from "../MostSearched/MostSearched";
 import { JustWatched } from "../JustWatched/JustWatched";
 import { Button } from "../Main/Button";
-
-export const List = ({ date, date2, month }) => {
-  // const [selectedOption, setSelectedOption] = useState({});
-
+import { LoadedContext } from "../../context/Loaded";
+import { useReactToPrint } from "react-to-print";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./style.css";
+import { GetDataWithAuthorization } from "../../Axios/AxiosService2";
+export const List = ({ month }) => {
   const { selectedCompany } = useContext(CompanyContext);
   // UseContext ашиглан component refresh хийх
   const [OrderData, setOrderData] = useState([]);
   const [serviceData, setServiceData] = useState([]);
   const [feedbackData, setFeedbackData] = useState([]);
 
-  const { refresh, setRefresh } = useContext(OrderContext);
+  const { refresh } = useContext(OrderContext);
   // Loading хийх
-  const [loading, setLoading] = useState(false);
+  const { setLoading } = useContext(LoadedContext);
+
+  const notify = ({ text }) => {
+    toast.error(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
+
   useEffect(() => {
     const FetchData = async () => {
       setLoading(true);
-      console.log(date);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedCompany}&startDate=${date}&endDate=${date2}`,
-          // `/api/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-type": "application/json",
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`
         );
         setOrderData(data.data);
-        setServiceData(data.data.filter((info) => info.number.startsWith("Ү")));
-        setFeedbackData(
-          data.data.filter((info) => !info.number.startsWith("Ү"))
-        );
+        console.log("Service:", data);
+        if (data.data) {
+          setServiceData(
+            data.data.filter((info) => info.number.startsWith("Ү"))
+          );
+          setFeedbackData(
+            data.data.filter((info) => !info.number.startsWith("Ү"))
+          );
+        }
       } catch (err) {
-        console.log(err);
+        notify({ text: err.message });
+        // console.log("errr", err);
       } finally {
         setLoading(false);
       }
     };
     FetchData();
-  }, [selectedCompany, month, refresh]);
+  }, [selectedCompany, refresh]);
 
   return (
     <div className=" mb-4">
@@ -65,15 +77,15 @@ export const List = ({ date, date2, month }) => {
           !(OrderData && OrderData.length > 0) && "mb-4"
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center mb-4">
           <div className=" text-[16px] 3xl:text-[24px] font-semibold mr-4">
             Захиалга үүсгэх
           </div>
           <RoundButton />
         </div>
-        {OrderData && OrderData.length > 0 && (
+        {/* {OrderData && OrderData.length > 0 && (
           <img src={character} alt="character image" className=" w-[80px]" />
-        )}
+        )} */}
       </div>
       <ServiceList
         serviceData={serviceData}
@@ -93,17 +105,12 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
     switch (parseInt(data)) {
       case 0:
         jsxElement = (
-          <div className={"bg-[#FAA61A] w-[12px] h-[12px] rounded-full"}></div>
+          <div className={"bg-[#BDBDBD] w-[12px] h-[12px] rounded-full"}></div>
         );
         break;
       case 1:
         jsxElement = (
-          <div className={"bg-[#DD2338] w-[12px] h-[12px] rounded-full"}></div>
-        );
-        break;
-      case 2:
-        jsxElement = (
-          <div className={"bg-[#FAA61A] w-[12px] h-[12px] rounded-full"}></div>
+          <div className={"bg-[#0496D4] w-[12px] h-[12px] rounded-full"}></div>
         );
         break;
       default:
@@ -122,7 +129,7 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
   const { selectedCompany } = useContext(CompanyContext);
   const navigate = useNavigate();
   return (
-    <div className="relative w-full p-[25px] text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
+    <div className="relative w-full p-[25px] pb-[50px] text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
       {OrderData && OrderData.length > 0 ? (
         <div className="h-[25vh] overflow-y-auto">
           {serviceData && serviceData.length > 0 && (
@@ -142,10 +149,7 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
                       <tr>
                         <td className="3xl:py-[10px] py-[5px]">
                           {info.registrationTime && (
-                            <div>
-                              {info.registrationTime.substring(0, 10)}-
-                              {info.registrationTime.substring(11, 16)}
-                            </div>
+                            <div>{info.registrationTime.substring(0, 10)}</div>
                           )}
                         </td>
                         <td
@@ -189,10 +193,7 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
                       <tr>
                         <td className="3xl:py-[10px] py-[5px]">
                           {info.registrationTime && (
-                            <div>
-                              {info.registrationTime.substring(0, 10)}-
-                              {info.registrationTime.substring(11, 16)}
-                            </div>
+                            <div>{info.registrationTime.substring(0, 10)}</div>
                           )}
                         </td>
                         <td
@@ -238,12 +239,12 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
         />
       )}
       <div
-        className={`absolute bottom-1 right-4 text-sm ${
+        className={`absolute bottom-5 right-5 text-xs 3xl:text-base  ${
           OrderData && OrderData.length > 0 ? "md:block hidden" : "hidden"
         } cursor-pointer `}
         onClick={() => navigate("/test/list")}
       >
-        Дэлгэрэнгүй
+        Бүгдийг харах
       </div>
     </div>
   );
@@ -252,7 +253,7 @@ export const ServiceList = ({ serviceData, feedbackData, OrderData }) => {
 export const Payment = ({ year }) => {
   const [OrderData, setOrderData] = useState([]);
   const [beginBalance, setBeginBalance] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { setLoading } = useContext(LoadedContext);
   // Niit tuluh dun
   const totalPay =
     OrderData && OrderData.length > 0
@@ -277,70 +278,71 @@ export const Payment = ({ year }) => {
 
   const { selectedCompany } = useContext(CompanyContext);
 
+  const company = JSON.parse(localStorage.getItem("companies")).filter(
+    (element) => element.customerId === selectedCompany
+  );
+
+  const notify = ({ text }) => {
+    toast.error(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
   useEffect(() => {
     const FetchData = async () => {
       setLoading(true);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31
-          `,
-          // `/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31
-          //     `,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31`
         );
         setOrderData(data.data.transactions);
         setBeginBalance(data.data.beginbalance);
       } catch (err) {
-        if (
-          err.response?.status === 400 ||
-          err.response?.status === 404 ||
-          err.response?.status === 500 ||
-          err.response?.status === 204
-        ) {
-        }
+        // if (
+        //   err.response?.status === 400 ||
+        //   err.response?.status === 404 ||
+        //   err.response?.status === 500 ||
+        //   err.response?.status === 204
+        // ) {
+        // }
+        notify({ text: err.message });
       } finally {
         setLoading(false);
       }
     };
-    // };
-    FetchData();
+    if (company && company.length > 0 && company[0].isAdmin === true)
+      FetchData();
   }, []);
 
   useEffect(() => {
     const FetchData = async () => {
       setLoading(true);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31
-          `,
-          // `/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31
-          // `,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getbillinginfo?customerId=${selectedCompany}&startDate=${year}-01-01&endDate=${year}-12-31`
         );
         setOrderData(data.data.transactions);
         setBeginBalance(data.data.beginbalance);
       } catch (err) {
-        if (
-          err.response?.status === 400 ||
-          err.response?.status === 404 ||
-          err.response?.status === 500 ||
-          err.response?.status === 204
-        ) {
-        }
+        // if (
+        //   err.response?.status === 400 ||
+        //   err.response?.status === 404 ||
+        //   err.response?.status === 500 ||
+        //   err.response?.status === 204
+        // ) {
+        // }
+        notify({ text: err.message });
       } finally {
         setLoading(false);
       }
     };
-    // };
-    FetchData();
+    if (company && company.length > 0 && company[0].isAdmin === true)
+      FetchData();
   }, [selectedCompany, year]);
 
   return (
@@ -353,9 +355,9 @@ export const Payment = ({ year }) => {
         <div className="text-[16px] 3xl:text-[24px] font-semibold">
           Төлбөр тооцоо
         </div>
-        {OrderData && OrderData.length > 0 && (
+        {/* {OrderData && OrderData.length > 0 && (
           <img src={character} className="w-[80px] " />
-        )}
+        )} */}
       </div>
       <div
         className={`flex justify-between text-xs 3xl:text-base px-[5%] my-5 mb-10 ${
@@ -388,12 +390,6 @@ export const Payment = ({ year }) => {
         </div>
       </div>
       <PaymentList OrderData={OrderData} />
-
-      {loading && (
-        <div className="fixed top-0 left-0 h-screen w-screen">
-          <Loading />
-        </div>
-      )}
     </div>
   );
 };
@@ -415,7 +411,7 @@ export const PaymentList = ({ OrderData }) => {
   };
   const navigate = useNavigate();
   const { handleTime, time } = useContext(TimeFilterContext);
-  const { number, setNumber } = useContext(PaymentContext);
+  const { setNumber } = useContext(PaymentContext);
   return (
     <div className="w-full p-[25px] pb-2 text-[#7B7B7B] bg-white rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.15)]">
       {OrderData && OrderData.length > 0 ? (
@@ -442,6 +438,7 @@ export const PaymentList = ({ OrderData }) => {
                         </td>
                         <td
                           className="w-[50%] 3xl:py-[10px] py-[5px] cursor-pointer pointer-events-none lg:pointer-events-auto"
+                          // className="w-[50%] 3xl:py-[10px] py-[5px] cursor-pointer"
                           onClick={() => {
                             setNumber(props.number);
                             navigate("/test/payment");
@@ -475,8 +472,8 @@ export const PaymentList = ({ OrderData }) => {
         />
       )}
 
-      <div className="w-full flex justify-end mt-4">
-        <div className=" w-[30px] h-[30px] rounded-full bg-[#D9D9D9] flex items-center justify-center rotate-180 cursor-pointer transition duration-150 hover:scale-105 mr-2">
+      <div className="w-full flex justify-end my-4">
+        <div className=" w-[24px] h-[24px] rounded-full bg-[#D9D9D9] flex items-center justify-center rotate-180 cursor-pointer transition duration-150 hover:scale-105 mr-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="15"
@@ -503,7 +500,7 @@ export const PaymentList = ({ OrderData }) => {
             />
           </svg>
         </div>
-        <div className=" w-[30px] h-[30px] rounded-full bg-[#D9D9D9] flex items-center justify-center cursor-pointer transition duration-150 hover:scale-105">
+        <div className=" w-[24px] h-[24px] rounded-full bg-[#D9D9D9] flex items-center justify-center cursor-pointer transition duration-150 hover:scale-105">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="15"
@@ -536,111 +533,191 @@ export const PaymentList = ({ OrderData }) => {
 };
 
 export const PaymentTable = ({ OrderData }) => {
+  const notify = ({ text }) => {
+    toast.warning(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 2000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
   const { number } = useContext(PaymentContext);
+  const componentPDF = useRef();
+  const generatePDF = useReactToPrint({
+    content: () => componentPDF.current,
+    bodyClass: "print",
+    documentTitle: "Төлбөрийн мэдээлэл",
+    onAfterPrint: () => notify({ text: "Өгөгдөл pdf файл боллоо" }),
+  });
   return (
     <div className="w-full  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-lg p-[2%]">
-      <table className="w-full 3xl:text-sm text-[9px] ">
-        <thead className=" text-left">
-          <tr>
-            <th className="p-2 pt-0 pb-0 text-left">Огноо</th>
-            <th className="p-2 pt-0 pb-0 text-left">Баримтын дугаар</th>
-            <th className="p-2 pt-0 pb-0 text-left">Ажил үйлчилгээ</th>
-            <th className="p-2 pt-0 pb-0 text-right">Төлөх дүн</th>
-            <th className="p-2 pt-0 pb-0 text-right">Төлсөн</th>
-            <th className="p-2 pt-0 pb-0 text-right">Үлдэгдэл</th>
-            <th className="p-2 pt-0 pb-0 text-right">Илүү төлөлт</th>
-            <th className="p-2 pt-0 pb-0 text-center">Тэмдэглэл</th>
-          </tr>
-        </thead>
-        <tbody className=" text-[#7B7B7B]">
-          {OrderData && OrderData.length > 0 ? (
-            OrderData.map((props) => {
-              const balance =
-                props.dtAmount - props.ktAmount > 0
-                  ? props.dtAmount - props.ktAmount
-                  : 0;
-
-              return (
-                <React.Fragment key={props.number}>
-                  <tr
-                    className={`${
-                      number === props.number && "border border-t-"
-                    }`}
-                  >
-                    <td className="p-2">
-                      <div>{props.date.substring(0, 10)}</div>
-                    </td>
-                    <td className="p-2">{props.number}</td>
-                    <td className="p-2">{props.transactionReference}</td>
-                    <td className="p-2 text-right">
-                      {props.dtAmount.toLocaleString("en-US")}₮
-                    </td>
-                    <td className="p-2 text-right">
-                      {props.ktAmount.toLocaleString("en-US")}₮
-                    </td>
-                    <td className="p-2 text-right">
-                      {balance.toLocaleString("en-US")}₮
-                    </td>
-                    <td className="p-2 text-right">
-                      {props.dtAmount - props.ktAmount > 0
-                        ? 0
-                        : (props.ktAmount - props.dtAmount).toLocaleString(
-                            "en-US"
-                          )}
-                      ₮
-                    </td>
-                    <td className="p-2 text-center">{props.journal}</td>
-                  </tr>
-                </React.Fragment>
-              );
-            })
-          ) : (
+      <div className="w-full">
+        <div
+          className="float-right cursor-pointer hover:scale-110 transition duration-200"
+          onClick={() => generatePDF()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            className="mb-[10px]"
+            fill="none"
+          >
+            <path
+              d="M7.25 7H16.75V5C16.75 3 16 2 13.75 2H10.25C8 2 7.25 3 7.25 5V7Z"
+              stroke="#2D3648"
+              strokeWidth="1.5"
+              stroke-miterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 15V19C16 21 15 22 13 22H11C9 22 8 21 8 19V15H16Z"
+              stroke="#2D3648"
+              strokeWidth="1.5"
+              stroke-miterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M21 10V15C21 17 20 18 18 18H16V15H8V18H6C4 18 3 17 3 15V10C3 8 4 7 6 7H18C20 7 21 8 21 10Z"
+              stroke="#2D3648"
+              strokeWidth="1.5"
+              stroke-miterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M17 15H15.79H7"
+              stroke="#2D3648"
+              strokeWidth="1.5"
+              stroke-miterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M7 11H10"
+              stroke="#2D3648"
+              strokeWidth="1.5"
+              stroke-miterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
+      <div ref={componentPDF}>
+        <table className="w-full 3xl:text-sm text-[9px] ">
+          <thead className=" text-left">
             <tr>
-              <td colSpan={8} className="text-center text-lg h-[10vh]">
-                Таны хайсан мэдээлэл байхгүй байна.
-              </td>
+              <th className="p-2 pt-0 pb-0 text-left">Огноо</th>
+              <th className="p-2 pt-0 pb-0 text-left">Баримтын дугаар</th>
+              <th className="p-2 pt-0 pb-0 text-left">Ажил үйлчилгээ</th>
+              <th className="p-2 pt-0 pb-0 text-right">Төлөх дүн</th>
+              <th className="p-2 pt-0 pb-0 text-right">Төлсөн</th>
+              <th className="p-2 pt-0 pb-0 text-right">Үлдэгдэл</th>
+              <th className="p-2 pt-0 pb-0 text-right">Илүү төлөлт</th>
+              <th className="p-2 pt-0 pb-0 text-center">Тэмдэглэл</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className=" text-[#7B7B7B]">
+            {OrderData && OrderData.length > 0 ? (
+              OrderData.map((props) => {
+                const balance =
+                  props.dtAmount - props.ktAmount > 0
+                    ? props.dtAmount - props.ktAmount
+                    : 0;
+
+                return (
+                  <React.Fragment key={props.number}>
+                    <tr
+                      className={`${
+                        number === props.number && "border border-t-"
+                      }`}
+                    >
+                      <td className="p-2">
+                        <div>{props.date.substring(0, 10)}</div>
+                      </td>
+                      <td className="p-2">{props.number}</td>
+                      <td className="p-2">{props.transactionReference}</td>
+                      <td className="p-2 text-right">
+                        {props.dtAmount.toLocaleString("en-US")}₮
+                      </td>
+                      <td className="p-2 text-right">
+                        {props.ktAmount.toLocaleString("en-US")}₮
+                      </td>
+                      <td className="p-2 text-right">
+                        {balance.toLocaleString("en-US")}₮
+                      </td>
+                      <td className="p-2 text-right">
+                        {props.dtAmount - props.ktAmount > 0
+                          ? 0
+                          : (props.ktAmount - props.dtAmount).toLocaleString(
+                              "en-US"
+                            )}
+                        ₮
+                      </td>
+                      <td className="p-2 text-center">{props.journal}</td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={8} className="text-center text-lg h-[10vh]">
+                  Таны хайсан мэдээлэл байхгүй байна.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export const PaymentPage = () => {
   const [OrderData, setOrderData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { setLoading } = useContext(LoadedContext);
   const { selectedCompany } = useContext(CompanyContext);
   const { time } = useContext(TimeFilterContext);
+  const notify = ({ text }) => {
+    toast.error(text, {
+      position: "top-center", // Change the position of the toast
+      autoClose: 1000, // Auto close the toast after 1 seconds
+      hideProgressBar: true, // Hide the progress bar
+      closeOnClick: true, // Close the toast when clicked
+      draggable: true, // Allow dragging the toast
+      className: "custom-toast", // Apply a custom CSS class to the toast
+      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+    });
+  };
   useEffect(() => {
     const FetchData = async () => {
       setLoading(true);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31
-          `,
-          // `/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31
-          //     `,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31`
         );
+        console.log("Data:", data.data.transactions);
         setOrderData(data.data.transactions);
       } catch (err) {
-        if (
-          err.response?.status === 400 ||
-          err.response?.status === 404 ||
-          err.response?.status === 500 ||
-          err.response?.status === 204
-        ) {
-        }
+        // if (
+        //   err.response?.status === 400 ||
+        //   err.response?.status === 404 ||
+        //   err.response?.status === 500 ||
+        //   err.response?.status === 204
+        // ) {
+        // }
+        notify({ text: err.message });
       } finally {
         setLoading(false);
       }
     };
-    // };
     FetchData();
   }, []);
 
@@ -648,31 +725,23 @@ export const PaymentPage = () => {
     const FetchData = async () => {
       setLoading(true);
       try {
-        const data = await axios.get(
-          `https://service2.stg.mn/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31
-          `,
-          // `/api/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31
-          // `,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+        const data = await GetDataWithAuthorization(
+          `/services/getbillinginfo?customerId=${selectedCompany}&startDate=${time}-01-01&endDate=${time}-12-31`
         );
         setOrderData(data.data.transactions);
       } catch (err) {
-        if (
-          err.response?.status === 400 ||
-          err.response?.status === 404 ||
-          err.response?.status === 500 ||
-          err.response?.status === 204
-        ) {
-        }
+        // if (
+        //   err.response?.status === 400 ||
+        //   err.response?.status === 404 ||
+        //   err.response?.status === 500 ||
+        //   err.response?.status === 204
+        // ) {
+        // }
+        notify({ text: err.message });
       } finally {
         setLoading(false);
       }
     };
-    // };
     FetchData();
   }, [selectedCompany, time]);
   const currentYear = new Date().getFullYear();
@@ -686,8 +755,8 @@ export const PaymentPage = () => {
         </div>
       </div>
       <PaymentTable OrderData={OrderData} />
-      <div className="w-full flex justify-end my-4 text-sm">
-        <div className="w-fit" onClick={() => navigate("/test")}>
+      <div className="w-full flex justify-end my-[30px] text-sm">
+        <div className="w-fit h-[34px]" onClick={() => navigate("/test")}>
           <Button name={"Буцах"} text={"3xl:text-base text-xs"} />
         </div>
       </div>
@@ -713,15 +782,20 @@ export const Test = () => {
 
 export const ServicePage = () => {
   const { time } = useContext(TimeFilterContext);
+  const { selectedCompany } = useContext(CompanyContext);
   const [menu, setMenu] = useState({
     questions: false,
     service: true,
-    news: false,
+    // news: false,
   });
+
+  const selectedOption = JSON.parse(localStorage.getItem("companies")).filter(
+    (company) => company.customerId === selectedCompany
+  );
   return (
     <div className="w-full h-full">
       <div className="w-full h-full flex mt-[2%] px-[4%]">
-        <div className="w-[10%] lg:hidden block mr-[4%]">
+        <div className="w-[10%] lg:hidden block mr-[4%] min-h-[80vh]">
           <div className="flex flex-col justify-center">
             {/* Үйлчилгээ */}
             <div
@@ -733,7 +807,7 @@ export const ServicePage = () => {
                   ...prevMenu,
                   service: true,
                   questions: false,
-                  news: false,
+                  // news: false,
                 }))
               }
             >
@@ -768,7 +842,7 @@ export const ServicePage = () => {
                   ...prevMenu,
                   service: false,
                   questions: true,
-                  news: false,
+                  // news: false,
                 }))
               }
             >
@@ -795,7 +869,7 @@ export const ServicePage = () => {
             </div>
 
             {/* Мэдээлэл */}
-            <div
+            {/* <div
               className={`mt-4 ${
                 menu.news ? "border-r-2 border-[#2D3648]" : ""
               }`}
@@ -806,7 +880,6 @@ export const ServicePage = () => {
                   questions: false,
                   news: true,
                 }));
-                console.log("clocked News");
               }}
             >
               <svg
@@ -819,26 +892,26 @@ export const ServicePage = () => {
                 <path
                   d="M21 3.00759V15.0777C21 16.0377 20.22 16.9376 19.26 17.0576L18.93 17.0977C16.75 17.3877 13.39 18.4976 11.47 19.5576C11.21 19.7076 10.78 19.7076 10.51 19.5576L10.47 19.5377C8.54997 18.4877 5.20003 17.3877 3.03003 17.0977L2.73999 17.0576C1.77999 16.9376 1 16.0377 1 15.0777V2.99758C1 1.80758 1.96997 0.907591 3.15997 1.00759C5.25997 1.17759 8.43997 2.23762 10.22 3.34762L10.47 3.49758C10.76 3.67759 11.24 3.67759 11.53 3.49758L11.7 3.3876C12.33 2.9976 13.13 2.60759 14 2.25759V6.33761L16 5.00759L18 6.33761V1.11764C18.27 1.06764 18.53 1.0376 18.77 1.0176H18.83C20.02 0.917601 21 1.80759 21 3.00759Z"
                   stroke="#2D3648"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M11 3.82812V18.8281"
                   stroke="#2D3648"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M18 1.11719V6.33716L16 5.00714L14 6.33716V2.25714C15.31 1.73714 16.77 1.31719 18 1.11719Z"
                   stroke="#2D3648"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
-            </div>
+            </div> */}
           </div>
         </div>
         <div
@@ -849,18 +922,27 @@ export const ServicePage = () => {
           <div className="">
             <List date={`${time}-01-01`} date2={`${time}-12-31`} month={time} />
           </div>
-          <div>
+          <div
+            className={`${
+              selectedOption &&
+              selectedOption.length > 0 &&
+              selectedOption[0].isAdmin
+                ? "block"
+                : "hidden"
+            }`}
+          >
             <Payment year={time} />
           </div>
         </div>
         <div
-          className={`lg:w-1/2 w-full h-full px-[2%] lg:block ${
+          // className={`lg:w-1/2 w-full h-full px-[2%] lg:block ${
+          className={`lg:w-3/4 w-full h-full px-[2%] lg:block ${
             menu.questions ? "block" : "hidden"
           }`}
         >
           <Outlet />
         </div>
-        <div
+        {/* <div
           className={`lg:w-[25%] w-full h-full lg:block ${
             menu.news ? "block" : "hidden"
           }`}
@@ -872,7 +954,7 @@ export const ServicePage = () => {
           <div className="my-4">
             <JustWatched />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

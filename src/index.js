@@ -13,28 +13,31 @@ import { CompanyProvider } from "./context/CompanyProvider";
 import { TimeFilterProvider } from "./context/TimeFilterProvider";
 import { PaymentProvider } from "./context/PaymentProvider";
 import { LoginPathProvider } from "./context/LoginPathProvider";
+import { Loaded } from "./context/Loaded";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ErrorBoundary fallbackRender={ErrorHandle}>
       <Suspense fallback={<Loading />}>
-        <AuthProvider>
-          <OrderProvider>
-            <ProgramProvider>
-              <CompanyProvider>
-                <TimeFilterProvider>
-                  <PaymentProvider>
-                    <LoginPathProvider>
-                      <BrowserRouter>
-                        <App />
-                      </BrowserRouter>
-                    </LoginPathProvider>
-                  </PaymentProvider>
-                </TimeFilterProvider>
-              </CompanyProvider>
-            </ProgramProvider>
-          </OrderProvider>
-        </AuthProvider>
+        <Loaded>
+          <AuthProvider>
+            <OrderProvider>
+              <ProgramProvider>
+                <CompanyProvider>
+                  <TimeFilterProvider>
+                    <PaymentProvider>
+                      <LoginPathProvider>
+                        <BrowserRouter>
+                          <App />
+                        </BrowserRouter>
+                      </LoginPathProvider>
+                    </PaymentProvider>
+                  </TimeFilterProvider>
+                </CompanyProvider>
+              </ProgramProvider>
+            </OrderProvider>
+          </AuthProvider>
+        </Loaded>
       </Suspense>
     </ErrorBoundary>
   </React.StrictMode>

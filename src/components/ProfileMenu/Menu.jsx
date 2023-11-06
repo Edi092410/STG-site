@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -43,11 +43,10 @@ export const Menu = (props) => {
     });
   };
 
-  const third = "Системээс гарах";
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const { setAuth } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const logOut = () => {
     localStorage.clear();
     setAuth(false);
@@ -126,7 +125,7 @@ export const Menu = (props) => {
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
         {modal && (
-          <div className="absolute top-0 left-0 text-black text-base z-10">
+          <div className="text-black text-base">
             <Notification
               name="Та системээс гарах гэж байна?"
               button="Системээс гарах"

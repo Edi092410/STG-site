@@ -79,14 +79,8 @@ export const QA = () => {
           }),
           axios.get("https://admin.e-siticom.com/api/solutions"),
         ]);
-        setArticleData(data.data.data.data);
-        console.log("data:", data.data.data.data);
-        const modifiedData = data2.data.data.data.map((item) => ({
-          ...item,
-          image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
-        }));
-        setData(modifiedData);
-        console.log("modified:", modifiedData);
+        setArticleData(data.data.data);
+        setData(data2.data.data);
       } catch (error) {
         console.log("Error:", error);
       }
@@ -110,7 +104,6 @@ export const QA = () => {
           .map((element) => element.id); // Extract the 'id' values
 
         const idsString = ids.join(",");
-        // console.log("ids:", idsString);
         data(idsString);
       }
     };
@@ -132,14 +125,12 @@ export const QA = () => {
           }),
           axios.get("https://admin.e-siticom.com/api/solutions"),
         ]);
-        setArticleData(data.data.data.data);
-        console.log("data:", data.data.data.data);
-        const modifiedData = data2.data.data.data.map((item) => ({
-          ...item,
-          image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
-        }));
-        setData(modifiedData);
-        console.log("modified:", modifiedData);
+        setArticleData(data.data.data);
+        // const modifiedData = data2.data.data.data.map((item) => ({
+        //   ...item,
+        //   image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
+        // }));
+        setData(data2.data.data);
       } catch (error) {
         console.log("Error:", error);
       }
@@ -162,7 +153,6 @@ export const QA = () => {
           .map((element) => element.id); // Extract the 'id' values
 
         const idsString = ids.join(",");
-        // console.log("ids:", idsString);
         data(idsString);
       }
     };
@@ -175,7 +165,6 @@ export const QA = () => {
       const response = await axios.get(
         `https://admin.e-siticom.com/api/articles/${data}`
       );
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -195,13 +184,11 @@ export const QA = () => {
           <SearchBar />
         </div>
         <div className="flex items-center mt-2 lg:mt-0">
-          <div className="md:block hidden text-[16px] 3xl:text-[24px] font-semibold mx-2">
+          {/* <div className="md:block hidden text-[16px] 3xl:text-[24px] font-semibold mx-2">
             Таны хэрэглэдэг програм
-          </div>
+          </div> */}
           <div className="flex">
             {data.map((data, index) => (
-              //   data[index] &&
-              // <div className={`mr-2 ${selectedChips[index] ? "" : "hidden"}`}>
               <div className={`mr-2`}>
                 <Box
                   img={data.image}
@@ -225,7 +212,6 @@ export const QA = () => {
         {articleData &&
           articleData.length > 0 &&
           articleData.map((prop, index) => {
-            // console.log("Content:", data.content);
             const contentWithUpload = [];
             const modifiedContent = prop.content.replace(
               /src="(\/uploads\/[^"]+)"/g,
@@ -236,17 +222,22 @@ export const QA = () => {
             contentWithUpload.push(modifiedContent);
 
             // Initialize an array to store image URLs
-            const imageUrls = [];
+            // let imageUrls = [];
             const videoUrls = [];
 
             // Loop through the modified content and extract image URLs
-            contentWithUpload.forEach((content) => {
-              const regex = /<img[^>]*src="([^"]+)"/g;
-              let match;
-              while ((match = regex.exec(content)) !== null) {
-                imageUrls.push(match[1]);
-              }
-            });
+            // contentWithUpload.forEach((content) => {
+            //   const regex = /<img[^>]*src="([^"]+)"/g;
+            //   let match;
+            //   while ((match = regex.exec(content)) !== null) {
+            //     imageUrls.push(match[1]);
+            //   }
+            // });
+
+            // const imageUrls = articleData.map((imageUrl) => ({
+            //   image: imageUrl.thumbnall,
+            // }));
+
             // data.content.forEach((video) => {
             const regex = /<iframe[^>]*src="([^"]+)"/g;
             let match;
@@ -262,37 +253,26 @@ export const QA = () => {
                 increment={() => viewIncrement(prop.id)}
                 data={data}
                 id={prop.solution_id}
+                name={prop.solution}
               >
                 <div
                   dangerouslySetInnerHTML={{ __html: prop.intro }}
                   className="my-4"
                 />
-                <Image.PreviewGroup
-                  preview={{
-                    onChange: (current, prev) =>
-                      console.log(
-                        `current index: ${current}, prev index: ${prev}`
-                      ),
-                  }}
-                >
-                  <div className=" grid grid-cols-2 gap-[10%]">
-                    {imageUrls.length > 0 &&
-                      imageUrls.map((imageUrl, subIndex) => (
-                        <Image
-                          key={subIndex}
-                          src={imageUrl}
-                          // width={"45%"}
-                          height={"20vh"}
-                          width={"100%"}
-                          alt={`Image ${subIndex}`}
-                          style={{
-                            objectFit: "contain",
-                          }}
-                          // className={`${subIndex > 1 && "hidden"}`}
-                        />
-                      ))}
-                  </div>
-                </Image.PreviewGroup>
+                <div className=" grid grid-cols-2 gap-[10%]">
+                  <Image
+                    // key={subIndex}
+                    key={index}
+                    src={prop.thumbnall}
+                    // width={"45%"}
+                    height={"20vh"}
+                    width={"100%"}
+                    alt={`Image ${index}`}
+                    style={{
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
                 {videoUrls &&
                   videoUrls.length > 0 &&
                   videoUrls.map((video, index) => {
@@ -343,19 +323,39 @@ export const Box = ({ img, index, remove, select, bool }) => {
         onClick={(e) => {
           e.stopPropagation(); // Prevent the click from propagating to the parent div
           setSelected(false); // Set selected to false
-          console.log("false");
           remove(index);
         }}
       >
-        <div className="w-full h-full flex justify-center items-center pb-1">
-          x
+        <div className="w-full h-full flex justify-center items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+          >
+            <path
+              d="M3.33594 3.33203L8.66926 8.66536"
+              stroke="#FEFEFE"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M3.33464 8.66536L8.66797 3.33203"
+              stroke="#FEFEFE"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </div>
     </div>
   );
 };
 
-export const Tab = ({ head, increment, data, id, children }) => {
+export const Tab = ({ head, name, increment, data, id, children }) => {
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState(0);
   const [dislike, setDislike] = useState(0);
@@ -376,22 +376,9 @@ export const Tab = ({ head, increment, data, id, children }) => {
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
 
-  console.log(
-    "fata:",
-    // data.filter((element) => element.id === 6).map((element) => element.name)
-    id
-  );
-
-  useEffect(() => {
-    console.log("changed");
-  }, [open]);
-
   return (
     <div className="relative">
-      <div
-        className="border-[#1D3049] p-4 text-sm 3xl:text-base"
-        // style={{ borderBottomWidth: ".1px" }}
-      >
+      <div className="p-4 text-sm 3xl:text-base">
         <div className="flex">
           <div className="mr-auto font-medium">{head}</div>
           <div className={`flex gap-3 `}>
@@ -400,9 +387,12 @@ export const Tab = ({ head, increment, data, id, children }) => {
                 open === true && "hidden"
               } text-slate-100 mr-2 text-[14px]`}
             >
-              {data
-                .filter((element) => element.id === id)
-                .map((element) => element.name)}
+              {/* {data &&
+                data.length > 0 &&
+                data
+                  .filter((element) => element.id === id)
+                  .map((element) => element.name)} */}
+              {name}
             </div>
             <div className={`flex ${open === false && "hidden"}  `}>
               <div
@@ -427,7 +417,6 @@ export const Tab = ({ head, increment, data, id, children }) => {
                     fill="none"
                     className=" cursor-pointer transition duration-200 hover:scale-110"
                   >
-                    {/* <circle cx="11" cy="11" r="11" fill="#F6F6F6" /> */}
                     <path
                       d="M7.89844 15.17L10.025 16.8164C10.2994 17.0908 10.9168 17.228 11.3284 17.228H13.9352C14.7584 17.228 15.6502 16.6106 15.856 15.7874L17.5024 10.7796C17.8454 9.8192 17.228 8.99599 16.199 8.99599H13.455C13.0434 8.99599 12.7004 8.65299 12.769 8.1728L13.112 5.97761C13.2492 5.36022 12.8376 4.67422 12.2202 4.46842C11.6714 4.26262 10.9854 4.53702 10.711 4.94862L7.89844 9.13319"
                       stroke="#FFFFFF"
@@ -449,7 +438,6 @@ export const Tab = ({ head, increment, data, id, children }) => {
                     fill="none"
                     className=" cursor-pointer transition duration-200 hover:scale-110"
                   >
-                    {/* <circle cx="11" cy="11" r="11" fill="#F6F6F6" /> */}
                     <g transform="translate(5, 5)">
                       <path
                         d="M3.83594 9.73617V3.63947C3.83594 3.39944 3.90795 3.16542 4.03996 2.96739L5.67814 0.531111C5.93617 0.141066 6.57824 -0.134966 7.12431 0.0690575C7.71237 0.26708 8.10242 0.927157 7.9764 1.51522L7.66437 3.47745C7.64037 3.65747 7.68837 3.81949 7.79038 3.94551C7.8924 4.05952 8.04241 4.13153 8.20443 4.13153H10.6707C11.1448 4.13153 11.5528 4.32355 11.7928 4.65958C12.0209 4.98362 12.0629 5.40367 11.9129 5.82972L10.4367 10.3242C10.2507 11.0683 9.44057 11.6744 8.63648 11.6744H6.29621C5.89416 11.6744 5.3301 11.5364 5.07207 11.2783L4.30399 10.6843C4.00996 10.4623 3.83594 10.1082 3.83594 9.73617Z"
@@ -488,13 +476,6 @@ export const Tab = ({ head, increment, data, id, children }) => {
                     fill="none"
                     className=" cursor-pointer transition duration-200 hover:scale-110"
                   >
-                    {/* <circle
-                      cx="11"
-                      cy="11"
-                      r="11"
-                      transform="rotate(-180 11 11)"
-                      fill="#F6F6F6"
-                    /> */}
                     <path
                       d="M14.1016 6.83003L11.975 5.18365C11.7006 4.90925 11.0832 4.77205 10.6716 4.77205H8.06479C7.2416 4.77205 6.34981 5.38945 6.14401 6.21264L4.49762 11.2204C4.15462 12.1808 4.77202 13.004 5.80101 13.004H8.54499C8.95659 13.004 9.29958 13.347 9.23098 13.8272L8.88799 16.0224C8.75079 16.6398 9.16239 17.3258 9.77978 17.5316C10.3286 17.7374 11.0146 17.463 11.289 17.0514L14.1016 12.8668"
                       stroke="#FFFFFF"
@@ -516,13 +497,6 @@ export const Tab = ({ head, increment, data, id, children }) => {
                     fill="none"
                     className=" cursor-pointer transition duration-200 hover:scale-110"
                   >
-                    {/* <circle
-                      cx="11"
-                      cy="11"
-                      r="11"
-                      transform="rotate(-180 11 11)"
-                      fill="#F6F6F6"
-                    /> */}
                     <g transform="translate(5, 5)">
                       <path
                         d="M8.16406 2.26383L8.16406 8.36053C8.16406 8.60056 8.09205 8.83458 7.96004 9.03261L6.32186 11.4689C6.06383 11.8589 5.42176 12.135 4.87569 11.9309C4.28763 11.7329 3.89758 11.0728 4.0236 10.4848L4.33563 8.52255C4.35963 8.34253 4.31163 8.18051 4.20962 8.05449C4.1076 7.94048 3.95759 7.86847 3.79557 7.86847H1.32928C0.855229 7.86847 0.447181 7.67645 0.207153 7.34042C-0.0208731 7.01638 -0.0628773 6.59633 0.0871401 6.17028L1.56331 1.67576C1.74933 0.931675 2.55943 0.325605 3.36352 0.325605H5.70379C6.10584 0.325605 6.6699 0.463621 6.92793 0.721651L7.69601 1.31572C7.99004 1.53775 8.16406 1.89179 8.16406 2.26383Z"
@@ -543,13 +517,6 @@ export const Tab = ({ head, increment, data, id, children }) => {
             <div
               className="flex items-center justify-center w-[20px] h-[20px] rounded-full bg-[#032D60] cursor-pointer"
               onClick={() => {
-                console.log(
-                  "firstaa",
-                  // data
-                  // .filter((element) => element.id === id)
-                  // .map((element) => element.name)
-                  id
-                );
                 open === false && increment();
                 setOpen(!open);
               }}
@@ -670,10 +637,6 @@ export const Feedback = () => {
           )}
         </div>
       </div>
-      {/* <div
-        className="absolute inset-x-0 -bottom-4 h-[0.3px] bg-[#1D3049] "
-        style={{ opacity: 0.3 }}
-      ></div> */}
       <form
         className={`${
           open === false ? "hidden" : "animate-upToDown"
@@ -775,7 +738,7 @@ export const Feedback = () => {
           className="w-full bg-[#DFE3EE] mt-1 p-3"
           {...register("question")}
         ></textarea>
-        <div className="flex justify-end w-full my-4">
+        <div className="flex justify-end w-full h-10 my-4">
           <div>
             <Button name={"Илгээх"} />
           </div>

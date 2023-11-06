@@ -50,7 +50,9 @@ export const Help = () => {
                 }}
               >
                 <Link to="/program" target="_blank">
-                  <Button name={"Танд туслая"} wiggleLength={100} />
+                  <div className="h-10">
+                    <Button name={"Танд туслая"} wiggleLength={100} />
+                  </div>
                 </Link>
               </div>
             </div>

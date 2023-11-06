@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { PulseLoader } from "react-spinners";
-export const Button = ({ name, wiggleLength, loading, text }) => {
+export const Button = ({ name, wiggleLength, loading, text, height }) => {
   const [animate, setAnimate] = useState(false);
   return (
-    <div className="relative w-full h-10 flex justify-center items-center">
+    <div className={`relative w-full h-full flex justify-center items-center`}>
       <button
-        className={`rounded-full bg-[#2D3648] h-full w-full px-5 transform transition duration-300 hover:scale-110 text-white ${text}`}
+        className={`rounded-full bg-[#2D3648] h-full w-full px-5 transition duration-200 hover:scale-110 text-white ${text} flex items-center justify-center`}
         onMouseEnter={() => setAnimate(true)}
         onMouseLeave={() => setAnimate(false)}
         type="submit"

@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { CompanyNames } from "../CompanyNames/CompanyNames";
-import axios from "axios";
 import { OrderContext } from "../../context/OrderProvider";
-import { PulseLoader } from "react-spinners";
+import { PostDataWithAuthorization } from "../../Axios/AxiosService2";
 import { ServiceSelect } from "../ServiceSelect/ServiceSelect";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,16 +27,28 @@ export const CreateOrder = ({ closeModal }) => {
   const handleSelectedCompany = (selectedCompany) => {
     setSelectedCompany(selectedCompany);
   };
-  const notify = ({ text }) => {
-    toast.success(text, {
-      position: "top-center", // Change the position of the toast
-      autoClose: 1000, // Auto close the toast after 1 seconds
-      hideProgressBar: true, // Hide the progress bar
-      closeOnClick: true, // Close the toast when clicked
-      draggable: true, // Allow dragging the toast
-      className: "custom-toast", // Apply a custom CSS class to the toast
-      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
-    });
+  const notify = ({ text, success }) => {
+    {
+      success
+        ? toast.success(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          })
+        : toast.error(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          });
+    }
   };
 
   const onSubmit = async (e) => {
@@ -45,22 +56,13 @@ export const CreateOrder = ({ closeModal }) => {
       if (selectedOption !== "Санал хүсэлт") {
         setLoading(true);
         try {
-          await axios.post(
-            "https://service2.stg.mn/api/services/servicerequest",
-            // "/api/services/servicerequest",
-            e,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-type": "application/json",
-              },
-            }
-          );
-          // alert("Хүсэлт илгээгдлээ");
-          notify({ text: "Хүсэлт илгээгдлээ." });
+          await PostDataWithAuthorization("/services/servicerequest", e);
+          notify({ text: "Хүсэлт илгээгдлээ.", success: true });
           setRefresh((prev) => !prev);
           closeModal();
         } catch (err) {
+          console.log("err", err);
+          notify({ text: err.message, success: false });
         } finally {
           setLoading(false);
         }
@@ -68,22 +70,12 @@ export const CreateOrder = ({ closeModal }) => {
         delete e.servicetype;
         delete e.programcode;
         try {
-          await axios.post(
-            "https://service2.stg.mn/api/services/feedbackrequest",
-            // "/api/services/feedbackrequest",
-            e,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-type": "application/json",
-              },
-            }
-          );
-          // alert("Санал хүсэлт илгээгдлээ");
-          notify({ text: "Санал хүсэлт илгээгдлээ." });
+          await PostDataWithAuthorization("/services/feedbackrequest", e);
+          notify({ text: "Санал хүсэлт илгээгдлээ.", success: true });
           setRefresh((prev) => !prev);
           closeModal();
         } catch (err) {
+          notify({ text: err.message, success: false });
         } finally {
           setLoading(false);
         }
@@ -149,6 +141,7 @@ export const CreateOrder = ({ closeModal }) => {
               <ServiceSelect
                 selectedOption={selectedOption}
                 onSelectedChange={handleSelected}
+                disabled={false}
               />
               <input type="hidden" {...register("serviceType")} />
             </div>
@@ -192,7 +185,7 @@ export const CreateOrder = ({ closeModal }) => {
             ></textarea>
             <div className="w-full">
               <div
-                className="md:w-[20%]  float-right"
+                className="md:w-[20%] h-[40px] float-right"
                 onClick={() => {
                   setValue("customerId", selectedCompany);
                   setValue("serviceType", selectedOption);

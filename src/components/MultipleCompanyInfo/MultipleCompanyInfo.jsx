@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Input from "../PersonalInfo/PersonalInfo";
 import { ProfileHeading } from "../ProfileHeading/ProfileHeading";
 import { SlArrowRight } from "react-icons/sl";
 import { SlArrowLeft } from "react-icons/sl";
 export const MultipleCompanyInfo = () => {
-  const companies = JSON.parse(localStorage.getItem("companies")).data;
+  const companies = JSON.parse(localStorage.getItem("companies"));
+  console.log("compnay", companies);
   return (
     <div className="w-[80vw]">
       <ProfileHeading
@@ -14,33 +15,24 @@ export const MultipleCompanyInfo = () => {
       <div className="flex justify-center items-end h-[10%]">
         <div className="flex items-center">
           <SlArrowLeft className="mr-8 cursor-pointer" />
-          {companies.map((props) => (
-            <div
-              className="mr-10 text-[#717D96] cursor-pointer"
-              // style={({ isActive }) => ({
-              //   color: isActive ? "black" : "",
-              //   paddingBottom: isActive ? "4px" : "",
-              //   borderBottom: isActive ? "3px" : "",
-              //   borderColor: isActive ? "black" : "",
-              // })}
-              key={props.customerId}
-            >
-              {props.name.slice(0, 10)}...
-            </div>
-          ))}
+          {companies &&
+            companies.length > 0 &&
+            companies.map((props) => (
+              <div
+                className="mr-10 text-[#717D96] cursor-pointer"
+                key={props.customerId}
+              >
+                {props.name.slice(0, 10)}...
+              </div>
+            ))}
           <SlArrowRight className="cursor-pointer" />
+          {/* Company */}
         </div>
       </div>
       <form className="text-sm">
         <Input type="text" name="Байгууллагын нэр " />
         <Input type="text" name="Ажлын байр " />
         <Input type="tel" name="Утасны дугаар " />
-        {/* <button
-          type="submit"
-          className="w-[100px] h-[50px] bg-slate-800 rounded-[30px] text-white ml-[40%] mt-10"
-        >
-          Хадгалах
-        </button> */}
         <SettingsButton />
       </form>
     </div>

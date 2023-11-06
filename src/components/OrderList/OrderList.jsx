@@ -2,17 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { OrderDetail } from "../OrderDetail/OrderDetail";
 import { Notification } from "../Notification/Notification";
 import { InfoReq } from "../InfoReq/InfoReq";
-import axios from "axios";
 import { Loading } from "../Loading/Loading";
 import { OrderContext } from "../../context/OrderProvider";
-import { ServerErrorPage } from "../../pages/ErrorPages/ServerErrorPage";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CompanyContext } from "../../context/CompanyProvider";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../Main/Button";
-export const OrderList = ({ date, date2, month }) => {
-  const [selectedOption, setSelectedOption] = useState({});
+import {
+  GetDataWithAuthorization,
+  PostDataWithAuthorization,
+} from "../../Axios/AxiosService2";
+export const OrderList = ({ month }) => {
   // UseContext ашиглан component refresh хийх
   const [OrderData, setOrderData] = useState([]);
   const { refresh, setRefresh } = useContext(OrderContext);
@@ -42,7 +43,30 @@ export const OrderList = ({ date, date2, month }) => {
   // Өгөгдлүүдийг авах. Энэ дээр хийгдэж байгаа үйлдэл нь эхлээд компани аа сонгоод id-г нь
   // api рүү явуулна
 
-  const [hasError, setHasError] = useState(false);
+  // const [hasError, setHasError] = useState(false);
+  const notify = ({ text, success }) => {
+    {
+      success
+        ? toast.success(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          })
+        : toast.error(text, {
+            position: "top-center", // Change the position of the toast
+            autoClose: 1000, // Auto close the toast after 1 seconds
+            hideProgressBar: true, // Hide the progress bar
+            closeOnClick: true, // Close the toast when clicked
+            draggable: true, // Allow dragging the toast
+            className: "custom-toast", // Apply a custom CSS class to the toast
+            bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
+          });
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -51,20 +75,12 @@ export const OrderList = ({ date, date2, month }) => {
       if (selectedCompany !== "") {
         setLoading(true);
         try {
-          const data = await axios.get(
-            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedCompany}&startDate=${date}&endDate=${date2}`,
-            `/api/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-type": "application/json",
-              },
-            }
+          const data = await GetDataWithAuthorization(
+            `/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`
           );
           setOrderData(data.data);
-          console.log("list:", data.data);
         } catch (err) {
-          setHasError(true);
+          notify({ text: err.message, success: false });
         } finally {
           setLoading(false);
         }
@@ -78,19 +94,13 @@ export const OrderList = ({ date, date2, month }) => {
       if (selectedCompany !== "") {
         setLoading(true);
         try {
-          const data = await axios.get(
-            // `https://service2.stg.mn/api/services/getservicelist?customerId=${selectedCompany}&startDate=${date}&endDate=${date2}`,
-            `/api/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-type": "application/json",
-              },
-            }
+          const data = await GetDataWithAuthorization(
+            `/services/getservicelist?customerId=${selectedCompany}&startDate=2023-01-01&endDate=2023-12-31`
           );
           setOrderData(data.data);
         } catch (err) {
-          setHasError(true);
+          // setHasError(true);
+          notify({ text: err.message, success: false });
         } finally {
           setLoading(false);
         }
@@ -99,54 +109,23 @@ export const OrderList = ({ date, date2, month }) => {
     FetchData();
   }, [selectedCompany, month, refresh]);
 
-  const notify = ({ text }) => {
-    toast.success(text, {
-      position: "top-center", // Change the position of the toast
-      autoClose: 1000, // Auto close the toast after 1 seconds
-      hideProgressBar: true, // Hide the progress bar
-      closeOnClick: true, // Close the toast when clicked
-      draggable: true, // Allow dragging the toast
-      className: "custom-toast", // Apply a custom CSS class to the toast
-      bodyClassName: "custom-toast-body", // Apply a custom CSS class to the toast body
-    });
-  };
-  const handleSelectedChange = (selectedCompany) => {
-    if (selectedCompany !== "") {
-      setSelectedOption(selectedCompany);
-    }
-  };
   // Захиалга цуцлах
   const deleteOrder = async () => {
     try {
-      axios.post(
-        // `https://service2.stg.mn/api/services/deleteservice?number=${storedNumber}&type=${type}`,
-        `/api/services/deleteservice?number=${storedNumber}&type=${type}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-type": "application/json",
-          },
-        }
+      await PostDataWithAuthorization(
+        `/services/deleteservice?number=${storedNumber}&type=${type}`
       );
-      // setOrderData(OrderData.filter((order) => order.number !== storedNumber));
       setRefresh((prev) => !prev);
-      // alert("Устгагдлаа");
-      notify({ text: "Устгагдлаа." });
-    } catch (err) {}
+      notify({ text: "Устгагдлаа.", success: true });
+    } catch (err) {
+      notify({ text: err.message, success: false });
+    }
   };
 
   let type;
   return (
     <div className="mb-[5vh] w-full rounded-lg shadow-xl px-[5%] py-[5%]">
       <div className=" ">
-        {/* <div className="m-[5%]"> */}
-        {/* <div className="">
-          <CompanyNames
-            selectedOption={selectedOption}
-            onSelectedChange={handleSelectedChange}
-          />
-        </div> */}
         <div className="lg:overflow-visible overflow-auto w-full mt-4">
           {(OrderData && OrderData.length > 0) ||
           OrderData === null ||
@@ -154,13 +133,13 @@ export const OrderList = ({ date, date2, month }) => {
             <table className=" text-xs  w-full ">
               <thead className=" text-left">
                 <tr>
-                  <th className="p-2">Огноо</th>
-                  <th className="p-2">Дугаар</th>
-                  <th className="p-2">Захиалгын нэр</th>
-                  <th className="p-2">Захиалгын төлөв</th>
-                  <th className="p-2">Хариуцсан</th>
-                  <th className="p-2">Засах</th>
-                  <th className="p-2">Цуцлах</th>
+                  <th className="p-2 w-[15%]">Огноо</th>
+                  {/* <th className="p-2">Дугаар</th> */}
+                  <th className="p-2 w-[40%]">Нэр</th>
+                  <th className="p-2 w-[15%] text-right">Төлөв</th>
+                  <th className="p-2 w-[20%] text-center">Хариуцсан</th>
+                  {/* <th className="p-2">Засах</th> */}
+                  <th className="p-2 w-[10%] text-center">Цуцлах</th>
                 </tr>
               </thead>
               <tbody>
@@ -168,53 +147,56 @@ export const OrderList = ({ date, date2, month }) => {
                   type = info.serviceType;
                   return (
                     <React.Fragment key={info.number}>
-                      <tr>
+                      <tr className="">
                         <td className="p-2">
                           {info.registrationTime && (
                             <div>{info.registrationTime.substring(0, 10)}</div>
                           )}
-                          {info.registrationTime && (
-                            <div className="text-slate-400">
-                              {info.registrationTime.substring(11)}
-                            </div>
-                          )}
                         </td>
-                        <td className="p-2">{info.number}</td>
-                        <td className="p-2">{info.comment}</td>
-                        <td className="p-2">
+                        {/* <td className="p-2">{info.number}</td> */}
+                        <td className="p-2 text-left">{info.comment}</td>
+                        <td className="p-2 float-right">
                           <State data={info.state} />
                         </td>
-                        <td className="p-2">{info.servedUser}</td>
-                        {info.state === 0 ? (
+                        <td className="p-2 text-center">{info.servedUser}</td>
+                        {info.state === 0 && (
                           <td
                             className="p-2"
-                            style={noDisable}
-                            onClick={() => {
-                              setStoredNumber(info.number);
-                              setModal(true);
-                            }}
+                            // style={noDisable}
                           >
-                            Засах
-                          </td>
-                        ) : (
-                          <td className="p-2" style={disable}>
-                            Засах
-                          </td>
-                        )}
-                        {info.state === 0 ? (
-                          <td
-                            className="p-2"
-                            style={noDisable}
-                            onClick={() => {
-                              setStoredNumber(info.number);
-                              setNotif(true);
-                            }}
-                          >
-                            Цуцлах
-                          </td>
-                        ) : (
-                          <td className="p-2" style={disable}>
-                            Цуцлах
+                            {/* Цуцлах */}
+                            <div className="w-full h-full flex justify-center">
+                              <div
+                                className="flex items-center justify-center rounded-full w-[20px] h-[20px] bg-[#D9D9D9] text-white transition duration-200 hover:scale-110 cursor-pointer"
+                                onClick={() => {
+                                  setStoredNumber(info.number);
+                                  setNotif(true);
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 12 12"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M3.33594 3.33203L8.66926 8.66536"
+                                    stroke="#FEFEFE"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M3.33464 8.66536L8.66797 3.33203"
+                                    stroke="#FEFEFE"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
                           </td>
                         )}
                       </tr>
@@ -238,38 +220,7 @@ export const OrderList = ({ date, date2, month }) => {
         </div>
         {/* </div> */}
         <div className="w-full flex justify-end my-4">
-          {/* <button
-            className=" w-fit rounded-full text-white bg-[#2D3648] flex p-[10px] transition duration-300 hover:scale-105 3xl:text-base text-xs"
-            onClick={() => navigate("/test")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="19"
-              viewBox="0 0 25 24"
-              fill="none"
-              className="mr-1"
-            >
-              <path
-                d="M10.07 5.92969L4 11.9997L10.07 18.0697"
-                stroke="#FEFEFE"
-                strokeWidth="1.5"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M21.0019 12H4.17188"
-                stroke="#FEFEFE"
-                strokeWidth="1.5"
-                strokeMiterlimit="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Буцах
-          </button> */}
-          <div className="w-fit" onClick={() => navigate("/test")}>
+          <div className="w-fit h-10" onClick={() => navigate("/test")}>
             <Button name={"Буцах"} text={"3xl:text-base text-xs"} />
           </div>
         </div>
@@ -293,13 +244,8 @@ export const OrderList = ({ date, date2, month }) => {
         </div>
       )}
       {loading && (
-        <div className="fixed top-0 left-0 h-screen w-screen">
+        <div className="">
           <Loading />
-        </div>
-      )}
-      {hasError && (
-        <div className="fixed top-0 left-0">
-          <ServerErrorPage />
         </div>
       )}
     </div>

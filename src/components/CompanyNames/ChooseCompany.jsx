@@ -53,11 +53,6 @@ export const ChooseCompany = ({
           setIsOpened(!isOpened);
         }}
       >
-        {/* <select
-          className=" appearance-none w-full md:w-[325px] h-[30px] border bg-[#D9D9D9] pl-[15px] float-left text-center text-[#0074E0] pr-14"
-          value={selectedOption}
-          onChange={handleSelectedChange}
-        > */}
         <select
           className=" appearance-none w-fit h-[30px] bg-transparent text-white focus:outline-none pr-6 text-right cursor-pointer "
           // defaultValue={selectedCompany}

@@ -6,7 +6,7 @@ import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-export const ForgetField = () => {
+export const ChangePassword = () => {
   const {
     register,
     handleSubmit,
@@ -88,27 +88,27 @@ export const ForgetField = () => {
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <div className="w-full m-[10%]">
-                    <input type="hidden" {...register("token")}></input>
-                    <div className=" text-[#032D60] font-bold w-full mb-1">
-                      Цахим шуудан
+                    {/* <input type="hidden" {...register("token")}></input>
+                        <div className=" text-[#032D60] font-bold w-full mb-3">
+                          Цахим шуудан
+                        </div>
+                        <input
+                          type={"email"}
+                          className="w-full h-12  bg-[#DEDEDE] pl-[15px] mb-5"
+                          {...register("email", {
+                            required: "Та mail хаягаа оруулна уу",
+                            pattern: {
+                              value:
+                                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                              message: "Invalid email format",
+                            },
+                          })}
+                        />
+                        <div className=" text-red-500">{errors.email?.message}</div> */}
+                    <div className=" text-[#032D60] font-bold w-full">
+                      Системээс өгсөн нууц үг
                     </div>
-                    <input
-                      type={"email"}
-                      className="w-full h-12  bg-[#DEDEDE] pl-[15px] mb-5"
-                      {...register("email", {
-                        required: "Та mail хаягаа оруулна уу",
-                        pattern: {
-                          value:
-                            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-                          message: "Invalid email format",
-                        },
-                      })}
-                    />
-                    <div className=" text-red-500">{errors.email?.message}</div>
-                    <div className=" text-[#032D60] font-bold w-full mb-1">
-                      Шинэ нууц үг
-                    </div>
-                    <div className="relative">
+                    <div className="relative mt-1">
                       {showPassword ? (
                         <FaEye
                           className="h-5 w-5 absolute left-[90%] top-[30%] cursor-pointer"
@@ -124,27 +124,28 @@ export const ForgetField = () => {
                         type={showPassword ? "text" : "password"}
                         {...register("password", {
                           required: true,
-                          // minLength: 8,
+                          minLength: 6,
                           // pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%&])/,
                         })}
                         className="w-full h-12 bg-[#DEDEDE] pl-[15px] "
                       />
                     </div>
-                    {/* <div className="text-red-500">
-          {errors.password?.type === "required" && "Нууц үгээ оруулна уу"}
-        </div>
-        <div className="text-red-500">
-          {errors.password?.type === "minLength" &&
-            "Дор хаяж 8 тэмдэгт оруулна уу"}
-        </div>
-        <div className="text-red-500">
-          {errors.password?.type === "pattern" &&
-            "Дор хаяж 1 жижиг үсэг, 1 том үсэг, 1 тоо, 1 тэмдэгт агуулна"}
-        </div> */}
-                    <div className=" text-[#032D60] font-bold w-full mb-1 mt-5">
-                      Нууц үгээ давтана уу!
+                    <div className="text-red-500">
+                      {errors.password?.type === "required" &&
+                        "Нууц үгээ оруулна уу"}
                     </div>
-                    <div className="relative">
+                    <div className="text-red-500">
+                      {errors.password?.type === "minLength" &&
+                        "Дор хаяж 6 тэмдэгт оруулна уу"}
+                    </div>
+                    {/* <div className="text-red-500">
+                      {errors.password?.type === "pattern" &&
+                        "Дор хаяж 1 жижиг үсэг, 1 том үсэг, 1 тоо, 1 тэмдэгт агуулна"}
+                    </div> */}
+                    <div className=" text-[#032D60] font-bold w-full mt-5">
+                      Шинэ нууц үг
+                    </div>
+                    <div className="relative mt-1">
                       {showPassword ? (
                         <FaEye
                           className="h-5 w-5 absolute left-[90%] top-[30%] cursor-pointer"
@@ -160,13 +161,13 @@ export const ForgetField = () => {
                         type={showPassword ? "text" : "password"}
                         {...register("confirmPassword", {
                           required: true,
-                          // minLength: 8,
+                          minLength: 6,
                           // pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%&])/,
-                          validate: (value) => {
-                            if (watch("password") !== value) {
-                              return "Нууц үгүүд таарсангүй.";
-                            }
-                          },
+                          //   validate: (value) => {
+                          //     if (watch("password") !== value) {
+                          //       return "Нууц үгүүд таарсангүй.";
+                          //     }
+                          //   },
                         })}
                         className="w-full h-12 bg-[#DEDEDE] pl-[15px]"
                       />
@@ -192,18 +193,3 @@ export const ForgetField = () => {
     </>
   );
 };
-
-// export const Success = () => {
-//   const navigate = useNavigate();
-//   return (
-//     <div className="flex items-center justify-center">
-//       <div className=" text-5xl">Таны нууц үг амжилттай солигдлоо.</div>
-//       <button
-//         className="w-48 h-12 bg-slate-800 text-white rounded-3xl mt-6"
-//         onClick={() => navigate("/login")}
-//       >
-//         Нэвтрэх
-//       </button>
-//     </div>
-//   );
-// };

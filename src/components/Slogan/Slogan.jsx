@@ -1,5 +1,4 @@
 import React from "react";
-import { GetData } from "../../Axios/Axios";
 import { MainBox } from "../MainBox/MainBox";
 // import { MainPicture } from "../MainPicture/MainPicture";
 // import img from "../../Assets/main.png";

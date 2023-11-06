@@ -2,8 +2,6 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import logo from "../../Assets/logo.jpg";
-import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Main } from "../../layouts/Main";
@@ -37,6 +35,14 @@ export const Registration = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const handleErrMsg = (errMsg) => {
+    setErrMsgEmail(errMsg);
+    // Set errMsgEmail to null after 2 second
+    setTimeout(() => {
+      setErrMsgEmail(null);
+    }, 2000); // 1000 milliseconds = 1 second
+  };
+
   const onSubmit = async (e) => {
     setLoading(true);
     delete e.checkbox;
@@ -52,7 +58,9 @@ export const Registration = () => {
           },
         }
       );
+      console.log("data", data);
       if (data.request.status === 200) {
+        console.log("data is heeree");
         token = data.data.data.token;
         // alert(data?.data?.message);
         notify(data?.data?.message);
@@ -63,55 +71,89 @@ export const Registration = () => {
             To: getValues("email"),
             From: "m.erdenebayar.siticom@gmail.com",
             Subject: "Цахим хаягаа баталгаажуулах",
-            Body: `
-            <html>
+            Body: `<html>
             <head>
-          
               <style>
-              button {
-                background-color: red;
-                border-style: none;
-                border-radius: 8px;
-                height: 30px;
-                color: white;
-                cursor: pointer;
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
               }
-              img {
-                  height: 30px;
-                  border-radius: 15px;
-                  margin-right: 10px;
+    
+              .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 10px;
+                box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
               }
-              .wrap {
-                  display: flex;
-                  margin-top: 0;
-                  align-items: center;
-                  width: 200px;
+              .header{
+                display: flex;
               }
-              </style>
+    
+              .header img {
+                max-width: 30px;
+                max-height: 30px;
+                height: auto;
+                border-radius: 10px;
+              }
+    
+              .header h1 {
+                font-size: 24px;
+                color: #333333;
+                margin-left: 10px;
+                margin-top: 0;
+              }
+    
+              .content {
+                margin-top: 20px;
+                font-size: 16px;
+                color: #555555;
+              }
+    
+              .content a {
+                color: #007bff;
+                text-decoration: none;
+              }
+    
+              .footer {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #888888;
+              }
+            </style>
+    
             </head>
             <body>
-            <div class="wrap"><img src="https://admin.e-siticom.com/assets/images/logo.jpg">
-            <p>Санхүүгийн Тооцоолох Групп Компани</p>
-            </div>
-            <div class="container">
-            <div>
-            <p>Эрхэм хэрэглэгч ${getValues(
-              "name"
-            )} танд энэ өдрийн мэнд хүргэе!</p>
-            <p>Та STG веб сайтын хэрэглэгчээр бүртгүүлсэн байна.</p>
-            <p>Танд хэрэглэгчийн цахим шуудангаа баталгаажуулах доорх холбоос-ыг илгээлээ. <a href="https://e-siticom.com/verification?token=${token}">Холбоос</a> дээр дарж өөрийгөө баталгаажуулна уу.</p>
-            </div>
-            <p>Хүндэтгэсэн Санхүүгийн Тооцоолох Групп компани.</p>
-            </div>
+              <div class="container">
+                <div class="header">
+                  <img src="https://admin.e-siticom.com/storage/logo.jpeg" alt="Logo" />
+                  <h1>Санхүүгийн Тооцоолох Групп Компани</h1>
+                </div>
+                <div class="content">
+                  <p>Эрхэм хэрэглэгч ${getValues(
+                    "name"
+                  )} танд энэ өдрийн мэнд хүргэе!</p>
+                  <p>Та STG веб сайтын хэрэглэгчээр бүртгүүлсэн байна.</p>
+                  <p>Танд хэрэглэгчийн цахим шуудангаа баталгаажуулах доорх холбоос-ыг илгээлээ. <a href="https://e-siticom.com/verification?token=${token}">Холбоос</a> дээр дарж өөрийгөө баталгаажуулна уу.</p>    
+                </div>
+                <div class="footer">
+                  <p>Таныг хүндэтгэсэн, "Санхүүгийн Тооцоолох Групп" компани.</p>
+                </div>
+              </div>
             </body>
-          </html>`,
-          }).then((message) => notify(message));
+            </html>`,
+          }).then((message) =>
+            notify({ text: "Та цахим шуудангаа шалгана уу." })
+          );
           setValue(false);
         }
       }
     } catch (err) {
       console.log(err);
-      setErrMsgEmail(err.response.data.data.email);
+      handleErrMsg(err.response.data.data.email);
       setValue(false);
     } finally {
       setLoading(false);
@@ -208,7 +250,11 @@ export const Registration = () => {
                     <div className="text-red-500">This field is required.</div>
                   )}
                 </div> */}
-                <div className="mb-[50px] mt-[30px] mx-[25%]">
+
+                <div className="w-full flex justify-center mt-4 text-red-500">
+                  {errMsgEmail}
+                </div>
+                <div className="h-10 mb-[50px] mt-[30px] mx-[25%]">
                   <Button name={"Бүртгүүлэх"} loading={loading} />
                 </div>
               </div>

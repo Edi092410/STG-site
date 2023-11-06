@@ -4,7 +4,6 @@ import { Button } from "../Main/Button";
 import { Box } from "../Main/Box";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { ProgramContext } from "../../context/ProgramProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -23,7 +22,6 @@ export const ChooseProgram = () => {
         id: data[index].id,
         select: !currentChip.select, // Toggle the select property
       };
-      console.log("chips:", updatedSelected);
       return updatedSelected;
     });
   };
@@ -34,11 +32,7 @@ export const ChooseProgram = () => {
         const data = await axios.get(
           "https://admin.e-siticom.com/api/solutions"
         );
-        const modifiedData = data.data.data.data.map((item) => ({
-          ...item,
-          image: `https://admin.e-siticom.com/uploads/products/${item.image}`, // Modify the image property
-        }));
-        setData(modifiedData);
+        setData(data.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -50,9 +44,7 @@ export const ChooseProgram = () => {
   const saveSelectedChips = () => {
     if (selectedChips.length !== 0) {
       SetSelected(true);
-      console.log("selected chips:", selectedChips);
       localStorage.setItem("programmes", JSON.stringify(selectedChips));
-      console.log("local storage:", localStorage.getItem("programmes"));
       navigate("/test");
     } else {
       SetSelected(false);
@@ -97,28 +89,22 @@ export const ChooseProgram = () => {
                   data.map((item, index) => (
                     <div
                       key={index}
-                      className={`w-[120px] h-[60px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
+                      className={`md:w-[120px] md:h-[60px] w-[100px] h-[50px] flex items-center justify-center rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer ${
                         selectedChips[index]?.select
                           ? // selectedChips[index]
                             " transition duration-300 bg-slate-200"
                           : " transition duration-300 hover:scale-110"
                       } ${selected === false && " border border-red-500"} `}
                       onClick={() => {
-                        console.log("id:", item.id);
                         toggleChip(index, item.id);
                       }}
                     >
-                      <img
-                        src={item.image}
-                        alt={index}
-                        width={"40px"}
-                        height={"35px"}
-                      />
+                      <img src={item.image} alt={index} className="" />
                     </div>
                   ))}
               </div>
               <div
-                className={`w-full `}
+                className={`w-full h-10`}
                 onClick={() => {
                   saveSelectedChips();
                 }}
